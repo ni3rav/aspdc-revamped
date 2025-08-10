@@ -21,6 +21,7 @@ export default function EventsPage() {
     return <div className="p-6 text-red-500">Failed to load projects.</div>;
   }
 
+  //TODO: remove this once used, lint marker for now
   const eventsData: EventsResponse = data;
 
   return (
