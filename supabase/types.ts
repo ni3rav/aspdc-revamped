@@ -55,3 +55,11 @@ export type UpcomingEvent = {
   created_at: string | null;
   event_image_url?: string | null;
 };
+
+//? types for hooks
+export type NewProject = Omit<Project, "id" | "created_at">;
+export type NewAchievement = Omit<Achievement, "id" | "created_at">;
+export type NewBlog = Omit<Blog, "id" | "created_at">;
+export type NewEvent = Omit<Event, "id" | "created_at">;
+export type NewLeaderboardEntry = Omit<LeaderboardEntry, "id" | "created_at">;
+export type NewUpcomingEvent = Omit<UpcomingEvent, "id" | "created_at">;

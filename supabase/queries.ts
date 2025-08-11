@@ -21,7 +21,7 @@ export const fetchBlogs = async (): Promise<Blog[]> => {
   const { data, error } = await supabase
     .from("blogs")
     .select("*")
-    .order("date", { ascending: false });
+    .order("date", { ascending: false } );
 
   if (error) throw error;
   return data;

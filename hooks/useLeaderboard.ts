@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLeaderboard } from "@/supabase/queries";
-import { addLeaderboardEntry, NewLeaderboardEntry } from "@/supabase/mutations";
+import {
+  addLeaderboardEntry,
+  deleteLeaderboardEntry,
+  updateLeaderBoardEntry,
+} from "@/supabase/mutations";
 import { toast } from "sonner";
+import { LeaderboardEntry, NewLeaderboardEntry } from "@/supabase/types";
 
 export function useLeaderboard() {
   return useQuery({
@@ -21,6 +26,44 @@ export function useAddLeaderboardEntry() {
     },
     onError: () => {
       toast.error("Failed to add leaderboard entry");
+    },
+  });
+}
+
+export function useUpdateLeaderBoardEntry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      leaderBoardEntry,
+    }: {
+      id: string;
+      leaderBoardEntry: Partial<LeaderboardEntry>;
+    }) => updateLeaderBoardEntry(id, leaderBoardEntry),
+    onSuccess: () => {
+      toast.success("leaderboard-entry updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["fetch-leaderboard"] });
+    },
+    onError: (error: Error) => {
+      toast.error("Failed to update leaderboard-entry");
+      console.error("Error updating leaderboard-entry:", error.message);
+    },
+  });
+}
+
+export function useDeleteLeaderboardEntry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteLeaderboardEntry(id),
+    onSuccess: () => {
+      toast.success("leaderboard-entry deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["fetch-leaderboard"] });
+    },
+    onError: (error: Error) => {
+      toast.error("Failed to delete leaderboard-entry");
+      console.error("Error deleting leaderboard-entry:", error.message);
     },
   });
 }
