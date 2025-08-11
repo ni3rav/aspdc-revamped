@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase-client";
 
-export function useAchievements() {
+export function useBlogs() {
   return useQuery({
-    queryKey: ["fetch-achievements"],
+    queryKey: ["fetch-blogs"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("achievements")
+        .from("blogs")
         .select("*")
         .order("date", { ascending: false });
 

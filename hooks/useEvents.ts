@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase-client";
 
 export function useEvents() {
   return useQuery({
-    queryKey: ["events"],
+    queryKey: ["fetch-events"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("events")

@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase-client";
 
 export function useProjects() {
   return useQuery({
-    queryKey: ["projects"],
+    queryKey: ["fetch-projects"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")

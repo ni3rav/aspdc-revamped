@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase-client";
 
 export function useLeaderboard() {
   return useQuery({
-    queryKey: ["leaderboard"],
+    queryKey: ["fetch-leaderboard"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("leaderboard")
