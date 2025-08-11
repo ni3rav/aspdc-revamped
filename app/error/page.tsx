@@ -9,7 +9,7 @@ export default function NotFound() {
       <Card className="w-full max-w-md text-center">
         <CardContent className="pt-6">
           <div className="text-6xl font-mono text-muted-foreground mb-4">
-            oppise daisy!
+            oops!
           </div>
           <h1 className="text-2xl font-semibold text-foreground mb-2">
             something went wrong

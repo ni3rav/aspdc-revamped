@@ -14,11 +14,9 @@ export async function login(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  console.log(data);
   const parsedData = authSchema.safeParse(data);
 
   if (!parsedData.success) {
-    console.log("error in zod validation");
     redirect("/");
   }
 
@@ -26,7 +24,6 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    console.log(error);
     redirect("/error");
   }
 
