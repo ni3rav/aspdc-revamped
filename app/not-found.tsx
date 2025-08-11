@@ -15,7 +15,7 @@ export default function NotFound() {
             page not found
           </h1>
           <p className="text-muted-foreground mb-6 text-sm">
-            {`looks like you've lost your way`}
+            {`looks like you've lost your way `}
           </p>
           <div className="flex gap-2">
             <Link href="/" className="flex-1">
