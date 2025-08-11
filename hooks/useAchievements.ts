@@ -1,17 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase-client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchAcv } from "@/supabase/queries";
+import { addAchievement, NewAchievement } from "@/supabase/mutations";
+import { toast } from "sonner";
 
 export function useAchievements() {
   return useQuery({
     queryKey: ["fetch-achievements"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("achievements")
-        .select("*")
-        .order("date", { ascending: false });
+    queryFn: fetchAcv,
+  });
+}
 
-      if (error) throw error;
-      return data;
+export function useAddAchievement() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (achievement: NewAchievement) => addAchievement(achievement),
+    onSuccess: () => {
+      toast.success("Achievement added successfully");
+      queryClient.invalidateQueries({ queryKey: ["fetch-achievements"] });
+    },
+    onError: () => {
+      toast.error("Failed to add achievement");
     },
   });
 }

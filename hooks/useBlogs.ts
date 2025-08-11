@@ -1,17 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase-client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchBlogs } from "@/supabase/queries";
+import { addBlog, NewBlog } from "@/supabase/mutations";
+import { toast } from "sonner";
 
 export function useBlogs() {
   return useQuery({
     queryKey: ["fetch-blogs"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("blogs")
-        .select("*")
-        .order("date", { ascending: false });
+    queryFn: fetchBlogs,
+  });
+}
 
-      if (error) throw error;
-      return data;
+export function useAddBlog() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (blog: NewBlog) => addBlog(blog),
+    onSuccess: () => {
+      toast.success("Blog added successfully");
+      queryClient.invalidateQueries({ queryKey: ["fetch-blogs"] });
+    },
+    onError: () => {
+      toast.error("Failed to add blog");
     },
   });
 }

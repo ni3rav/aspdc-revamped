@@ -1,17 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase-client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchLeaderboard } from "@/supabase/queries";
+import { addLeaderboardEntry, NewLeaderboardEntry } from "@/supabase/mutations";
+import { toast } from "sonner";
 
 export function useLeaderboard() {
   return useQuery({
     queryKey: ["fetch-leaderboard"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("leaderboard")
-        .select("*")
-        .order("rating", { ascending: false });
+    queryFn: fetchLeaderboard,
+  });
+}
 
-      if (error) throw error;
-      return data;
+export function useAddLeaderboardEntry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (entry: NewLeaderboardEntry) => addLeaderboardEntry(entry),
+    onSuccess: () => {
+      toast.success("Leaderboard entry added successfully");
+      queryClient.invalidateQueries({ queryKey: ["fetch-leaderboard"] });
+    },
+    onError: () => {
+      toast.error("Failed to add leaderboard entry");
     },
   });
 }
