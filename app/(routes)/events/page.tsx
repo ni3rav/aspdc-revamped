@@ -22,6 +22,8 @@ export default function EventsPage() {
   }
 
   const eventsData: EventsResponse = data;
+  //TODO: remove this once used, lint marker for now
+  console.log(eventsData);
 
   return (
     <>

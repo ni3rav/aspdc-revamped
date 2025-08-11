@@ -1,4 +1,4 @@
-import { AlertTriangle, Bug } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 interface ErrorStateProps {
   title?: string;
