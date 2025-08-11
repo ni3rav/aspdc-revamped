@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import QueryProvider from "@/lib/query-provider";
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${spaceGrotesk.className} antialiased`}>
+        <Toaster richColors position="top-center" />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
