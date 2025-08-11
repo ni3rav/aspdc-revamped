@@ -34,7 +34,7 @@ export function AddDataDialog({ open, onOpenChange, fields, category }: AddDataD
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget as HTMLFormElement)
-    const data: Record<string, any> = {}
+    const data: Record<string, any> = {} // eslint-disable-line
     fields.forEach((field) => {
       data[field.name] = formData.get(field.name)
     })

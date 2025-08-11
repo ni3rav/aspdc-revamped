@@ -9,7 +9,7 @@ import {
   Clock,
   LogOut,
 } from "lucide-react";
-import { Button } from "@/components/ui/button"; // Import Button component
+import { Button } from "@/components/ui/button"; 
 
 import {
   Sidebar,
@@ -17,14 +17,12 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Import Avatar components
 
 const navItems = [
   { title: "achievements", href: "/admin/achievements", icon: Trophy },

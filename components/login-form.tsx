@@ -45,6 +45,7 @@ export function LoginForm({
       try {
         await login(formData);
       } catch (err) {
+        console.log(err)
         setErrors((prev) => ({ ...prev, global: "Invalid email or password" }));
       }
     });

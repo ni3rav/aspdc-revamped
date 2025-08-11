@@ -10,7 +10,7 @@ import { AddDataDialog } from "@/components/add-data-dialog"
 import { PlusCircle } from "lucide-react"
 
 // Define the configuration for each data category
-const categoryConfig: Record<string, any> = {
+const categoryConfig: Record<string, any>  = { // eslint-disable-line
   blogs: {
     title: "Blogs",
     columns: [
@@ -288,7 +288,7 @@ export default function CategoryPage() {
           <h1 className="text-xl font-semibold">Category Not Found</h1>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-          <p>The requested category "{category}" does not exist.</p>
+          <p>{`The requested category "${category}" does not exist.`}</p>
         </div>
       </SidebarInset>
     )

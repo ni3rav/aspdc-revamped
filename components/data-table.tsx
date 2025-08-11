@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 interface DataTableProps<TData> {
   data: TData[]
-  columns: { header: string; accessorKey?: string; cell?: (props: { row: any }) => React.ReactNode }[]
+  columns: { header: string; accessorKey?: string; cell?: (props: { row: any }) => React.ReactNode }[] // eslint-disable-line
 }
 
 export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
@@ -18,7 +18,7 @@ export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((row: any, rowIndex) => (
+          {data.map((row: any, rowIndex) => ( // eslint-disable-line
             <TableRow key={rowIndex}>
               {columns.map((column, colIndex) => (
                 <TableCell key={colIndex}>{column.cell ? column.cell({ row }) : row[column.accessorKey!]}</TableCell>
