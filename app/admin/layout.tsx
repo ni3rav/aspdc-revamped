@@ -14,6 +14,7 @@ export default function AdminRoutesLayout({
   children: ReactNode;
 }) {
   const cookieStore = cookies();
+  console.log(cookieStore);
   return (
     <>
       <SidebarProvider defaultOpen>
