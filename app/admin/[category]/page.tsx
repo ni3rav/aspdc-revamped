@@ -8,6 +8,11 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table";
 import { AddDataDialog } from "@/components/add-data-dialog";
 import { PlusCircle } from "lucide-react";
+import { useAchievements } from "@/hooks/useAchievements";
+import { useBlogs } from "@/hooks/useBlogs";
+import { useEvents } from "@/hooks/useEvents";
+import { useProjects } from "@/hooks/useProjects";
+import { useUpcomingEvents } from "@/hooks/useUpcomingEvents";
 
 // Define the configuration for each data category
 const categoryConfig: Record<string, any> = {
@@ -55,7 +60,6 @@ const categoryConfig: Record<string, any> = {
           "a publicly uploaded image url (lol object storage service)",
       },
     ],
-    data: [],
   },
   blogs: {
     title: "Blogs",
@@ -106,7 +110,6 @@ const categoryConfig: Record<string, any> = {
         placeholder: "link to blog's cover image",
       },
     ],
-    data: [],
   },
   events: {
     title: "Events",
@@ -150,7 +153,6 @@ const categoryConfig: Record<string, any> = {
         placeholder: "urls to images separated by comma(,)",
       },
     ],
-    data: [],
   },
   projects: {
     title: "Projects",
@@ -208,7 +210,6 @@ const categoryConfig: Record<string, any> = {
         placeholder: "link to project banner image",
       },
     ],
-    data: [],
   },
   upcoming_events: {
     title: "Upcoming Events",
@@ -257,7 +258,7 @@ const categoryConfig: Record<string, any> = {
         name: "location",
         label: "Location",
         type: "text",
-        placeholder: "location of the event"
+        placeholder: "location of the event",
       },
       {
         name: "event_imgae_url",
@@ -266,16 +267,26 @@ const categoryConfig: Record<string, any> = {
         placeholder: "link to event image",
       },
     ],
-    data: [],
   },
+};
+
+const fetchingHooks = {
+  achievements: useAchievements,
+  blogs: useBlogs,
+  events: useEvents,
+  projects: useProjects,
+  upcoming_events: useUpcomingEvents,
 };
 
 export default function CategoryPage() {
   const params = useParams();
-  const category = params.category as string;
+  const category = params.category as keyof typeof fetchingHooks;
   const config = categoryConfig[category];
+  const fetchingHook = fetchingHooks[category];
 
   const [isAddDialogOpen, setIsAddDialogOpen] = React.useState(false);
+
+  const { data = [], isLoading } = fetchingHook();
 
   if (!config) {
     return (
@@ -306,7 +317,8 @@ export default function CategoryPage() {
       <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
         <div className="border shadow-sm rounded-lg p-4">
           <h2 className="text-lg font-medium mb-4">Current {config.title}</h2>
-          <DataTable data={config.data} columns={config.columns} />
+          {/* @ts-ignore */}
+          <DataTable data={data} columns={config.columns} />
         </div>
       </div>
       <AddDataDialog
