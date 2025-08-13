@@ -1,7 +1,10 @@
-import React from "react";
+import React from 'react'
 
 export default function AdminPage() {
-  return <div className="w-full h-full text-4xl flex justify-center items-center">
-    Please use this in desktop only amd ensure to fill details properly since admin ui does not have validations
-  </div>;
+    return (
+        <div className="flex h-full w-full items-center justify-center text-4xl">
+            Please use this in desktop only amd ensure to fill details properly
+            since admin ui does not have validations
+        </div>
+    )
 }

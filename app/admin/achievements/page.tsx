@@ -1,3 +1,3 @@
-export default function AcvPage(){
+export default function AcvPage() {
     return <div>acv</div>
 }

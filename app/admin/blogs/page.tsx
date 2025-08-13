@@ -1,3 +1,3 @@
-export default function BlogsPage(){
+export default function BlogsPage() {
     return <div>blogs</div>
 }

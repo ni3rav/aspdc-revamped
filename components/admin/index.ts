@@ -1,5 +1,5 @@
-export { FloatingNavbar } from "./floating-navbar";
-export { CompoundCard } from "./compound-card";
-export { DeleteDialog } from "./delete-dialog";
-export { InsertionDialog } from "./insertion-dialog";
-export { ModifyDialog } from "./modify-dialog";
+export { FloatingNavbar } from './floating-navbar'
+export { CompoundCard } from './compound-card'
+export { DeleteDialog } from './delete-dialog'
+export { InsertionDialog } from './insertion-dialog'
+export { ModifyDialog } from './modify-dialog'
