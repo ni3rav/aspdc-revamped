@@ -1,29 +1,29 @@
-import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
-import { Toaster } from "@/components/ui/sonner";
-import "./globals.css";
-import QueryProvider from "@/lib/query-provider";
+import type { Metadata } from 'next'
+import { Space_Grotesk } from 'next/font/google'
+import { Toaster } from '@/components/ui/sonner'
+import './globals.css'
+import QueryProvider from '@/lib/query-provider'
 
 const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-});
+    variable: '--font-space-grotesk',
+    subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
-  title: "ASPDC",
-};
+    title: 'ASPDC',
+}
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode
 }>) {
-  return (
-    <html lang="en">
-      <body className={`${spaceGrotesk.className} antialiased`}>
-        <Toaster richColors position="top-center" />
-        <QueryProvider>{children}</QueryProvider>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body className={`${spaceGrotesk.className} antialiased`}>
+                <Toaster richColors position="top-center" />
+                <QueryProvider>{children}</QueryProvider>
+            </body>
+        </html>
+    )
 }
