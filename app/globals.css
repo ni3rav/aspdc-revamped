@@ -129,12 +129,150 @@
   --shadow-2xl: 0px 1px 2px 0px hsl(0 0% 0% / 0.45);
 }
 
+
+@layer utilities {
+  .text-stroke-1 {
+    -webkit-text-stroke-width: 1px;
+  }
+
+  .text-stroke-2 {
+    -webkit-text-stroke-width: 2px;
+  }
+
+  .text-stroke-white {
+    -webkit-text-stroke-color: white;
+  }
+
+  .text-stroke-black {
+    -webkit-text-stroke-color: black;
+  }
+
+  .text-stroke-green-500 {
+    -webkit-text-stroke-color: #10b981;
+  }
+
+  .circular-gradient-soft {
+    background: radial-gradient(circle, rgb(28 145 72) 0%, rgba(28, 145, 72, 0.5) 30%, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 1) 100%);
+  }
+
+  .binary-number {
+    transition: none;
+    /* Let GSAP handle all transitions */
+    will-change: color, transform, text-shadow;
+    /* Optimize for animations */
+    backface-visibility: hidden;
+    /* Enable GPU acceleration */
+    transform-style: preserve-3d;
+    /* Enable 3D acceleration */
+    contain: layout style paint;
+    /* CSS containment for better performance */
+    pointer-events: none;
+    /* Disable mouse events on individual numbers */
+    transform-origin: center center;
+    /* Optimize scaling */
+  }
+
+  .main {
+    contain: layout style paint;
+    transform: translateZ(0);
+    background-attachment: fixed;
+    will-change: transform;
+    /* Optimize for animations */
+  }
+
+  /* Optimize logo and images for smooth animations */
+  .mainLogo,
+  .img1,
+  .img3,
+  .img4 {
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    contain: layout style paint;
+    transform-origin: center center;
+  }
+
+  /* Smooth scroll optimization */
+  .scroll-container {
+    contain: layout style paint;
+    will-change: scroll-position;
+  }
+
+  .main {
+    contain: layout style paint;
+    transform: translateZ(0);
+    background-attachment: fixed;
+  }
+
+  .main-option-2 {
+    background: linear-gradient(to bottom,
+        rgba(6, 78, 59, 0.302) 0%,
+        rgba(0, 0, 0, 1) 100%);
+  }
+
+  .main-option-2-reversed {
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 1) 60%,
+        rgba(6, 78, 59, 0.3) 100%);
+  }
+
+  @keyframes subtle-pulse {
+    0% {
+      opacity: 0.95;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Hide scrollbar for all browsers */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+  }
+
+  /* Global scrollbar hiding */
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+    /* Chrome/Safari */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  html {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }
+}
+
+.scrollText span {
+  background: linear-gradient(to bottom, red 0%, red 0%, #075d27 0%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-size: 100% 0%;
+  background-repeat: no-repeat;
 }
