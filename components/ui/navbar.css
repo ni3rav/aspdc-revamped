@@ -61,10 +61,10 @@
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
-  padding: 3px;
+  padding: 1.5px; /* Reduced from 3px to make it thinner */
   border-radius: inherit;
   will-change: background-position;
-  opacity: 0.8;
+  opacity: 0.5; /* Reduced from 0.8 to make it more transparent */
 }
 
 .navbar-glow {

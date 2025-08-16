@@ -234,9 +234,8 @@ const Navbar = () => {
             </div>
             <div className="relative">
               <span className="text-xl font-bold text-white transition-all duration-500 group-hover:scale-105 group-hover:text-green-400">
-                <span className="text-green-500 group-hover:text-green-300 transition-colors duration-500">A</span>SPDC
+                <span className="text-green-500 group-hover:text-green-300 transition-colors duration-500">a</span>spdc
               </span>
-              <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 to-green-500 transition-all duration-500 group-hover:w-full"></div>
             </div>
           </div>
 

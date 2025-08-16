@@ -13,12 +13,7 @@ gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
 function page() {
   useGSAP(() => {
-
-    // ===================================
-    // LOGO ENTRANCE ANIMATION (ENHANCED)
-    // ===================================
-
-    // Set initial state for logo
+    // Logo entrance animation
     gsap.set(".mainLogo", {
       scale: 0,
       opacity: 0,
@@ -26,105 +21,85 @@ function page() {
       transformOrigin: "center center"
     });
 
-    // Create logo animation timeline with smoother easing
     const logoTL = gsap.timeline();
-
     logoTL
       .to(".mainLogo", {
         scale: 1.2,
         opacity: 1,
         rotationY: 0,
-        duration: 1.2, // Slower for smoothness
-        ease: "power3.out", // Smoother easing
+        duration: 1.2,
+        ease: "power3.out",
         force3D: true
       })
       .to(".mainLogo", {
-        scale: 1.25, // Final scale as per original
-        duration: 0.6, // Smoother timing
-        ease: "elastic.out(1, 0.4)", // Gentler elastic
+        scale: 1.25,
+        duration: 0.6,
+        ease: "elastic.out(1, 0.4)",
         force3D: true
       })
       .to(".mainLogo", {
         rotationZ: 3,
         duration: 0.4,
-        ease: "sine.inOut", // Smoother rotation
+        ease: "sine.inOut",
         yoyo: true,
         repeat: 1,
         force3D: true
       }, "-=0.3");
 
-    // ===================================
-    // OPTIMIZED WORD-BY-WORD TEXT ANIMATION (ENHANCED)
-    // ===================================
-
-    // Set initial states for all text elements
+    // Word-by-word text animation
     gsap.set(".word-animate", {
-      y: 20, // Reduced for smoother motion
+      y: 20,
       opacity: 0,
-      rotationX: -30, // Less dramatic for smoothness
+      rotationX: -30,
       transformOrigin: "50% 100%"
     });
 
-    // Create master timeline for text animations - start after logo
-    const masterTextTL = gsap.timeline({ delay: 1.8 }); // More delay for gap
-
-    // Animate words in sequence with smoother timing
+    const masterTextTL = gsap.timeline({ delay: 1.8 });
     masterTextTL
       .to(".word-animate", {
         y: 0,
         opacity: 1,
         rotationX: 0,
-        duration: 0.7, // Slower for smoothness
-        ease: "power2.out", // Smoother easing
-        stagger: {
-          amount: 2.2, // Slightly slower for smoothness
-          from: "start",
-          ease: "sine.out" // Smoother stagger easing
-        },
+        duration: 0.7,
+        ease: "power2.out",
+        stagger: { amount: 2.2, from: "start", ease: "sine.out" },
         force3D: true
       })
       .to(".word-animate", {
         scale: 1.05,
-        duration: 0.3, // Smoother bounce
+        duration: 0.3,
         ease: "sine.out",
-        stagger: {
-          amount: 2.2,
-          from: "start"
-        },
+        stagger: { amount: 2.2, from: "start" },
         force3D: true
       }, "-=2.0")
       .to(".word-animate", {
         scale: 1,
         duration: 0.4,
-        ease: "power2.out", // Smoother settle
-        stagger: {
-          amount: 2.2,
-          from: "start"
-        },
+        ease: "power2.out",
+        stagger: { amount: 2.2, from: "start" },
         force3D: true
       }, "-=1.8");
 
-    // Add performance optimization for animations
+    // Performance optimizations
     gsap.set([".word-animate", ".mainLogo", ".navbar", ".nav-item"], {
       willChange: "transform, opacity",
       backfaceVisibility: "hidden",
       perspective: 1000
     });
 
+    // Interactive binary numbers
     const main = document.querySelector(".main");
-    const binaryContainer = document.querySelector(".main > div:first-child"); // Target the binary container
+    const binaryContainer = document.querySelector(".main > div:first-child");
     const binaryNumbers: { element: HTMLElement; rect: DOMRect; isActive: boolean }[] = [];
     let rafId: number;
     let lastMouseX = 0;
     let lastMouseY = 0;
     const proximityRadius = 100;
     const proximityRadiusSquared = proximityRadius * proximityRadius;
-
-    // Optimized: Reduce binary numbers for better performance
     const ROWS = 16;
     const COLS = 80;
 
-    // Create binary numbers and cache their positions - Optimized with DocumentFragment
+    // Create binary numbers with optimized DOM operations
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < ROWS; i++) {
       const container = document.createElement("div");
@@ -137,9 +112,9 @@ function page() {
       }
       fragment.appendChild(container);
     }
-    binaryContainer?.appendChild(fragment); // Append to binary container instead of main
+    binaryContainer?.appendChild(fragment);
 
-    // Cache positions after DOM is ready - Optimized structure
+    // Cache positions after DOM ready
     setTimeout(() => {
       const elements = binaryContainer?.querySelectorAll('.binary-number') as NodeListOf<HTMLElement>;
       elements?.forEach((element) => {
@@ -156,44 +131,30 @@ function page() {
       });
     }, 100);
 
-    // Optimized animation function using RAF with improved batching and viewport culling
+    // Optimized binary animation with viewport culling
     const updateBinaryNumbers = () => {
       const mouseX = lastMouseX;
       const mouseY = lastMouseY;
-
-      // Pre-allocate arrays with estimated capacity to reduce memory allocations
       const toActivate: HTMLElement[] = [];
       const toDeactivate: HTMLElement[] = [];
-      toActivate.length = 0;
-      toDeactivate.length = 0;
-
-      // Viewport culling optimization - only check elements near the mouse
-      const checkRadius = proximityRadius + 50; // Buffer zone
-      const checkRadiusSquared = checkRadius * checkRadius;
-
+      const checkRadiusSquared = (proximityRadius + 50) ** 2;
       let activeCount = 0;
-      const maxActiveElements = 50; // Limit concurrent animations for performance
+      const maxActiveElements = 50;
 
       binaryNumbers.forEach((numberData) => {
         const { element, rect, isActive } = numberData;
-
-        // Early exit if too many elements are already active
         if (activeCount >= maxActiveElements && !isActive) return;
 
-        // Use squared distance to avoid expensive sqrt operation
         const deltaX = mouseX - (rect as any).centerX;
         const deltaY = mouseY - (rect as any).centerY;
         const distanceSquared = deltaX * deltaX + deltaY * deltaY;
 
-        // Viewport culling - skip elements far from mouse
         if (distanceSquared > checkRadiusSquared && !isActive) return;
 
         const shouldBeActive = distanceSquared < proximityRadiusSquared;
 
-        // Only animate if state changes (avoid redundant animations)
         if (shouldBeActive !== isActive) {
           numberData.isActive = shouldBeActive;
-
           if (shouldBeActive && activeCount < maxActiveElements) {
             toActivate.push(element);
             activeCount++;
@@ -205,40 +166,36 @@ function page() {
         }
       });
 
-      // Batch GSAP animations for better performance
-      if (toActivate.length > 0) {
+      // Batch GSAP animations
+      if (toActivate.length) {
         gsap.set(toActivate, {
           color: "rgba(28, 145, 72, 0.8)",
           textShadow: "0 0 10px rgba(28, 145, 72, 0.8)",
           scale: 1,
-          duration: 1,
           ease: "power2.out",
           force3D: true
         });
       }
 
-      if (toDeactivate.length > 0) {
+      if (toDeactivate.length) {
         gsap.set(toDeactivate, {
           color: "#000000",
           textShadow: "none",
           scale: 0.75,
-          duration: 1,
           ease: "power2.out",
           force3D: true
         });
       }
     };
 
-    // Improved throttled mousemove handler with debouncing
+    // Throttled mousemove handler
     let isAnimating = false;
     const handleMouseMove = (e: Event) => {
       const mouseEvent = e as MouseEvent;
       lastMouseX = mouseEvent.clientX;
       lastMouseY = mouseEvent.clientY;
 
-      // Skip if already animating to maintain consistent 60fps
       if (isAnimating) return;
-
       isAnimating = true;
       rafId = requestAnimationFrame(() => {
         updateBinaryNumbers();
@@ -248,347 +205,100 @@ function page() {
 
     main?.addEventListener("mousemove", handleMouseMove, { passive: true });
 
-    const mainLogo = document.querySelector(".mainLogo");
-
-    // Pre-optimize logo images for better performance
-    gsap.set([".img1", ".img3", ".img4"], {
-      transformOrigin: "center center",
-      force3D: true
-    });
-
-    mainLogo?.addEventListener("mouseenter", () => {
-      const tl = gsap.timeline();
-
-      tl.to('.img1', {
-        scale: 1,
-        opacity: 1,
-        duration: 0.25,
-        ease: "power2.out",
-        force3D: true
-      })
-
-      tl.to('.img3', {
-        opacity: 1,
-        rotate: -10,
-        duration: 0.25,
-        ease: "power2.out",
-        force3D: true
-      })
-
-      tl.to('.img4', {
-        opacity: 1,
-        rotate: 10,
-        duration: 0.25,
-        ease: "power2.out",
-        force3D: true
-      })
-    });
-
-    mainLogo?.addEventListener("mouseleave", () => {
-      const tl = gsap.timeline();
-
-      tl.to('.img1', {
-        scale: 0,
-        opacity: 0,
-        duration: 0.25,
-        ease: "power2.out",
-        force3D: true
-      })
-
-      tl.to('.img3', {
-        opacity: 0,
-        rotate: 45,
-        duration: 0.25,
-        ease: "power2.out",
-        force3D: true
-      })
-
-      tl.to('.img4', {
-        opacity: 0,
-        rotate: -45,
-        duration: 0.25,
-        ease: "power2.out",
-        force3D: true
-      })
-    });
-
-    // ===================================
-    // SECOND PAGE SCROLL ANIMATIONS
-    // ===================================
-
-    // Set initial states for second page elements
-    gsap.set('.about-title', {
-      y: 100,
-      opacity: 0,
-      scale: 0.8
-    });
-
-    gsap.set('.about-subtitle', {
-      y: 80,
+    // Second page scroll animations
+    gsap.set(['.about-title', '.about-subtitle', '.about-card', '.activity-item', '.about-bg-element', '.cta-section'], {
       opacity: 0
     });
 
-    gsap.set('.about-card', {
-      y: 120,
-      opacity: 0,
-      scale: 0.9,
-      rotationX: 15
-    });
+    gsap.set('.about-title', { y: 100, scale: 0.8 });
+    gsap.set('.about-subtitle', { y: 80 });
+    gsap.set('.about-card', { y: 120, scale: 0.9, rotationX: 15 });
+    gsap.set('.activity-item', { x: -50 });
+    gsap.set('.about-bg-element', { scale: 0, rotation: 0 });
 
-    gsap.set('.activity-item', {
-      x: -50,
-      opacity: 0
-    });
-
-    gsap.set('.about-bg-element', {
-      scale: 0,
-      opacity: 0,
-      rotation: 0
-    });
-
-    // Create second page animations with ScrollTrigger and scrub - visible when in viewport
+    // Create second page animations with ScrollTrigger
     ScrollTrigger.create({
       trigger: '.secondPage',
       start: 'top 90%',
       end: 'top 20%',
       scrub: 0.3,
       animation: gsap.timeline()
-        .to('.about-title', {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          ease: 'none'
-        })
-        .to('.about-subtitle', {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: 'none'
-        }, 0.2)
-        .to('.about-bg-element', {
-          scale: 1,
-          opacity: 1,
-          rotation: 180,
-          duration: 2,
-          ease: 'none',
-          stagger: 0.1
-        }, 0.3)
+        .to('.about-title', { y: 0, opacity: 1, scale: 1, duration: 1, ease: 'none' })
+        .to('.about-subtitle', { y: 0, opacity: 1, duration: 1, ease: 'none' }, 0.2)
+        .to('.about-bg-element', { scale: 1, opacity: 1, rotation: 180, duration: 2, ease: 'none', stagger: 0.1 }, 0.3)
     });
 
-    // Cards animation with scrub - visible when entering viewport
     ScrollTrigger.create({
       trigger: '.about-card',
       start: 'top 95%',
       end: 'top 30%',
       scrub: 0.5,
       animation: gsap.timeline()
-        .to('.about-card', {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          rotationX: 0,
-          duration: 1,
-          ease: 'none',
-          stagger: 0.1
-        })
+        .to('.about-card', { y: 0, opacity: 1, scale: 1, rotationX: 0, duration: 1, ease: 'none', stagger: 0.1 })
     });
 
-    // Activity items animation with scrub - visible when entering viewport
     ScrollTrigger.create({
       trigger: '.activity-item',
       start: 'top 95%',
       end: 'top 40%',
       scrub: 0.8,
       animation: gsap.timeline()
-        .to('.activity-item', {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          ease: 'none',
-          stagger: 0.05
-        })
+        .to('.activity-item', { x: 0, opacity: 1, duration: 1, ease: 'none', stagger: 0.05 })
     });
 
-    // Simple ASPDC text scrolling animation
     ScrollTrigger.create({
       trigger: '.transition-section',
       start: 'top bottom',
       end: 'bottom top',
       scrub: 1,
-      animation: gsap.fromTo('.scroll-text',
-        {
-          x: '-50%'
-        },
-        {
-          x: '50%',
-          ease: 'none'
-        }
-      )
+      animation: gsap.fromTo('.scroll-text', { x: '-50%' }, { x: '50%', ease: 'none' })
     });
 
-    // Add text scrub animation for title - visible when entering viewport
     ScrollTrigger.create({
       trigger: '.about-title',
       start: 'top 90%',
       end: 'top 20%',
       scrub: 0.8,
       animation: gsap.fromTo('.about-title span', 
-        {
-          y: 30,
-          opacity: 0,
-          rotationX: 30
-        },
-        {
-          y: 0,
-          opacity: 1,
-          rotationX: 0,
-          duration: 1,
-          ease: 'none',
-          stagger: 0.05
-        }
+        { y: 30, opacity: 0, rotationX: 30 },
+        { y: 0, opacity: 1, rotationX: 0, duration: 1, ease: 'none', stagger: 0.05 }
       )
     });
 
-    // Add cards scale scrub effect - visible when entering viewport
-    ScrollTrigger.create({
-      trigger: '.about-card',
-      start: 'top 95%',
-      end: 'top 30%',
-      scrub: 0.5,
-      animation: gsap.fromTo('.about-card',
-        {
-          scale: 0.95,
-          rotationY: 5
-        },
-        {
-          scale: 1,
-          rotationY: 0,
-          duration: 1,
-          ease: 'none'
-        }
-      )
-    });
+    // Gallery page initial states
+    gsap.set(['.gallery-title', '.gallery-subtitle', '.gallery-item', '.gallery-bg-element', '.gallery-cta'], { opacity: 0 });
+    gsap.set('.gallery-title', { y: 80, scale: 0.9 });
+    gsap.set('.gallery-subtitle', { y: 60 });
+    gsap.set('.gallery-item', { y: 100, scale: 0.95, rotationY: 15 });
+    gsap.set('.gallery-bg-element', { scale: 0, rotation: 0 });
+    gsap.set('.gallery-cta', { y: 40, scale: 0.9 });
 
-    // Add content reveal scrub - visible when entering viewport
-    ScrollTrigger.create({
-      trigger: '.secondPage',
-      start: 'top 90%',
-      end: 'top 30%',
-      scrub: 0.5,
-      animation: gsap.fromTo('.secondPage .container',
-        {
-          opacity: 0.9,
-          filter: 'blur(2px)'
-        },
-        {
-          opacity: 1,
-          filter: 'blur(0px)',
-          duration: 1,
-          ease: 'none'
-        }
-      )
-    });
-
-    // ===================================
-    // GALLERY PAGE ANIMATIONS
-    // ===================================
-
-    // Set initial states for gallery elements
-    gsap.set('.gallery-title', {
-      y: 80,
-      opacity: 0,
-      scale: 0.9
-    });
-
-    gsap.set('.gallery-subtitle', {
-      y: 60,
-      opacity: 0
-    });
-
-    gsap.set('.gallery-item', {
-      y: 100,
-      opacity: 0,
-      scale: 0.95,
-      rotationY: 15
-    });
-
-    gsap.set('.gallery-bg-element', {
-      scale: 0,
-      opacity: 0,
-      rotation: 0
-    });
-
-    gsap.set('.gallery-cta', {
-      y: 40,
-      opacity: 0,
-      scale: 0.9
-    });
-
-    // Gallery page entrance animations
     ScrollTrigger.create({
       trigger: '.galleryPage',
       start: 'top 85%',
       end: 'top 20%',
       scrub: 0.3,
       animation: gsap.timeline()
-        .to('.gallery-bg-element', {
-          scale: 1,
-          opacity: 1,
-          rotation: 180,
-          duration: 2,
-          ease: 'none',
-          stagger: 0.2
-        })
-        .to('.gallery-title', {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          ease: 'none'
-        }, 0.5)
-        .to('.gallery-subtitle', {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: 'none'
-        }, 0.7)
+        .to('.gallery-bg-element', { scale: 1, opacity: 1, rotation: 180, duration: 2, ease: 'none', stagger: 0.2 })
+        .to('.gallery-title', { y: 0, opacity: 1, scale: 1, duration: 1, ease: 'none' }, 0.5)
+        .to('.gallery-subtitle', { y: 0, opacity: 1, duration: 1, ease: 'none' }, 0.7)
     });
 
-    // Gallery items staggered animation
     ScrollTrigger.create({
       trigger: '.gallery-grid',
       start: 'top 90%',
       end: 'top 30%',
       scrub: 0.5,
       animation: gsap.timeline()
-        .to('.gallery-item', {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          rotationY: 0,
-          duration: 1,
-          ease: 'none',
-          stagger: {
-            amount: 0.8,
-            from: 'start'
-          }
-        })
+        .to('.gallery-item', { y: 0, opacity: 1, scale: 1, rotationY: 0, duration: 1, ease: 'none', stagger: { amount: 0.8, from: 'start' } })
     });
 
-    // Gallery CTA animation
     ScrollTrigger.create({
       trigger: '.gallery-cta',
       start: 'top 95%',
       end: 'top 70%',
       scrub: 0.3,
-      animation: gsap.to('.gallery-cta', {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        ease: 'none'
-      })
+      animation: gsap.to('.gallery-cta', { y: 0, opacity: 1, scale: 1, duration: 1, ease: 'none' })
     });
 
     // ===================================
@@ -609,20 +319,7 @@ function page() {
       let containerRect: DOMRect;
       let isTransitioning = false;
 
-      // Gallery images array - UPDATE THESE WITH YOUR ASPDC IMAGES
-      const images = [
-        // "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop&crop=faces",
-        // "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1200&h=800&fit=crop&crop=center",
-        // "https://images.unsplash.com/photo-1515378960530-7c0da6231fb1?w=1200&h=800&fit=crop&crop=center",
-        // "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1200&h=800&fit=crop&crop=center",
-        // "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&h=800&fit=crop&crop=faces",
-        // "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&h=800&fit=crop&crop=center"
-        "/main1.jpg",
-        "/main2.jpg",
-        "/main3.jpg",
-        "/main4.jpg"
-      ];
-
+      const images = ["/main1.jpg", "/main2.jpg", "/main3.jpg", "/main4.jpg"];
       let currentIndex = 0;
       let nextIndex = 1;
 
@@ -634,13 +331,12 @@ function page() {
         if (isTransitioning) return;
         
         const x = e.clientX - containerRect.left;
-        const mousePercent = (x / containerRect.width) * 100;
-        const revealPercent = Math.max(0, Math.min(100, mousePercent));
+        const revealPercent = Math.max(0, Math.min(100, (x / containerRect.width) * 100));
         
         gsap.to(nextImageSection, {
           duration: 0.3,
           ease: 'power2.out',
-          onUpdate: function() {
+          onUpdate: () => {
             if (nextImageSection) {
               nextImageSection.style.clipPath = `polygon(${revealPercent}% 0%, 100% 0%, 100% 100%, ${revealPercent}% 100%)`;
             }
@@ -660,7 +356,7 @@ function page() {
         gsap.to(nextImageSection, {
           duration: 0.4,
           ease: 'power2.out',
-          onUpdate: function() {
+          onUpdate: () => {
             if (nextImageSection) {
               nextImageSection.style.clipPath = 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)';
             }
@@ -675,33 +371,29 @@ function page() {
         if (isTransitioning) return;
         isTransitioning = true;
 
-        const tl = gsap.timeline();
-        
-        tl.to(nextImageSection, {
-          duration: 0.5,
-          ease: 'power2.inOut',
-          onUpdate: function() {
-            if (nextImageSection) {
-              nextImageSection.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+        gsap.timeline()
+          .to(nextImageSection, {
+            duration: 0.5,
+            ease: 'power2.inOut',
+            onUpdate: () => {
+              if (nextImageSection) {
+                nextImageSection.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+              }
             }
-          }
-        })
-        .call(() => {
-          currentIndex = nextIndex;
-          nextIndex = (nextIndex + 1) % images.length;
-          
-          mainImage.src = images[currentIndex];
-          nextImage.src = images[nextIndex];
-          
-          if (nextImageSection) {
-            nextImageSection.style.clipPath = 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)';
-          }
-          
-          gsap.set(rightInfo, { opacity: 0 });
-          gsap.set(leftInfo, { opacity: 1 });
-          
-          isTransitioning = false;
-        }, [], 0.5);
+          })
+          .call(() => {
+            currentIndex = nextIndex;
+            nextIndex = (nextIndex + 1) % images.length;
+            
+            mainImage.src = images[currentIndex];
+            nextImage.src = images[nextIndex];
+            
+            if (nextImageSection) nextImageSection.style.clipPath = 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)';
+            
+            gsap.set(rightInfo, { opacity: 0 });
+            gsap.set(leftInfo, { opacity: 1 });
+            isTransitioning = false;
+          }, [], 0.5);
       };
 
       showcaseContainer.addEventListener('mousemove', handleMouseMove);
@@ -715,77 +407,19 @@ function page() {
       nextImage.src = images[nextIndex];
     }, 500);
 
-    // Add hover animations for cards
+    // Card hover animations
     document.querySelectorAll('.about-card').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        gsap.to(card, {
-          scale: 1.02,
-          y: -5,
-          duration: 0.3,
-          ease: 'power2.out'
-        });
-      });
-
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, {
-          scale: 1,
-          y: 0,
-          duration: 0.3,
-          ease: 'power2.out'
-        });
-      });
+      card.addEventListener('mouseenter', () => gsap.to(card, { scale: 1.02, y: -5, duration: 0.3, ease: 'power2.out' }));
+      card.addEventListener('mouseleave', () => gsap.to(card, { scale: 1, y: 0, duration: 0.3, ease: 'power2.out' }));
     });
 
-    // Set initial states for ScrollTrigger elements to prevent flash
-    gsap.set('.scrollText span', {
-      height: 0
-    });
-
-    // Set initial states for social elements
-    gsap.set('.social-title', {
-      y: 30,
-      opacity: 0
-    });
-
-    gsap.set('.social-subtitle', {
-      y: 20,
-      opacity: 0
-    });
-
-    gsap.set('.social-link', {
-      y: 40,
-      opacity: 0,
-      scale: 0.8
-    });
-
-    gsap.set('.social-particle', {
-      scale: 0,
-      opacity: 0
-    });
-
-    // Add binary rain animation for last page
-    gsap.set('.lastPage .flex.flex-col span', {
-      opacity: 0.3,
-      y: -20
-    });
-
-    // Create floating binary animation
-    ScrollTrigger.create({
-      trigger: '.lastPage',
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: 1,
-      animation: gsap.to('.lastPage .flex.flex-col span', {
-        y: 20,
-        opacity: 0.8,
-        duration: 1,
-        ease: 'none',
-        stagger: {
-          amount: 2,
-          from: 'random'
-        }
-      })
-    });
+    // Social elements initial states
+    gsap.set(['.social-title', '.social-subtitle', '.social-link', '.social-particle'], { opacity: 0 });
+    gsap.set('.scrollText span', { height: 0 });
+    gsap.set('.social-title', { y: 30 });
+    gsap.set('.social-subtitle', { y: 20 });
+    gsap.set('.social-link', { y: 40, scale: 0.8 });
+    gsap.set('.social-particle', { scale: 0 });
 
     const t2 = gsap.timeline({
       scrollTrigger: {
@@ -794,92 +428,39 @@ function page() {
         end: "150% top",
         pin: true,
         scrub: 1,
-        invalidateOnRefresh: true, // Optimization: recalculate on resize
-        // markers: true, // Optional: for debugging, remove in production
+        invalidateOnRefresh: true,
       }
     });
 
-    t2.to('.scrollText span', {
-      height: "auto",
-      duration: 1,
-      ease: "power2.out",
-      stagger: 0.1,
-    })
+    t2.to('.scrollText span', { height: "auto", duration: 1, ease: "power2.out", stagger: 0.1 })
+      .to('.scrollText span', { color: "transparent", webkitTextStroke: "2px #075d27", duration: 0.1 })
+      .to('.scrollText span', { backgroundSize: "100% 100%", duration: 1, stagger: 0.1 });
 
-    t2.to('.scrollText span', {
-      color: "transparent",
-      webkitTextStroke: "2px #075d27",
-      duration: 0.1
-    })
-    t2.to('.scrollText span', {
-      backgroundSize: "100% 100%",
-      duration: 1,
-      stagger: 0.1,
-    })
-
-    // Social elements animation when page is in view
     ScrollTrigger.create({
       trigger: '.lastPage',
       start: 'top 90%',
       animation: gsap.timeline()
-        .to('.social-particle', {
-          scale: 1,
-          opacity: 1,
-          duration: 0.8,
-          ease: 'power2.out',
-          stagger: 0.1
-        })
-        .to('.social-title', {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: 'power2.out'
-        }, '-=0.4')
-        .to('.social-subtitle', {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: 'power2.out'
-        }, '-=0.3')
-        .to('.social-link', {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.5,
-          ease: 'back.out(1.7)',
-          stagger: 0.1
-        }, '-=0.2')
+        .to('.social-particle', { scale: 1, opacity: 1, duration: 0.8, ease: 'power2.out', stagger: 0.1 })
+        .to('.social-title', { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.4')
+        .to('.social-subtitle', { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3')
+        .to('.social-link', { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)', stagger: 0.1 }, '-=0.2')
     });
 
-    // Enhanced hover animations for social links
+    // Social links hover animations
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.querySelectorAll('.social-link').forEach(link => {
           link.addEventListener('mouseenter', () => {
-            gsap.to(link, {
-              scale: 1.15,
-              rotation: 5,
-              duration: 0.3,
-              ease: 'power2.out'
-            });
+            gsap.to(link, { scale: 1.15, rotation: 5, duration: 0.3, ease: 'power2.out' });
             
-            // Animate the ping effect
             const ping = link.querySelector('.animate-ping');
             if (ping) {
-              gsap.fromTo(ping, 
-                { scale: 0, opacity: 1 },
-                { scale: 1.5, opacity: 0, duration: 0.6, ease: 'power2.out' }
-              );
+              gsap.fromTo(ping, { scale: 0, opacity: 1 }, { scale: 1.5, opacity: 0, duration: 0.6, ease: 'power2.out' });
             }
           });
 
           link.addEventListener('mouseleave', () => {
-            gsap.to(link, {
-              scale: 1,
-              rotation: 0,
-              duration: 0.3,
-              ease: 'power2.out'
-            });
+            gsap.to(link, { scale: 1, rotation: 0, duration: 0.3, ease: 'power2.out' });
           });
         });
       }, 100);
@@ -893,6 +474,7 @@ function page() {
       main?.removeEventListener("mousemove", handleMouseMove);
     };
   });
+  
   return (
     <SmoothScroll>
       <Navbar />
@@ -950,9 +532,6 @@ function page() {
             </div>
           </div>
         </div>
-        <Image className="absolute z-20 top-20 left-10 opacity-0 scale-50 img1" height={150} width={150} src="/main1.jpg" alt="ASPDC Logo" />
-        <Image className="absolute z-20 -right-5 top-50 rotate-z-90 opacity-0 origin-bottom-right img3" height={200} width={200} src="/main3.jpg" alt="ASPDC Logo" />
-        <Image className="absolute z-20 bottom-20 -left-5 -rotate-z-90 opacity-0 origin-bottom-left img4" height={200} width={200} src="/main4.jpg" alt="ASPDC Logo" />
         <div className="bottom-10 bg-transparent text-xl text-center absolute w-full z-20">
           <div className="flex flex-col items-center gap-2">
             <div>
