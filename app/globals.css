@@ -303,7 +303,7 @@
     pointer-events: none;
     transform-origin: center center;
   }
-
+ma
   .main {
     contain: layout style paint;
     transform: translateZ(0);
