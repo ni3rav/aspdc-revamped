@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { ArrowLeft, Home, RefreshCw, Terminal, Mouse, Sparkles } from "lucide-react";
+import { ArrowLeft, Home, Sparkles, Zap, Code } from "lucide-react";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -12,128 +12,88 @@ export default function NotFound() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [clickCount, setClickCount] = useState(0);
-  const [terminalText, setTerminalText] = useState('');
-
-  const terminalCommands = [
-    '$ ls -la',
-    '$ cat /var/log/missing-page.log',
-    '$ ERROR: 404 - Page not found',
-    '$ Searching for page...',
-    '$ grep -r "page" /website/',
-    '$ No matches found',
-    '$ Suggestion: Try going home'
-  ];
+  const [hoverEffect, setHoverEffect] = useState(false);
 
   useEffect(() => {
-    // Terminal typing effect
-    let commandIndex = 0;
-    let charIndex = 0;
-    
-    const typeCommand = () => {
-      if (commandIndex < terminalCommands.length) {
-        if (charIndex < terminalCommands[commandIndex].length) {
-          setTerminalText(prev => prev + terminalCommands[commandIndex][charIndex]);
-          charIndex++;
-          setTimeout(typeCommand, 50 + Math.random() * 50);
-        } else {
-          setTerminalText(prev => prev + '\n');
-          commandIndex++;
-          charIndex = 0;
-          setTimeout(typeCommand, 1000);
-        }
-      }
-    };
-
-    setTimeout(typeCommand, 2000);
-
     // Enhanced binary numbers animation
     if (binaryContainerRef.current) {
       const binaryContainer = binaryContainerRef.current;
       
-      // Create more dynamic binary numbers
-      for (let i = 0; i < 80; i++) {
+      // Create interactive binary numbers
+      for (let i = 0; i < 40; i++) {
         const binary = document.createElement('div');
         binary.textContent = Math.random() > 0.5 ? '1' : '0';
-        binary.className = 'absolute text-green-500/20 font-mono select-none pointer-events-none transition-all duration-300';
+        binary.className = 'absolute text-green-500/15 font-mono select-none cursor-pointer transition-all duration-300 hover:text-green-400 hover:scale-150';
         binary.style.left = Math.random() * 100 + '%';
         binary.style.top = Math.random() * 100 + '%';
-        binary.style.fontSize = (12 + Math.random() * 8) + 'px';
+        binary.style.fontSize = (10 + Math.random() * 8) + 'px';
         binaryContainer.appendChild(binary);
 
-        // Enhanced animation with random patterns
+        // Enhanced floating animation
         gsap.to(binary, {
-          y: -100 - Math.random() * 50,
-          x: (Math.random() - 0.5) * 50,
+          y: -80,
+          x: (Math.random() - 0.5) * 30,
           opacity: 0,
-          rotation: Math.random() * 360,
-          scale: 0.5 + Math.random() * 0.5,
-          duration: 4 + Math.random() * 3,
-          delay: Math.random() * 3,
+          rotation: Math.random() * 180,
+          duration: 5 + Math.random() * 3,
+          delay: Math.random() * 2,
           repeat: -1,
           ease: "power2.out"
         });
 
-        // Color change on hover effect
+        // Interactive hover effects
         binary.addEventListener('mouseenter', () => {
           gsap.to(binary, { 
             color: '#22c55e', 
-            scale: 1.5, 
-            textShadow: '0 0 10px #22c55e',
+            scale: 2, 
+            textShadow: '0 0 15px #22c55e',
             duration: 0.3 
           });
+          createSparkle(binary.offsetLeft, binary.offsetTop);
         });
         
         binary.addEventListener('mouseleave', () => {
           gsap.to(binary, { 
-            color: 'rgba(34, 197, 94, 0.2)', 
+            color: 'rgba(34, 197, 94, 0.15)', 
             scale: 1, 
             textShadow: 'none',
             duration: 0.3 
           });
         });
+
+        // Click to change number
+        binary.addEventListener('click', () => {
+          binary.textContent = Math.random() > 0.5 ? '1' : '0';
+          gsap.fromTo(binary, 
+            { scale: 2, color: '#fbbf24' },
+            { scale: 1, color: 'rgba(34, 197, 94, 0.15)', duration: 0.5 }
+          );
+        });
       }
     }
 
-    // Mouse tracking
+    // Mouse tracking with enhanced cursor
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
       
-      // Create particle trail
-      createParticle(e.clientX, e.clientY);
-    };
-
-    // Create particle effect
-    const createParticle = (x: number, y: number) => {
-      if (!containerRef.current) return;
-      
-      const particle = document.createElement('div');
-      particle.className = 'absolute w-1 h-1 bg-green-500 rounded-full pointer-events-none';
-      particle.style.left = x + 'px';
-      particle.style.top = y + 'px';
-      particle.style.zIndex = '100';
-      containerRef.current.appendChild(particle);
-
-      gsap.to(particle, {
-        scale: 0,
-        opacity: 0,
-        duration: 1,
-        ease: "power2.out",
-        onComplete: () => particle.remove()
-      });
+      // Create occasional sparkles on mouse movement
+      if (Math.random() > 0.97) {
+        createSparkle(e.clientX, e.clientY);
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Main animation timeline
+    // Main animation timeline with more drama
     const tl = gsap.timeline();
     
     // Set initial states
     gsap.set(".error-code", { scale: 0, opacity: 0, rotationY: 180 });
-    gsap.set(".error-title", { y: 50, opacity: 0, rotationX: -20 });
+    gsap.set(".error-title", { y: 50, opacity: 0, skewX: 10 });
     gsap.set(".error-subtitle", { y: 30, opacity: 0 });
-    gsap.set(".action-button", { y: 40, opacity: 0, scale: 0.8 });
-    gsap.set(".terminal-window", { y: 80, opacity: 0, scale: 0.8 });
-    gsap.set(".interactive-element", { scale: 0, opacity: 0 });
+    gsap.set(".action-button", { y: 40, opacity: 0, scale: 0.5 });
+    gsap.set(".floating-icon", { scale: 0, opacity: 0, rotation: 180 });
+    gsap.set(".status-dot", { scale: 0 });
 
     // Enhanced animation sequence
     tl.to(".error-code", {
@@ -146,23 +106,30 @@ export default function NotFound() {
     .to(".error-title", {
       y: 0,
       opacity: 1,
-      rotationX: 0,
-      duration: 1,
+      skewX: 0,
+      duration: 0.8,
       ease: "power3.out"
-    }, "-=0.8")
+    }, "-=0.6")
     .to(".error-subtitle", {
       y: 0,
       opacity: 1,
-      duration: 0.8,
+      duration: 0.6,
       ease: "power2.out"
-    }, "-=0.6")
-    .to(".interactive-element", {
+    }, "-=0.4")
+    .to(".floating-icon", {
       scale: 1,
       opacity: 1,
-      duration: 0.6,
+      rotation: 0,
+      duration: 0.8,
       ease: "back.out(1.7)",
-      stagger: 0.1
+      stagger: 0.2
     }, "-=0.4")
+    .to(".status-dot", {
+      scale: 1,
+      duration: 0.5,
+      ease: "elastic.out(1, 0.8)",
+      stagger: 0.1
+    }, "-=0.3")
     .to(".action-button", {
       y: 0,
       opacity: 1,
@@ -170,33 +137,37 @@ export default function NotFound() {
       duration: 0.8,
       ease: "back.out(1.7)",
       stagger: 0.15
-    }, "-=0.5")
-    .to(".terminal-window", {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      duration: 0.8,
-      ease: "power2.out"
     }, "-=0.4");
 
-    // Enhanced glitch effect
+    // Enhanced glitch effect with color variations
     if (glitchRef.current) {
       const glitchTl = gsap.timeline({ repeat: -1 });
       glitchTl
-        .to(glitchRef.current, { skewX: 5, duration: 0.1, ease: "power2.inOut" })
-        .to(glitchRef.current, { skewX: -5, x: 2, duration: 0.1, ease: "power2.inOut" })
-        .to(glitchRef.current, { skewX: 0, x: 0, duration: 0.1, ease: "power2.inOut" })
-        .to(glitchRef.current, { delay: 2 });
+        .to(glitchRef.current, { skewX: 5, color: '#ef4444', duration: 0.1 })
+        .to(glitchRef.current, { skewX: -5, x: 2, color: '#22c55e', duration: 0.1 })
+        .to(glitchRef.current, { skewX: 0, x: 0, color: '#22c55e', duration: 0.1 })
+        .to(glitchRef.current, { delay: 4 });
     }
 
-    // Continuous floating animations
-    gsap.to(".interactive-element", {
-      y: -5,
-      rotation: 2,
-      duration: 2.5,
+    // Continuous floating animations for icons
+    gsap.to(".floating-icon", {
+      y: -10,
+      rotation: 5,
+      duration: 2,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
+      stagger: { amount: 1, from: "random" }
+    });
+
+    // Pulsing status dots
+    gsap.to(".status-dot", {
+      scale: 1.2,
+      opacity: 0.7,
+      duration: 1.5,
+      repeat: -1,
+      yoyo: true,
+      ease: "power2.inOut",
       stagger: 0.3
     });
 
@@ -205,44 +176,92 @@ export default function NotFound() {
     };
   }, []);
 
-  // Handle 404 click for easter egg
+  // Create sparkle effect
+  const createSparkle = (x: number, y: number) => {
+    if (!containerRef.current) return;
+    
+    const sparkle = document.createElement('div');
+    sparkle.innerHTML = '✨';
+    sparkle.className = 'absolute pointer-events-none text-yellow-400 text-xs';
+    sparkle.style.left = x + 'px';
+    sparkle.style.top = y + 'px';
+    sparkle.style.zIndex = '100';
+    containerRef.current.appendChild(sparkle);
+
+    gsap.fromTo(sparkle, 
+      { scale: 0, rotation: 0 },
+      { 
+        scale: 1.5, 
+        rotation: 360, 
+        y: -30,
+        opacity: 0,
+        duration: 1.2,
+        ease: "power2.out",
+        onComplete: () => sparkle.remove()
+      }
+    );
+  };
+
+  // Enhanced 404 click interaction
   const handle404Click = () => {
     setClickCount(prev => prev + 1);
     
-    if (clickCount >= 4) {
-      // Easter egg animation
-      gsap.to(".error-code", {
-        rotation: 360,
-        scale: 1.2,
-        duration: 1,
-        ease: "elastic.out(1, 0.3)",
-        yoyo: true,
-        repeat: 1
-      });
+    if (clickCount >= 2) {
+      // Epic easter egg animation
+      gsap.timeline()
+        .to(".error-code", {
+          rotation: 720,
+          scale: 1.3,
+          color: '#fbbf24',
+          duration: 1.5,
+          ease: "power2.out"
+        })
+        .to(".error-code", {
+          rotation: 0,
+          scale: 1,
+          color: '#22c55e',
+          duration: 1,
+          ease: "elastic.out(1, 0.3)"
+        });
       setClickCount(0);
     }
 
-    // Create explosion effect
-    for (let i = 0; i < 12; i++) {
+    // Enhanced explosion effect
+    for (let i = 0; i < 15; i++) {
       setTimeout(() => {
         createExplosionParticle();
-      }, i * 50);
+      }, i * 40);
     }
+
+    // Screen shake effect
+    gsap.to(containerRef.current, {
+      x: 5,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 5,
+      ease: "power2.inOut"
+    });
   };
 
   const createExplosionParticle = () => {
     if (!containerRef.current) return;
     
+    const shapes = ['●', '■', '▲', '♦', '★'];
+    const colors = ['#22c55e', '#fbbf24', '#ef4444', '#3b82f6', '#8b5cf6'];
+    
     const particle = document.createElement('div');
-    particle.className = 'absolute w-2 h-2 bg-green-500 rounded-full pointer-events-none';
+    particle.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+    particle.className = 'absolute text-lg pointer-events-none font-bold';
+    particle.style.color = colors[Math.floor(Math.random() * colors.length)];
     particle.style.left = '50%';
-    particle.style.top = '30%';
+    particle.style.top = '35%';
     particle.style.zIndex = '100';
     containerRef.current.appendChild(particle);
 
     gsap.to(particle, {
-      x: (Math.random() - 0.5) * 400,
-      y: (Math.random() - 0.5) * 400,
+      x: (Math.random() - 0.5) * 300,
+      y: (Math.random() - 0.5) * 300,
+      rotation: Math.random() * 720,
       scale: 0,
       opacity: 0,
       duration: 1.5,
@@ -252,140 +271,144 @@ export default function NotFound() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden cursor-none" ref={containerRef}>
-      {/* Custom cursor */}
+    <div className="h-screen bg-black text-white relative overflow-hidden cursor-none flex items-center justify-center" ref={containerRef}>
+      {/* Enhanced custom cursor */}
       <div 
         ref={mouseRef}
-        className="fixed w-4 h-4 bg-green-500/50 rounded-full pointer-events-none z-50 transition-all duration-100"
+        className="fixed w-4 h-4 bg-green-500/70 rounded-full pointer-events-none z-50 transition-all duration-200 shadow-lg shadow-green-500/50"
         style={{ 
           left: mousePosition.x - 8, 
           top: mousePosition.y - 8,
-          transform: isHovering ? 'scale(2)' : 'scale(1)'
+          transform: isHovering ? 'scale(2.5)' : 'scale(1)',
+          boxShadow: isHovering ? '0 0 20px #22c55e' : '0 0 10px #22c55e'
         }}
       />
 
-      {/* Enhanced animated background */}
+      {/* Interactive animated background */}
       <div 
         ref={binaryContainerRef}
-        className="absolute inset-0 overflow-hidden pointer-events-none"
+        className="absolute inset-0 overflow-hidden"
       />
 
-      {/* Animated grid background */}
+      {/* Enhanced grid background with pulse */}
       <div 
-        className="absolute inset-0 opacity-[0.05] animate-pulse"
+        className="absolute inset-0 opacity-[0.04] animate-pulse"
         style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(34, 197, 94, 0.5) 1px, transparent 0)',
-          backgroundSize: '40px 40px',
-          animation: 'gridMove 20s linear infinite'
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(34, 197, 94, 0.6) 1px, transparent 0)',
+          backgroundSize: '60px 60px'
         }}
       />
 
-      {/* Floating geometric shapes */}
-      <div className="absolute top-20 left-10 w-20 h-20 border border-green-500/20 rounded-full interactive-element"></div>
-      <div className="absolute bottom-32 right-20 w-16 h-16 border border-green-400/15 rounded-lg rotate-45 interactive-element"></div>
-      <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-green-500/10 rounded-full interactive-element"></div>
-      <div className="absolute bottom-1/3 right-1/3 w-24 h-24 border border-green-300/10 rounded-full interactive-element"></div>
+      {/* Floating decorative icons */}
+      <div className="floating-icon absolute top-20 left-20 text-green-500/30 text-2xl">
+        <Code />
+      </div>
+      <div className="floating-icon absolute top-32 right-32 text-green-400/20 text-xl">
+        <Zap />
+      </div>
+      <div className="floating-icon absolute bottom-32 left-32 text-green-300/25 text-lg">
+        <Sparkles />
+      </div>
 
-      {/* Main content */}
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
+      {/* Main content - enhanced and centered */}
+      <div className="text-center p-4 relative z-10 max-w-4xl mx-auto">
         
-        {/* Interactive 404 Error Code */}
-        <div className="text-center mb-8">
+        {/* Enhanced 404 Error Code */}
+        <div className="mb-8">
           <div 
             ref={glitchRef}
             onClick={handle404Click}
-            className="error-code text-8xl md:text-9xl lg:text-[12rem] font-bold text-green-500 mb-4 relative cursor-pointer hover:scale-105 transition-transform duration-300"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+            className="error-code text-7xl md:text-8xl lg:text-9xl font-bold text-green-500 mb-6 relative cursor-pointer hover:scale-110 transition-all duration-300 filter drop-shadow-lg"
+            onMouseEnter={() => {
+              setIsHovering(true);
+              setHoverEffect(true);
+            }}
+            onMouseLeave={() => {
+              setIsHovering(false);
+              setHoverEffect(false);
+            }}
+            style={{
+              textShadow: hoverEffect ? '0 0 30px #22c55e, 0 0 60px #22c55e' : '0 0 20px #22c55e'
+            }}
           >
             404
-            <div className="absolute inset-0 text-green-300 opacity-30 animate-ping">404</div>
-            <div className="absolute inset-0 text-red-500 opacity-20" style={{ transform: 'translate(2px, 2px)' }}>404</div>
+            <div className="absolute inset-0 text-green-300 opacity-20 animate-pulse">404</div>
+            <div className="absolute -inset-2 bg-gradient-to-r from-green-500/0 via-green-500/10 to-green-500/0 blur-xl opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
           </div>
           
-          <h1 className="error-title text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            <span className="text-white">System</span>{" "}
-            <span className="text-green-500 animate-pulse">Error</span>
+          <h1 className="error-title text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+            <span className="text-white">Page Not</span>{" "}
+            <span className="text-green-500 relative">
+              Found
+              <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-green-500 to-transparent"></div>
+            </span>
           </h1>
           
-          <p className="error-subtitle text-lg md:text-xl text-gray-300 max-w-2xl mb-8">
-            <span className="text-green-500 font-mono">[ERROR_404]</span> The requested page has been 
-            <span className="text-red-400"> deleted</span> from the matrix. 
-            Even our best <span className="text-green-500 font-semibold">ASPDC</span> developers are searching for it!
-          </p>
+          <div className="error-subtitle text-base md:text-lg text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+            <span className="text-green-500 font-mono bg-green-500/10 px-2 py-1 rounded">[ERROR_404]</span> 
+            {" "}This page seems to have vanished into the digital void. 
+            Our <span className="text-green-500 font-semibold relative">
+              ASPDC
+              <div className="status-dot absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></div>
+            </span> team is on it!
+          </div>
         </div>
 
-        {/* Interactive status indicators */}
-        <div className="flex gap-4 mb-8 interactive-element">
-          <div className="flex items-center gap-2 bg-red-500/20 px-4 py-2 rounded-full border border-red-500/30">
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-            <span className="text-red-400 text-sm font-mono">CONNECTION_LOST</span>
+        {/* Status indicators */}
+        <div className="flex gap-3 justify-center mb-8">
+          <div className="flex items-center gap-2 bg-red-500/10 px-3 py-2 rounded-full border border-red-500/20 backdrop-blur-sm">
+            <div className="status-dot w-2 h-2 bg-red-500 rounded-full"></div>
+            <span className="text-red-400 text-xs font-mono">LOST</span>
           </div>
-          <div className="flex items-center gap-2 bg-green-500/20 px-4 py-2 rounded-full border border-green-500/30">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-green-400 text-sm font-mono">SEARCHING...</span>
+          <div className="flex items-center gap-2 bg-yellow-500/10 px-3 py-2 rounded-full border border-yellow-500/20 backdrop-blur-sm">
+            <div className="status-dot w-2 h-2 bg-yellow-500 rounded-full"></div>
+            <span className="text-yellow-400 text-xs font-mono">SCAN</span>
+          </div>
+          <div className="flex items-center gap-2 bg-green-500/10 px-3 py-2 rounded-full border border-green-500/20 backdrop-blur-sm">
+            <div className="status-dot w-2 h-2 bg-green-500 rounded-full"></div>
+            <span className="text-green-400 text-xs font-mono">ACTIVE</span>
           </div>
         </div>
 
         {/* Enhanced action buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/" className="action-button">
             <button 
-              className="group flex items-center gap-3 bg-green-500 hover:bg-green-600 text-black font-semibold px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 relative overflow-hidden"
+              className="group flex items-center gap-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-green-500/30 relative overflow-hidden"
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <Home className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-green-300 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <Home className="w-4 h-4 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
               <span className="relative z-10">Initialize Home</span>
-              <Sparkles className="w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Sparkles className="w-4 h-4 relative z-10 opacity-0 group-hover:opacity-100 group-hover:rotate-180 transition-all duration-300" />
             </button>
           </Link>
           
           <button 
             onClick={() => window.history.back()}
-            className="action-button group flex items-center gap-3 bg-gray-800 hover:bg-gray-700 border border-green-500/30 hover:border-green-500 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 relative overflow-hidden"
+            className="action-button group flex items-center gap-3 bg-gray-800/80 hover:bg-gray-700/80 backdrop-blur-sm border border-green-500/30 hover:border-green-500 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-gray-500/20"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
             <span>Rollback</span>
-            <RefreshCw className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:rotate-180 transition-all duration-300" />
+            <div className="w-1 h-1 bg-green-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
         </div>
 
-        {/* Interactive terminal window */}
-        <div className="terminal-window bg-gray-900 border border-green-500/30 rounded-lg p-4 max-w-2xl w-full mb-8">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-gray-400 text-sm ml-2">ASPDC Terminal</span>
+        {/* Interactive footer */}
+        <div className="mt-8 text-center">
+          <p className="text-green-500/60 text-xs font-mono mb-2">
+            ASPDC • Click the numbers • Hover the binary rain
+          </p>
+          <div className="flex justify-center gap-1">
+            <div className="status-dot w-1 h-1 bg-green-500 rounded-full"></div>
+            <div className="status-dot w-1 h-1 bg-green-400 rounded-full"></div>
+            <div className="status-dot w-1 h-1 bg-green-300 rounded-full"></div>
           </div>
-          <pre className="text-green-400 font-mono text-sm whitespace-pre-wrap">
-            {terminalText}
-            <span className="animate-pulse">|</span>
-          </pre>
-        </div>
-
-        {/* Fun interaction hint */}
-        <div className="interactive-element text-center">
-          <p className="text-gray-500 text-sm mb-2 flex items-center justify-center gap-2">
-            <Mouse className="w-4 h-4" />
-            Move your mouse around • Click the 404 for a surprise
-          </p>
-          <p className="text-green-500/60 text-xs font-mono">
-            Error 404 • System Not Found • ASPDC Debug Mode Active
-          </p>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes gridMove {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(40px, 40px); }
-        }
-      `}</style>
     </div>
   );
 }
