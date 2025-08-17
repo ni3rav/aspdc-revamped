@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import Image from 'next/image';
 import './navbar.css';
+import Link from "next/link";
 
 const Navbar = () => {
   useGSAP(() => {
@@ -242,16 +243,16 @@ const Navbar = () => {
           {/* Enhanced Navigation Links with better spacing */}
           <div className="hidden md:flex items-center space-x-6">
             {["Home", "Team", "Events", "Gallery", "Projects", "LeaderBoard", "Blog", "Contact"].map((item, index) => (
-              <a
+              <Link
                 key={item}
-                href={`#${item.toLowerCase()}`}
+                href={`${item}`}
                 className="nav-item nav-link text-white/90 hover:text-green-400 transition-all duration-500 text-sm font-medium relative group px-3 py-1.5 rounded-full hover:bg-white/10"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <span className="relative z-10">{item}</span>
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/20 to-green-500/20 opacity-0 scale-75 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"></div>
                 <span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-green-400 to-green-500 transition-all duration-500 group-hover:w-3/4"></span>
-              </a>
+              </Link>
             ))}
           </div>
 
