@@ -1,12 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchAcv } from '@/supabase/queries'
-import {
-    addAchievement,
-    deleteAcv,
-    updateAchievement,
-} from '@/supabase/mutations'
+import { fetchAcv } from '@/db/queries'
+import { addAchievement, deleteAcv, updateAchievement } from '@/db/mutations'
 import { toast } from 'sonner'
-import { Achievement, NewAchievement } from '@/supabase/types'
+import { Achievement, NewAchievement } from '@/db/types'
 
 export function useAchievements() {
     return useQuery({

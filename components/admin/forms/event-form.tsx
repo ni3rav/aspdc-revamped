@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import type { NewEvent, Event } from '@/supabase/types'
+import type { NewEvent, Event } from '@/db/types'
 
 interface EventFormProps {
     onSubmit: (data: NewEvent) => void

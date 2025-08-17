@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { DialogFooter } from '@/components/ui/dialog'
-import type { UpcomingEvent, NewUpcomingEvent } from '@/supabase/types'
+import type { UpcomingEvent, NewUpcomingEvent } from '@/db/types'
 
 interface UpcomingEventFormProps {
     onSubmit: (data: NewUpcomingEvent | Partial<UpcomingEvent>) => void

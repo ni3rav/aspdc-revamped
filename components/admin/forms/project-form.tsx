@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import type { NewProject, Project } from '@/supabase/types'
+import type { NewProject, Project } from '@/db/types'
 
 interface ProjectFormProps {
     onSubmit: (data: NewProject) => void

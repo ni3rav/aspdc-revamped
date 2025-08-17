@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchBlogs } from '@/supabase/queries'
-import { addBlog, deleteBlog, updateBlog } from '@/supabase/mutations'
+import { fetchBlogs } from '@/db/queries'
+import { addBlog, deleteBlog, updateBlog } from '@/db/mutations'
 import { toast } from 'sonner'
-import { Blog, NewBlog } from '@/supabase/types'
+import { Blog, NewBlog } from '@/db/types'
 
 export function useBlogs() {
     return useQuery({

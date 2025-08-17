@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchEvents } from '@/supabase/queries'
-import { addEvent, deleteEvent, updateEvent } from '@/supabase/mutations'
+import { fetchEvents } from '@/db/queries'
+import { addEvent, deleteEvent, updateEvent } from '@/db/mutations'
 import { toast } from 'sonner'
-import { NewEvent } from '@/supabase/types'
+import { NewEvent } from '@/db/types'
 
 export function useEvents() {
     return useQuery({

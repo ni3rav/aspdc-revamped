@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchLeaderboard } from '@/supabase/queries'
+import { fetchLeaderboard } from '@/db/queries'
 import {
     addLeaderboardEntry,
     deleteLeaderboardEntry,
     updateLeaderBoardEntry,
-} from '@/supabase/mutations'
+} from '@/db/mutations'
 import { toast } from 'sonner'
-import { LeaderboardEntry, NewLeaderboardEntry } from '@/supabase/types'
+import { LeaderboardEntry, NewLeaderboardEntry } from '@/db/types'
 
 export function useLeaderboard() {
     return useQuery({

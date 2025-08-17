@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { DialogFooter } from '@/components/ui/dialog'
-import type { Achievement, NewAchievement } from '@/supabase/types'
+import type { Achievement, NewAchievement } from '@/db/types'
 
 interface AchievementFormProps {
     onSubmit: (data: NewAchievement | Partial<Achievement>) => void

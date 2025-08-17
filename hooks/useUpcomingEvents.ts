@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchUpcomingEvents } from '@/supabase/queries'
+import { fetchUpcomingEvents } from '@/db/queries'
 import {
     addUpcomingEvent,
     deleteUpcomingEvent,
     updatedUpcomingEvent,
-} from '@/supabase/mutations'
+} from '@/db/mutations'
 import { toast } from 'sonner'
-import { NewUpcomingEvent, UpcomingEvent } from '@/supabase/types'
+import { NewUpcomingEvent, UpcomingEvent } from '@/db/types'
 
 export function useUpcomingEvents() {
     return useQuery({

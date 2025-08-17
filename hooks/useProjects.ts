@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { fetchProjects } from '@/supabase/queries'
-import { addProject, deleteProject, updateProject } from '@/supabase/mutations'
+import { fetchProjects } from '@/db/queries'
+import { addProject, deleteProject, updateProject } from '@/db/mutations'
 import { toast } from 'sonner'
-import { NewProject, Project } from '@/supabase/types'
+import { NewProject, Project } from '@/db/types'
 
 export function useProjects() {
     return useQuery({
