@@ -5,111 +5,115 @@ settings:
     excludeLinksFromLockfile: false
 
 importers:
-    .:
-        dependencies:
-            '@radix-ui/react-avatar':
-                specifier: ^1.1.10
-                version: 1.1.10(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            '@radix-ui/react-dialog':
-                specifier: ^1.1.14
-                version: 1.1.14(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            '@radix-ui/react-label':
-                specifier: ^2.1.7
-                version: 2.1.7(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            '@radix-ui/react-separator':
-                specifier: ^1.1.7
-                version: 1.1.7(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            '@radix-ui/react-slot':
-                specifier: ^1.2.3
-                version: 1.2.3(@types/react@19.1.9)(react@19.1.0)
-            '@radix-ui/react-toggle':
-                specifier: ^1.1.9
-                version: 1.1.9(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            '@radix-ui/react-tooltip':
-                specifier: ^1.2.7
-                version: 1.2.7(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            '@supabase/ssr':
-                specifier: ^0.6.1
-                version: 0.6.1(@supabase/supabase-js@2.54.0)
-            '@supabase/supabase-js':
-                specifier: ^2.54.0
-                version: 2.54.0
-            '@tanstack/react-query':
-                specifier: ^5.84.1
-                version: 5.84.1(react@19.1.0)
-            class-variance-authority:
-                specifier: ^0.7.1
-                version: 0.7.1
-            clsx:
-                specifier: ^2.1.1
-                version: 2.1.1
-            lucide-react:
-                specifier: ^0.537.0
-                version: 0.537.0(react@19.1.0)
-            next:
-                specifier: 15.4.6
-                version: 15.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            next-themes:
-                specifier: ^0.4.6
-                version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            react:
-                specifier: 19.1.0
-                version: 19.1.0
-            react-dom:
-                specifier: 19.1.0
-                version: 19.1.0(react@19.1.0)
-            sonner:
-                specifier: ^2.0.7
-                version: 2.0.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-            tailwind-merge:
-                specifier: ^3.3.1
-                version: 3.3.1
-            zod:
-                specifier: ^4.0.15
-                version: 4.0.15
-        devDependencies:
-            '@eslint/eslintrc':
-                specifier: ^3
-                version: 3.3.1
-            '@tailwindcss/postcss':
-                specifier: ^4
-                version: 4.1.11
-            '@tanstack/eslint-plugin-query':
-                specifier: ^5.83.1
-                version: 5.83.1(eslint@9.32.0(jiti@2.5.1))(typescript@5.9.2)
-            '@tanstack/react-query-devtools':
-                specifier: ^5.84.1
-                version: 5.84.1(@tanstack/react-query@5.84.1(react@19.1.0))(react@19.1.0)
-            '@types/node':
-                specifier: ^20
-                version: 20.19.9
-            '@types/react':
-                specifier: ^19
-                version: 19.1.9
-            '@types/react-dom':
-                specifier: ^19
-                version: 19.1.7(@types/react@19.1.9)
-            eslint:
-                specifier: ^9
-                version: 9.32.0(jiti@2.5.1)
-            eslint-config-next:
-                specifier: 15.4.6
-                version: 15.4.6(eslint@9.32.0(jiti@2.5.1))(typescript@5.9.2)
-            prettier:
-                specifier: ^3.6.2
-                version: 3.6.2
-            prettier-plugin-tailwindcss:
-                specifier: ^0.6.14
-                version: 0.6.14(prettier@3.6.2)
-            tailwindcss:
-                specifier: ^4
-                version: 4.1.11
-            tw-animate-css:
-                specifier: ^1.3.6
-                version: 1.3.6
-            typescript:
-                specifier: ^5
-                version: 5.9.2
+
+  .:
+    dependencies:
+      '@gsap/react':
+        specifier: ^2.1.2
+        version: 2.1.2(gsap@3.13.0)(react@19.1.0)
+      '@radix-ui/react-avatar':
+        specifier: ^1.1.10
+        version: 1.1.10(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@radix-ui/react-dialog':
+        specifier: ^1.1.14
+        version: 1.1.14(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@radix-ui/react-label':
+        specifier: ^2.1.7
+        version: 2.1.7(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@radix-ui/react-separator':
+        specifier: ^1.1.7
+        version: 1.1.7(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@radix-ui/react-slot':
+        specifier: ^1.2.3
+        version: 1.2.3(@types/react@19.1.9)(react@19.1.0)
+      '@radix-ui/react-toggle':
+        specifier: ^1.1.9
+        version: 1.1.9(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@radix-ui/react-tooltip':
+        specifier: ^1.2.7
+        version: 1.2.7(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@studio-freight/lenis':
+        specifier: ^1.0.42
+        version: 1.0.42
+      '@supabase/ssr':
+        specifier: ^0.6.1
+        version: 0.6.1(@supabase/supabase-js@2.54.0)
+      '@supabase/supabase-js':
+        specifier: ^2.54.0
+        version: 2.54.0
+      '@tanstack/react-query':
+        specifier: ^5.84.1
+        version: 5.84.1(react@19.1.0)
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      gsap:
+        specifier: ^3.13.0
+        version: 3.13.0
+      lucide-react:
+        specifier: ^0.537.0
+        version: 0.537.0(react@19.1.0)
+      next:
+        specifier: 15.4.6
+        version: 15.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react:
+        specifier: 19.1.0
+        version: 19.1.0
+      react-dom:
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      tailwind-merge:
+        specifier: ^3.3.1
+        version: 3.3.1
+      zod:
+        specifier: ^4.0.15
+        version: 4.0.15
+    devDependencies:
+      '@eslint/eslintrc':
+        specifier: ^3
+        version: 3.3.1
+      '@tailwindcss/postcss':
+        specifier: ^4
+        version: 4.1.11
+      '@tanstack/eslint-plugin-query':
+        specifier: ^5.83.1
+        version: 5.83.1(eslint@9.32.0(jiti@2.5.1))(typescript@5.9.2)
+      '@tanstack/react-query-devtools':
+        specifier: ^5.84.1
+        version: 5.84.1(@tanstack/react-query@5.84.1(react@19.1.0))(react@19.1.0)
+      '@types/node':
+        specifier: ^20
+        version: 20.19.9
+      '@types/react':
+        specifier: ^19
+        version: 19.1.9
+      '@types/react-dom':
+        specifier: ^19
+        version: 19.1.7(@types/react@19.1.9)
+      eslint:
+        specifier: ^9
+        version: 9.32.0(jiti@2.5.1)
+      eslint-config-next:
+        specifier: 15.4.6
+        version: 15.4.6(eslint@9.32.0(jiti@2.5.1))(typescript@5.9.2)
+      tailwindcss:
+        specifier: ^4
+        version: 4.1.11
+      tw-animate-css:
+        specifier: ^1.3.6
+        version: 1.3.6
+      typescript:
+        specifier: ^5
+        version: 5.9.2
 
 packages:
     '@alloc/quick-lru@5.2.0':
@@ -236,12 +240,15 @@ packages:
                 integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==,
             }
 
-    '@humanfs/core@0.19.1':
-        resolution:
-            {
-                integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==,
-            }
-        engines: { node: '>=18.18.0' }
+  '@gsap/react@2.1.2':
+    resolution: {integrity: sha512-JqliybO1837UcgH2hVOM4VO+38APk3ECNrsuSM4MuXp+rbf+/2IG2K1YJiqfTcXQHH7XlA0m3ykniFYstfq0Iw==}
+    peerDependencies:
+      gsap: ^3.12.5
+      react: '>=17'
+
+  '@humanfs/core@0.19.1':
+    resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
+    engines: {node: '>=18.18.0'}
 
     '@humanfs/node@0.16.6':
         resolution:
@@ -1013,11 +1020,12 @@ packages:
                 integrity: sha512-5EwMtOqvJMMa3HbmxLlF74e+3/HhwBTMcvt3nqVJgGCozO6hzIPOBlwm8mGVNR9SN2IJpxSnlxczyDjcn7qIyw==,
             }
 
-    '@supabase/auth-js@2.71.1':
-        resolution:
-            {
-                integrity: sha512-mMIQHBRc+SKpZFRB2qtupuzulaUhFYupNyxqDj5Jp/LyPvcWvjaJzZzObv6URtL/O6lPxkanASnotGtNpS3H2Q==,
-            }
+  '@studio-freight/lenis@1.0.42':
+    resolution: {integrity: sha512-HJAGf2DeM+BTvKzHv752z6Z7zy6bA643nZM7W88Ft9tnw2GsJSp6iJ+3cekjyMIWH+cloL2U9X82dKXgdU8kPg==}
+    deprecated: 'The ''@studio-freight/lenis'' package has been renamed to ''lenis''. Please update your dependencies: npm install lenis and visit the documentation: https://www.npmjs.com/package/lenis'
+
+  '@supabase/auth-js@2.71.1':
+    resolution: {integrity: sha512-mMIQHBRc+SKpZFRB2qtupuzulaUhFYupNyxqDj5Jp/LyPvcWvjaJzZzObv6URtL/O6lPxkanASnotGtNpS3H2Q==}
 
     '@supabase/functions-js@2.4.5':
         resolution:
@@ -2350,12 +2358,12 @@ packages:
                 integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==,
             }
 
-    has-bigints@1.1.0:
-        resolution:
-            {
-                integrity: sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg==,
-            }
-        engines: { node: '>= 0.4' }
+  gsap@3.13.0:
+    resolution: {integrity: sha512-QL7MJ2WMjm1PHWsoFrAQH/J8wUeqZvMtHO58qdekHpCfhvhSL4gSiz6vJf5EeMP0LOn3ZCprL2ki/gjED8ghVw==}
+
+  has-bigints@1.1.0:
+    resolution: {integrity: sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg==}
+    engines: {node: '>= 0.4'}
 
     has-flag@4.0.0:
         resolution:
@@ -3918,7 +3926,12 @@ snapshots:
 
     '@floating-ui/utils@0.2.10': {}
 
-    '@humanfs/core@0.19.1': {}
+  '@gsap/react@2.1.2(gsap@3.13.0)(react@19.1.0)':
+    dependencies:
+      gsap: 3.13.0
+      react: 19.1.0
+
+  '@humanfs/core@0.19.1': {}
 
     '@humanfs/node@0.16.6':
         dependencies:
@@ -4352,7 +4365,9 @@ snapshots:
 
     '@rtsao/scc@1.1.0': {}
 
-    '@rushstack/eslint-patch@1.12.0': {}
+  '@rushstack/eslint-patch@1.12.0': {}
+
+  '@studio-freight/lenis@1.0.42': {}
 
     '@supabase/auth-js@2.71.1':
         dependencies:
@@ -5345,7 +5360,9 @@ snapshots:
 
     graceful-fs@4.2.11: {}
 
-    graphemer@1.4.0: {}
+  graphemer@1.4.0: {}
+
+  gsap@3.13.0: {}
 
     has-bigints@1.1.0: {}
 
