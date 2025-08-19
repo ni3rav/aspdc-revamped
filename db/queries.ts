@@ -1,6 +1,6 @@
 'use server'
 
-import { db } from '@/db'
+import { db } from '@/db/drizzle'
 import {
     achievements,
     blogs,

@@ -7,7 +7,7 @@ import {
     upcomingEvents,
     blogs,
 } from './schema'
-import { db } from '.'
+import { db } from './drizzle'
 
 async function main() {
     console.log('🌱 Starting seed...')
