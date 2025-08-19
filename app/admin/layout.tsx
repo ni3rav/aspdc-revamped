@@ -1,25 +1,17 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { Metadata } from "next";
-import { cookies } from "next/headers";
-import { ReactNode } from "react";
+import type React from 'react'
+import { FloatingNavbar } from '@/components/admin/floating-navbar'
 
-export const metadata: Metadata = {
-  title: "Admin View",
-};
-
-export default function AdminRoutesLayout({
-  children,
+export default function AdminLayout({
+    children,
 }: {
-  children: ReactNode;
+    children: React.ReactNode
 }) {
-  const cookieStore = cookies();
-  return (
-    <>
-      <SidebarProvider defaultOpen>
-        <AppSidebar />
-        {children}
-      </SidebarProvider>
-    </>
-  );
+    return (
+        <div className="bg-background flex min-h-screen min-w-screen items-center justify-center">
+            <FloatingNavbar basePath="/admin" />
+            <main className="max-h-10/12 w-3/4 overflow-x-hidden overflow-y-scroll px-4 pt-20 pb-8">
+                {children}
+            </main>
+        </div>
+    )
 }

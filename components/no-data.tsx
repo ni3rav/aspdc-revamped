@@ -1,21 +1,23 @@
-import { Database } from "lucide-react";
+import { Database } from 'lucide-react'
 
 interface NoDataProps {
-  title?: string;
-  message?: string;
+    title?: string
+    message?: string
 }
 
 export default function NoData({
-  title = "no data found",
-  message = "this place is emptier than your git commits on weekends",
+    title = 'no data found',
+    message = 'this place is emptier than your git commits on weekends',
 }: NoDataProps) {
-  return (
-    <div className="w-full h-full min-h-[500px] md:min-h-[800px] flex flex-col items-center justify-center bg-background p-8">
-      <Database className="w-16 h-16 text-muted-foreground mb-6" />
-      <h3 className="text-2xl font-semibold text-foreground mb-3">{title}</h3>
-      <p className="text-muted-foreground mb-8 text-center max-w-md">
-        {message}
-      </p>
-    </div>
-  );
+    return (
+        <div className="bg-background flex h-full min-h-[500px] w-full flex-col items-center justify-center p-8 md:min-h-[800px]">
+            <Database className="text-muted-foreground mb-6 h-16 w-16" />
+            <h3 className="text-foreground mb-3 text-2xl font-semibold">
+                {title}
+            </h3>
+            <p className="text-muted-foreground mb-8 max-w-md text-center">
+                {message}
+            </p>
+        </div>
+    )
 }
