@@ -3,7 +3,7 @@ import { fetchUpcomingEvents } from '@/db/queries'
 import {
     addUpcomingEvent,
     deleteUpcomingEvent,
-    updatedUpcomingEvent,
+    updateUpcomingEvent,
 } from '@/db/mutations'
 import { toast } from 'sonner'
 import { NewUpcomingEvent, UpcomingEvent } from '@/db/types'
@@ -42,7 +42,7 @@ export function useUpdateUpcomingEvent() {
         }: {
             id: string
             event: Partial<UpcomingEvent>
-        }) => updatedUpcomingEvent(id, event),
+        }) => updateUpcomingEvent(id, event),
         onSuccess: () => {
             toast.success('upcoming event updated successfully')
             queryClient.invalidateQueries({

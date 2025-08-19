@@ -1,60 +1,62 @@
+import { db } from '@/db'
+import {
+    achievements,
+    blogs,
+    events,
+    leaderboard,
+    projects,
+    upcomingEvents,
+} from '@/db/schema'
 import {
     Achievement,
     Blog,
+    Event,
     LeaderboardEntry,
     Project,
     UpcomingEvent,
 } from '@/db/types'
+import { desc, asc } from 'drizzle-orm'
 
-// export const fetchAcv = async (): Promise<Achievement[]> => {
-// }
+// ----------------- Achievements -----------------
+export async function fetchAchievements(): Promise<Achievement[]> {
+    const rows = await db
+        .select()
+        .from(achievements)
+        .orderBy(desc(achievements.date))
+    return rows.map((row) => ({
+        ...row,
+        date: new Date(row.date), // convert string → Date
+    }))
+}
 
-// export const fetchBlogs = async (): Promise<Blog[]> => {
-//     const { data, error } = await supabase
-//         .from('blogs')
-//         .select('*')
-//         .order('date', { ascending: false })
+// ----------------- Blogs -----------------
+export async function fetchBlogs(): Promise<Blog[]> {
+    return await db.select().from(blogs).orderBy(desc(blogs.publishDate))
+}
 
-//     if (error) throw error
-//     return data
-// }
+// ----------------- Events -----------------
+export async function fetchEvents(): Promise<Event[]> {
+    const rows = await db.select().from(events).orderBy(desc(events.date))
+    return rows.map((row) => ({
+        ...row,
+        imageUrls: row.imageUrls ?? [], // ensure []
+    }))
+}
 
-// export const fetchEvents = async (): Promise<Event[]> => {
-//     const { data, error } = await supabase
-//         .from('events')
-//         .select('*')
-//         .order('date', { ascending: false })
+// ----------------- Leaderboard -----------------
+export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
+    return await db.select().from(leaderboard).orderBy(desc(leaderboard.rating))
+}
 
-//     if (error) throw error
-//     return data
-// }
+// ----------------- Projects -----------------
+export async function fetchProjects(): Promise<Project[]> {
+    return await db.select().from(projects).orderBy(asc(projects.name))
+}
 
-// export const fetchLeaderboard = async (): Promise<LeaderboardEntry[]> => {
-//     const { data, error } = await supabase
-//         .from('leaderboard')
-//         .select('*')
-//         .order('rating', { ascending: false })
-
-//     if (error) throw error
-//     return data
-// }
-
-// export const fetchProjects = async (): Promise<Project[]> => {
-//     const { data, error } = await supabase
-//         .from('projects')
-//         .select('*')
-//         .order('name', { ascending: true })
-
-//     if (error) throw error
-//     return data
-// }
-
-// export const fetchUpcomingEvents = async (): Promise<UpcomingEvent[]> => {
-//     const { data, error } = await supabase
-//         .from('upcoming_events')
-//         .select('*')
-//         .order('name', { ascending: true })
-
-//     if (error) throw error
-//     return data
-// }
+// ----------------- Upcoming Events -----------------
+export async function fetchUpcomingEvents(): Promise<UpcomingEvent[]> {
+    return await db
+        .select()
+        .from(upcomingEvents)
+        .orderBy(asc(upcomingEvents.name))
+}

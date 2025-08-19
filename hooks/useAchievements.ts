@@ -1,13 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchAcv } from '@/db/queries'
-import { addAchievement, deleteAcv, updateAchievement } from '@/db/mutations'
+import { fetchAchievements } from '@/db/queries'
+import {
+    addAchievement,
+    deleteAchievement,
+    updateAchievement,
+} from '@/db/mutations'
 import { toast } from 'sonner'
 import { Achievement, NewAchievement } from '@/db/types'
 
 export function useAchievements() {
     return useQuery({
         queryKey: ['fetch-achievements'],
-        queryFn: fetchAcv,
+        queryFn: fetchAchievements,
     })
 }
 
@@ -48,7 +52,7 @@ export function useDeleteAcv() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: (id: string) => deleteAcv(id),
+        mutationFn: (id: string) => deleteAchievement(id),
         onSuccess: () => {
             toast.success('achievement deleted successfully')
             queryClient.invalidateQueries({ queryKey: ['fetch-achievements'] })

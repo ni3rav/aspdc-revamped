@@ -1,6 +1,16 @@
+import { db } from '@/db'
+import {
+    achievements,
+    blogs,
+    events,
+    leaderboard,
+    projects,
+    upcomingEvents,
+} from '@/db/schema'
 import type {
     Achievement,
     Blog,
+    Event,
     LeaderboardEntry,
     NewAchievement,
     NewBlog,
@@ -11,139 +21,119 @@ import type {
     Project,
     UpcomingEvent,
 } from '@/db/types'
+import { eq } from 'drizzle-orm'
 
-//* insertions
-// export async function addProject(project: NewProject) {
-//     const { error } = await supabase.from('projects').insert(project)
+// ----------------- Insertions -----------------
+export async function addProject(project: NewProject) {
+    await db.insert(projects).values(project)
+}
 
-//     if (error) {
-//         throw new Error(error.message)
-//     }
-// }
+export async function addAchievement(achievement: NewAchievement) {
+    await db.insert(achievements).values({
+        ...achievement,
+        date: achievement.date.toISOString().split('T')[0], // convert Date → YYYY-MM-DD
+    })
+}
 
-// export async function addAchievement(achievement: NewAchievement) {
-//     const { error } = await supabase.from('achievements').insert(achievement)
-//     if (error) throw new Error(error.message)
-// }
+export async function addBlog(blog: NewBlog) {
+    await db.insert(blogs).values(blog)
+}
 
-// export async function addBlog(blog: NewBlog) {
-//     const { error } = await supabase.from('blogs').insert(blog)
-//     if (error) throw new Error(error.message)
-// }
+export async function addEvent(event: NewEvent) {
+    await db.insert(events).values(event)
+}
 
-// export async function addEvent(event: NewEvent) {
-//     const { error } = await supabase.from('events').insert(event)
-//     if (error) throw new Error(error.message)
-// }
+export async function addLeaderboardEntry(entry: NewLeaderboardEntry) {
+    await db.insert(leaderboard).values(entry)
+}
 
-// export async function addLeaderboardEntry(entry: NewLeaderboardEntry) {
-//     const { error } = await supabase.from('leaderboard').insert(entry)
-//     if (error) throw new Error(error.message)
-// }
+export async function addUpcomingEvent(event: NewUpcomingEvent) {
+    await db.insert(upcomingEvents).values(event)
+}
 
-// export async function addUpcomingEvent(event: NewUpcomingEvent) {
-//     const { error } = await supabase.from('upcoming_events').insert(event)
-//     if (error) throw new Error(error.message)
-// }
+// ----------------- Updates -----------------
+export async function updateProject(id: string, updates: Partial<Project>) {
+    return await db
+        .update(projects)
+        .set(updates)
+        .where(eq(projects.id, id))
+        .returning()
+}
 
-// //* updation
-// export async function updateProject(id: string, updates: Partial<Project>) {
-//     const { data, error } = await supabase
-//         .from('projects')
-//         .update(updates)
-//         .eq('id', id)
-//         .select()
-//         .single()
+export async function updateAchievement(
+    id: string,
+    data: Partial<Achievement>
+) {
+    const adaptedData = {
+        ...data,
+        date: data.date ? data.date.toISOString().split('T')[0] : undefined,
+    }
 
-//     if (error) throw error
-//     return data
-// }
+    await db
+        .update(achievements)
+        .set(adaptedData)
+        .where(eq(achievements.id, id))
+}
 
-// export async function updateAchievement(
-//     id: string,
-//     updates: Partial<Achievement>
-// ) {
-//     const { error } = await supabase
-//         .from('achievements')
-//         .update(updates)
-//         .eq('id', id)
+export async function updateBlog(id: string, updates: Partial<Blog>) {
+    return await db
+        .update(blogs)
+        .set(updates)
+        .where(eq(blogs.id, id))
+        .returning()
+}
 
-//     if (error) throw error
-// }
+export async function updateEvent(id: string, updates: Partial<Event>) {
+    return await db
+        .update(events)
+        .set(updates)
+        .where(eq(events.id, id))
+        .returning()
+}
 
-// export async function updateBlog(id: string, updates: Partial<Blog>) {
-//     const { error } = await supabase.from('blogs').update(updates).eq('id', id)
+export async function updateLeaderboardEntry(
+    id: string,
+    updates: Partial<LeaderboardEntry>
+) {
+    return await db
+        .update(leaderboard)
+        .set(updates)
+        .where(eq(leaderboard.id, id))
+        .returning()
+}
 
-//     if (error) throw error
-// }
+export async function updateUpcomingEvent(
+    id: string,
+    updates: Partial<UpcomingEvent>
+) {
+    return await db
+        .update(upcomingEvents)
+        .set(updates)
+        .where(eq(upcomingEvents.id, id))
+        .returning()
+}
 
-// export async function updateEvent(id: string, updates: Partial<Event>) {
-//     const { error } = await supabase.from('events').update(updates).eq('id', id)
+// ----------------- Deletions -----------------
+export async function deleteProject(id: string) {
+    await db.delete(projects).where(eq(projects.id, id))
+}
 
-//     if (error) throw error
-// }
+export async function deleteAchievement(id: string) {
+    await db.delete(achievements).where(eq(achievements.id, id))
+}
 
-// export async function updateLeaderBoardEntry(
-//     id: string,
-//     updates: Partial<LeaderboardEntry>
-// ) {
-//     const { error } = await supabase
-//         .from('leaderboard')
-//         .update(updates)
-//         .eq('id', id)
+export async function deleteBlog(id: string) {
+    await db.delete(blogs).where(eq(blogs.id, id))
+}
 
-//     if (error) throw error
-// }
+export async function deleteEvent(id: string) {
+    await db.delete(events).where(eq(events.id, id))
+}
 
-// export async function updatedUpcomingEvent(
-//     id: string,
-//     updates: Partial<UpcomingEvent>
-// ) {
-//     const { error } = await supabase
-//         .from('upcoming_events')
-//         .update(updates)
-//         .eq('id', id)
+export async function deleteLeaderboardEntry(id: string) {
+    await db.delete(leaderboard).where(eq(leaderboard.id, id))
+}
 
-//     if (error) throw error
-// }
-
-// //*deletion
-
-// export async function deleteProject(id: string) {
-//     const { error } = await supabase.from('projects').delete().eq('id', id)
-
-//     if (error) throw error
-// }
-
-// export async function deleteAcv(id: string) {
-//     const { error } = await supabase.from('achievements').delete().eq('id', id)
-
-//     if (error) throw error
-// }
-
-// export async function deleteBlog(id: string) {
-//     const { error } = await supabase.from('blogs').delete().eq('id', id)
-
-//     if (error) throw error
-// }
-
-// export async function deleteEvent(id: string) {
-//     const { error } = await supabase.from('events').delete().eq('id', id)
-
-//     if (error) throw error
-// }
-
-// export async function deleteLeaderboardEntry(id: string) {
-//     const { error } = await supabase.from('leaderboard').delete().eq('id', id)
-
-//     if (error) throw error
-// }
-
-// export async function deleteUpcomingEvent(id: string) {
-//     const { error } = await supabase
-//         .from('upcoming_events')
-//         .delete()
-//         .eq('id', id)
-
-//     if (error) throw error
-// }
+export async function deleteUpcomingEvent(id: string) {
+    await db.delete(upcomingEvents).where(eq(upcomingEvents.id, id))
+}

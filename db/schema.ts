@@ -67,7 +67,7 @@ export const blogs = pgTable('blogs', {
     title: text().notNull(),
     author: text().notNull(),
     link: text().notNull(),
-    publishDate: timestamp('publish_date').notNull(), // custom column name
+    publishDate: timestamp().notNull(),
     coverImage: text(),
     createdAt: timestamp().defaultNow().notNull(),
 })

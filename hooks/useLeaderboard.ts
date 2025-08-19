@@ -3,7 +3,7 @@ import { fetchLeaderboard } from '@/db/queries'
 import {
     addLeaderboardEntry,
     deleteLeaderboardEntry,
-    updateLeaderBoardEntry,
+    updateLeaderboardEntry,
 } from '@/db/mutations'
 import { toast } from 'sonner'
 import { LeaderboardEntry, NewLeaderboardEntry } from '@/db/types'
@@ -40,7 +40,7 @@ export function useUpdateLeaderBoardEntry() {
         }: {
             id: string
             leaderBoardEntry: Partial<LeaderboardEntry>
-        }) => updateLeaderBoardEntry(id, leaderBoardEntry),
+        }) => updateLeaderboardEntry(id, leaderBoardEntry),
         onSuccess: () => {
             toast.success('leaderboard-entry updated successfully')
             queryClient.invalidateQueries({ queryKey: ['fetch-leaderboard'] })

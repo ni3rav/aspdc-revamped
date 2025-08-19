@@ -2,9 +2,9 @@ export type Achievement = {
     id: string
     title: string
     description: string
-    date: string
-    created_at: string
-    image_url: string | null
+    date: Date
+    createdAt: Date
+    imageUrl: string | null
 }
 
 export type Blog = {
@@ -12,18 +12,18 @@ export type Blog = {
     title: string
     author: string
     link: string
-    publish_date: string
-    cover_image: string | null
-    created_at: string
+    publishDate: Date
+    coverImage: string | null
+    createdAt: Date
 }
 
 export type Event = {
     id: string
     name: string
-    date: string
+    date: Date
     details: string
-    created_at: string
-    image_urls: string[]
+    createdAt: Date
+    imageUrls: string[]
 }
 
 export type LeaderboardEntry = {
@@ -31,7 +31,7 @@ export type LeaderboardEntry = {
     rank: number
     username: string
     rating: number
-    created_at: string
+    createdAt: Date
 }
 
 export type Project = {
@@ -39,26 +39,27 @@ export type Project = {
     name: string
     author: string
     description: string
-    live_link: string | null
-    github_url: string | null
-    created_at: string
-    project_banner_url: string | null
+    liveLink: string | null
+    githubUrl: string | null
+    createdAt: Date
+    projectBannerUrl: string | null
 }
 
 export type UpcomingEvent = {
     id: string
     name: string
-    date: string
+    date: Date
     description: string
     location: string | null
-    registration_link: string | null
-    created_at: string
-    event_image_url: string | null
+    registrationLink: string | null
+    createdAt: Date
+    eventImageUrl: string | null
 }
 
-export type NewAchievement = Omit<Achievement, 'id' | 'created_at'>
-export type NewBlog = Omit<Blog, 'id' | 'created_at'>
-export type NewEvent = Omit<Event, 'id' | 'created_at'>
-export type NewLeaderboardEntry = Omit<LeaderboardEntry, 'id' | 'created_at'>
-export type NewProject = Omit<Project, 'id' | 'created_at'>
-export type NewUpcomingEvent = Omit<UpcomingEvent, 'id' | 'created_at'>
+// New entity types
+export type NewAchievement = Omit<Achievement, 'id' | 'createdAt'>
+export type NewBlog = Omit<Blog, 'id' | 'createdAt'>
+export type NewEvent = Omit<Event, 'id' | 'createdAt'>
+export type NewLeaderboardEntry = Omit<LeaderboardEntry, 'id' | 'createdAt'>
+export type NewProject = Omit<Project, 'id' | 'createdAt'>
+export type NewUpcomingEvent = Omit<UpcomingEvent, 'id' | 'createdAt'>
