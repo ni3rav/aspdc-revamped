@@ -20,7 +20,7 @@ export default function ProjectsPage() {
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {data.map((project) => (
                     <div
-                        key={project.github_url}
+                        key={project.githubUrl}
                         className="rounded-md border border-gray-200 p-4 transition hover:shadow-md"
                     >
                         <h2 className="mb-1 text-lg font-semibold">
@@ -41,9 +41,9 @@ export default function ProjectsPage() {
                                     Live
                                 </a>
                             )}
-                            {project.github_url && (
+                            {project.githubUrl && (
                                 <a
-                                    href={project.github_url}
+                                    href={project.githubUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-600 underline"

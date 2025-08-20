@@ -56,17 +56,11 @@ interface ModifyDialogTriggerProps {
     label?: string
 }
 
-function ModifyDialogTrigger({
-    children,
-    label = 'Edit',
-}: ModifyDialogTriggerProps) {
+function ModifyDialogTrigger({ children }: ModifyDialogTriggerProps) {
     return (
-        <DialogTrigger asChild>
+        <DialogTrigger asChild className="cursor-pointer">
             {children || (
-                <Button variant="outline" size="sm">
-                    <Edit className="mr-2 h-4 w-4" />
-                    {label}
-                </Button>
+                <Edit className="mr-2 size-6 transition-all delay-100 hover:opacity-30" />
             )}
         </DialogTrigger>
     )

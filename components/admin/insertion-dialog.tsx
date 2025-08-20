@@ -61,14 +61,11 @@ interface TriggerProps {
     asChild?: boolean
 }
 
-function Trigger({ children, label = 'Add New', asChild }: TriggerProps) {
+function Trigger({ children, asChild }: TriggerProps) {
     return (
-        <DialogTrigger asChild={asChild}>
+        <DialogTrigger asChild={asChild} className="cursor-pointer">
             {children || (
-                <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    {label}
-                </Button>
+                <Plus className="mr-2 size-6 transition-all delay-100 hover:opacity-30" />
             )}
         </DialogTrigger>
     )

@@ -62,7 +62,7 @@ export default function ProjectsPage() {
                             title={project.name}
                             subtitle={`By ${project.author}`}
                             description={project.description}
-                            imageUrl={project.project_banner_url}
+                            imageUrl={project.projectBannerUrl}
                             badges={[{ label: 'Project', variant: 'default' }]}
                             actions={
                                 <div className="flex gap-2">
@@ -115,14 +115,14 @@ export default function ProjectsPage() {
                             }
                             footer={
                                 <div className="flex gap-2">
-                                    {project.live_link && (
+                                    {project.liveLink && (
                                         <Button
                                             variant="outline"
                                             size="sm"
                                             asChild
                                         >
                                             <a
-                                                href={project.live_link}
+                                                href={project.liveLink}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
@@ -130,14 +130,14 @@ export default function ProjectsPage() {
                                             </a>
                                         </Button>
                                     )}
-                                    {project.github_url && (
+                                    {project.githubUrl && (
                                         <Button
                                             variant="outline"
                                             size="sm"
                                             asChild
                                         >
                                             <a
-                                                href={project.github_url}
+                                                href={project.githubUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >

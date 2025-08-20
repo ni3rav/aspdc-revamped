@@ -1,16 +1,17 @@
 'use client'
 
 import type React from 'react'
-
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import type { NewProject, Project } from '@/db/types'
+import type { Project } from '@/db/types'
 
 interface ProjectFormProps {
-    onSubmit: (data: NewProject) => void
+    // ✅ accepts Partial<Project> instead of NewProject
+    // because update only needs changed fields, not a full project
+    onSubmit: (data: Partial<Project>) => void
     isLoading?: boolean
     initialData?: Project
     submitLabel?: string
@@ -22,18 +23,27 @@ export function ProjectForm({
     initialData,
     submitLabel = 'Submit',
 }: ProjectFormProps) {
-    const [formData, setFormData] = useState<NewProject>({
+    const [formData, setFormData] = useState<Partial<Project>>({
         name: initialData?.name ?? '',
         author: initialData?.author ?? '',
         description: initialData?.description ?? '',
-        live_link: initialData?.live_link ?? '',
-        github_url: initialData?.github_url ?? '',
-        project_banner_url: initialData?.project_banner_url ?? '',
+        liveLink: initialData?.liveLink ?? '',
+        githubUrl: initialData?.githubUrl ?? '',
+        projectBannerUrl: initialData?.projectBannerUrl ?? '',
     })
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        onSubmit(formData)
+
+        // ✅ Clean out empty strings & undefined
+        // so DB only updates provided fields
+        const cleaned = Object.fromEntries(
+            Object.entries(formData).filter(
+                ([_, v]) => v !== '' && v !== undefined
+            )
+        )
+
+        onSubmit(cleaned)
     }
 
     return (
@@ -42,7 +52,7 @@ export function ProjectForm({
                 <Label htmlFor="name">Project Name</Label>
                 <Input
                     id="name"
-                    value={formData.name}
+                    value={formData.name ?? ''}
                     onChange={(e) =>
                         setFormData((prev) => ({
                             ...prev,
@@ -57,7 +67,7 @@ export function ProjectForm({
                 <Label htmlFor="author">Author</Label>
                 <Input
                     id="author"
-                    value={formData.author}
+                    value={formData.author ?? ''}
                     onChange={(e) =>
                         setFormData((prev) => ({
                             ...prev,
@@ -72,7 +82,7 @@ export function ProjectForm({
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                     id="description"
-                    value={formData.description}
+                    value={formData.description ?? ''}
                     onChange={(e) =>
                         setFormData((prev) => ({
                             ...prev,
@@ -84,45 +94,45 @@ export function ProjectForm({
             </div>
 
             <div>
-                <Label htmlFor="live_link">Live Link</Label>
+                <Label htmlFor="liveLink">Live Link</Label>
                 <Input
-                    id="live_link"
+                    id="liveLink"
                     type="url"
-                    value={formData?.live_link ?? ''}
+                    value={formData.liveLink ?? ''}
                     onChange={(e) =>
                         setFormData((prev) => ({
                             ...prev,
-                            live_link: e.target.value,
+                            liveLink: e.target.value,
                         }))
                     }
                 />
             </div>
 
             <div>
-                <Label htmlFor="github_url">GitHub URL</Label>
+                <Label htmlFor="githubUrl">GitHub URL</Label>
                 <Input
-                    id="github_url"
+                    id="githubUrl"
                     type="url"
-                    value={formData?.github_url ?? ''}
+                    value={formData.githubUrl ?? ''}
                     onChange={(e) =>
                         setFormData((prev) => ({
                             ...prev,
-                            github_url: e.target.value,
+                            githubUrl: e.target.value,
                         }))
                     }
                 />
             </div>
 
             <div>
-                <Label htmlFor="project_banner_url">Banner Image URL</Label>
+                <Label htmlFor="projectBannerUrl">Banner Image URL</Label>
                 <Input
-                    id="project_banner_url"
+                    id="projectBannerUrl"
                     type="url"
-                    value={formData?.project_banner_url ?? ''}
+                    value={formData.projectBannerUrl ?? ''}
                     onChange={(e) =>
                         setFormData((prev) => ({
                             ...prev,
-                            project_banner_url: e.target.value,
+                            projectBannerUrl: e.target.value,
                         }))
                     }
                 />

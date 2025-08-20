@@ -56,14 +56,11 @@ interface TriggerProps {
     asChild?: boolean
 }
 
-function Trigger({ children, label = 'Delete', asChild }: TriggerProps) {
+function Trigger({ children, asChild }: TriggerProps) {
     return (
-        <DialogTrigger asChild={asChild}>
+        <DialogTrigger asChild={asChild} className="cursor-pointer">
             {children || (
-                <Button variant="destructive" size="sm">
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    {label}
-                </Button>
+                <Trash2 className="text-destructive mr-2 size-6 transition-all delay-100 hover:opacity-30" />
             )}
         </DialogTrigger>
     )
