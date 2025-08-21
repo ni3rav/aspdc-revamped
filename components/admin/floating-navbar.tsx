@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { SignedIn, SignOutButton } from '@clerk/nextjs'
 import {
     CalendarClock,
     Code,
@@ -10,6 +11,7 @@ import {
     Home,
     Images,
     Trophy,
+    LogOut,
 } from 'lucide-react'
 
 interface FloatingNavbarProps {
@@ -58,6 +60,17 @@ export function FloatingNavbar({ basePath = '' }: FloatingNavbarProps) {
                         </Link>
                     )
                 })}
+
+                <SignedIn>
+                    <div className="border-border/40 ml-2 flex items-center border-l pl-2">
+                        <SignOutButton>
+                            <button className="text-muted-foreground hover:text-foreground hover:bg-accent/60 flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95">
+                                <LogOut className="h-4 w-4" />
+                                Logout
+                            </button>
+                        </SignOutButton>
+                    </div>
+                </SignedIn>
             </nav>
         </div>
     )

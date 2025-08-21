@@ -3,6 +3,7 @@ import { Space_Grotesk } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 import QueryProvider from '@/lib/query-provider'
+import { ClerkProvider } from '@clerk/nextjs'
 
 const spaceGrotesk = Space_Grotesk({
     variable: '--font-space-grotesk',
@@ -19,11 +20,19 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     return (
-        <html lang="en">
-            <body className={`${spaceGrotesk.className} antialiased`}>
-                <Toaster richColors position="top-center" />
-                <QueryProvider>{children}</QueryProvider>
-            </body>
-        </html>
+        <ClerkProvider
+            appearance={{
+                elements: {
+                    footer: 'hidden',
+                },
+            }}
+        >
+            <html lang="en">
+                <body className={`${spaceGrotesk.className} antialiased`}>
+                    <Toaster richColors position="top-center" />
+                    <QueryProvider>{children}</QueryProvider>
+                </body>
+            </html>
+        </ClerkProvider>
     )
 }
