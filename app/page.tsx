@@ -1,7 +1,4 @@
 import Hero from '@/components/layout/Hero'
-import WrapButton from '@/components/ui/wrap-button'
-import { Phone } from 'lucide-react'
-import Link from 'next/link'
 import React from 'react'
 
 const page = () => {

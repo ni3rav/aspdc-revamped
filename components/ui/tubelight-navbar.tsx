@@ -3,13 +3,11 @@
 import React, { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface NavItem {
   name: string
   url: string
-  // icon: LucideIcon
 }
 
 interface NavBarProps {
@@ -38,9 +36,8 @@ export function NavBar({ items, className }: NavBarProps) {
         className,
       )}
     >
-      <div className="flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
+      <div className="flex items-center gap-3 bg-background/5 border border-border ring-inset-2 ring-inset-primary backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
         {items.map((item) => {
-          // const Icon = item.icon
           const isActive = activeTab === item.name
 
           return (
@@ -56,7 +53,6 @@ export function NavBar({ items, className }: NavBarProps) {
             >
               <span className="hidden md:inline">{item.name}</span>
               <span className="md:hidden">
-                {/* <Icon size={18} strokeWidth={2.5} /> */}
               </span>
               {isActive && (
                 <motion.div
