@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+.secnone {
+    user-select: none
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -76,7 +80,7 @@
     --card-foreground: oklch(1 0 0);
     --popover: oklch(0.2393 0 0);
     --popover-foreground: oklch(1 0 0);
-    --primary: oklch(0.7451 0.1577 151.5384);
+    --primary: #23C55E;
     --primary-foreground: oklch(0 0 0);
     --secondary: oklch(0.3306 0.0285 154.5649);
     --secondary-foreground: oklch(0.9551 0 0);
@@ -88,7 +92,7 @@
     --destructive-foreground: oklch(0 0 0);
     --border: oklch(0.2686 0 0);
     --input: oklch(0.3306 0.0285 154.5649);
-    --ring: oklch(0.7451 0.1577 151.5384);
+    --ring: #23C55E;
     --chart-1: oklch(0.7451 0.1577 151.5384);
     --chart-2: oklch(0.6161 0.1222 153.851);
     --chart-3: oklch(0.4824 0.0878 157.0934);
@@ -97,12 +101,12 @@
     --radius: 0.5rem;
     --sidebar: oklch(0.2178 0 0);
     --sidebar-foreground: oklch(1 0 0);
-    --sidebar-primary: oklch(0.7451 0.1577 151.5384);
+    --sidebar-primary: #23C55E;
     --sidebar-primary-foreground: oklch(0 0 0);
     --sidebar-accent: oklch(0.3306 0.0285 154.5649);
     --sidebar-accent-foreground: oklch(0.9551 0 0);
     --sidebar-border: oklch(0.3306 0.0285 154.5649);
-    --sidebar-ring: oklch(0.7451 0.1577 151.5384);
+    --sidebar-ring: #23C55E;
     --font-sans: Geist, sans-serif;
     --font-serif: Georgia, serif;
     --font-mono: Geist Mono, monospace;

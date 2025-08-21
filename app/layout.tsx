@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 import QueryProvider from '@/lib/query-provider'
 import Navbar from '@/components/layout/Navbar'
+import DotGrid from '@/components/bits/DotGrid/DotGrid'
 
 const spaceGrotesk = Space_Grotesk({
     variable: '--font-space-grotesk',
@@ -25,11 +26,13 @@ export default function RootLayout({
             <body className={`${spaceGrotesk.className} antialiased`}>
                 <Toaster richColors position="top-center" />
                 <QueryProvider>
-                    <div className='absolute'>
-                        {/* <div className="fixed top-0 left-0"> */}
-                        {/* </div> */}
-                        {children}
+                    <div className='w-screen relative'>
+                        <div className="fixed inset-0 -z-10">
+                            <DotGrid dotSize={10} baseColor='#111111' activeColor='#23C55E' className='h-full w-full' />
+                        </div>
+                        <Navbar />
                     </div>
+                    {children}
 
                 </QueryProvider>
             </body>

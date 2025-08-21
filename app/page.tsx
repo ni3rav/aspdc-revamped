@@ -1,15 +1,15 @@
-import DotGrid from '@/components/bits/DotGrid/DotGrid'
-import Navbar from '@/components/layout/Navbar'
+import Hero from '@/components/layout/Hero'
+import WrapButton from '@/components/ui/wrap-button'
+import { Phone } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 const page = () => {
     return (
-        <main className='min-h-dvh w-screen relative'>
-            <Navbar />
-            <div className='fixed inset-0 -z-10'>
-                <DotGrid dotSize={10} baseColor='#111111' activeColor='#23C55E' className='h-full w-full' />
-            </div>
-        </main>
+        <div className='min-h-dvh w-screen'>
+            <Hero />
+            
+        </div>
     )
 }
 

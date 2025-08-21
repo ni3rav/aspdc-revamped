@@ -11,7 +11,7 @@ const Navbar = () => {
         { name: 'Leaderboard', url: '/' },
     ]
     return (
-        <NavBar items={navItems} className="text-white" />
+        <NavBar items={navItems} className="text-white secnone" />
     )
 }
 
