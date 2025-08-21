@@ -20,13 +20,13 @@ const Hero = () => {
 
                 {/* Main hero content */}
                 <div className="flex flex-1 flex-col justify-center items-center text-center">
-                    <TextScramble className="text-9xl font-extrabold text-primary ">
+                    <TextScramble duration={1.5} className="text-9xl font-extrabold text-primary ">
                         ASPDC
                     </TextScramble>
                     <TextScramble className="text-xl sm:text-2xl text-gray-300">
                         Adani Students Programming and Development Club
                     </TextScramble>
-                    <p className="text-base sm:text-5xl text-gray-400 italic mt-14">
+                    <p className="text-base sm:text-5xl text-gray-400 mt-6">
                         For The Students, By The Students
                     </p>
                 </div>
