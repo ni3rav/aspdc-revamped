@@ -1,4 +1,8 @@
+'use client'
 import React from 'react'
+import { motion } from 'framer-motion'
+import { TextEffect } from '@/components/motion-primitives/text-effect'
+import { TextScramble } from '@/components/motion-primitives/text-scramble'
 
 const page = () => {
     const everything = [
@@ -38,7 +42,7 @@ const page = () => {
                 {
                     name: "Rudra Patel",
                     role: "Member",
-                    avatar: "/team/rudra.jpg"
+                    avatar: "/team/rudra.jpeg"
                 },
                 {
                     name: "Dwij Gosai",
@@ -127,7 +131,7 @@ const page = () => {
                 },
                 {
                     name: "Ved Parmar",
-                    role: "Assistant",
+                    role: "Lead",
                     avatar: "/team/ved.jpg"
                 }
             ]
@@ -177,22 +181,51 @@ const page = () => {
     return (
         <section className="py-12 md:py-32">
             <div className="mx-auto max-w-5xl px-8 lg:px-0">
-                <h2 className="mb-8 text-primary uppercase text-4xl font-bold md:mb-16 lg:text-5xl">The Faces Behind ASPDC</h2>
+                <TextScramble className="mb-8 text-primary uppercase text-4xl font-bold md:mb-16 lg:text-5xl">The Faces Behind ASPDC</TextScramble>
                 {
                     everything.map((d, idx) => (
                         <div key={idx}>
-                            <h3 className="mb-3 text-2xl font-medium text-primary">{d.domainName}</h3>
-                            <div className="grid grid-cols-2 gap-4 border-t border-white py-5 md:grid-cols-4">
+                            <TextEffect per='char' preset='blur' speedReveal={.6} className="mb-3 text-2xl font-medium text-primary">{d.domainName}</TextEffect>
+                            <motion.div
+                                initial={{ width: 0 }}
+                                whileInView={{ width: "100%" }}
+                                transition={{ duration: 1 }}
+                                viewport={{ once: true }}
+                                className="h-px bg-white"
+                            />
+
+                            <motion.div
+                                transition={{ duration: 1 }}
+                                className="grid grid-cols-2 gap-4 py-5 md:grid-cols-4"
+                            >
                                 {d.members.map((member, index) => (
-                                    <div key={index}>
-                                        <div className="bg-white size-50 rounded-xl border p-0.5 shadow shadow-zinc-950/5">
-                                            <img className="aspect-square rounded-xl object-cover" src={member.avatar} alt={member.name} height="460" width="460" loading="lazy" />
+                                    <motion.div
+                                        initial={{ y: 40, opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1 }}
+                                        transition={{ duration: 0.5, delay: index * 0.1 }} // stagger effect
+                                        viewport={{ once: true }}
+                                        key={index}
+                                    >
+                                        <div
+                                            className={`size-50 rounded-2xl border p-0.5 shadow shadow-zinc-950/5 ${member.role == "Member" ? "bg-white" : "bg-primary"
+                                                }`}
+                                        >
+                                            <img
+                                                className="aspect-square rounded-xl object-cover"
+                                                src={member.avatar}
+                                                alt={member.name}
+                                                height="460"
+                                                width="460"
+                                                loading="lazy"
+                                            />
                                         </div>
                                         <span className="mt-2 block text-base">{member.name}</span>
-                                        <span className="text-muted-foreground block text-sm">{member.role}</span>
-                                    </div>
+                                        <span className="text-muted-foreground block text-sm">
+                                            {member.role}
+                                        </span>
+                                    </motion.div>
                                 ))}
-                            </div>
+                            </motion.div>
                         </div>
                     ))
 
