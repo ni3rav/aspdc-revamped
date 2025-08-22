@@ -7,8 +7,8 @@ const Navbar = () => {
         { name: 'Team', url: '/team' },
         { name: 'Upcoming', url: '/upcoming' },
         { name: 'Events', url: '/events' },
-        { name: 'Projects', url: '/' },
-        { name: 'Digest', url: '/' },
+        { name: 'Projects', url: '/projects' },
+        { name: 'Digest', url: '/digest' },
     ]
     return (
         <NavBar items={navItems} className="text-white secnone" />

@@ -31,7 +31,7 @@ const Hero = () => {
                     </p>
                 </div>
 
-                <div className='flex flex-col gap-5 justify-center items-center mb-10 text-xl secnone'>
+                <div className='flex flex-col gap-5 justify-center items-center mb-10 text-xl'>
                     <p>Scroll down to explore</p>
                     <ChevronDown />
                 </div>

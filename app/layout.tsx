@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${spaceGrotesk.className} antialiased`}>
+            <body className={`${spaceGrotesk.className} antialiased secnone`}>
                 <Toaster richColors position="top-center" />
                 <QueryProvider>
                     <div className='w-screen relative'>

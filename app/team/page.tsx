@@ -179,7 +179,7 @@ const page = () => {
     ]
 
     return (
-        <section className="py-12 md:py-32">
+        <main className="py-12 md:py-32">
             <div className="mx-auto max-w-5xl px-8 lg:px-0">
                 <TextScramble className="mb-8 text-primary uppercase text-4xl font-bold md:mb-16 lg:text-5xl">The Faces Behind ASPDC</TextScramble>
                 {
@@ -202,7 +202,7 @@ const page = () => {
                                     <motion.div
                                         initial={{ y: 40, opacity: 0 }}
                                         whileInView={{ y: 0, opacity: 1 }}
-                                        transition={{ duration: 0.5, delay: index * 0.1 }} // stagger effect
+                                        transition={{ duration: 0.5, delay: index * 0.1 }}
                                         viewport={{ once: true }}
                                         key={index}
                                     >
@@ -228,10 +228,9 @@ const page = () => {
                             </motion.div>
                         </div>
                     ))
-
                 }
             </div>
-        </section>
+        </main>
     )
 }
 
