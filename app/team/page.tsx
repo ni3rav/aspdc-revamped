@@ -8,7 +8,7 @@ const page = () => {
                 {
                     name: "Dr. Nikita Joshi",
                     role: "",
-                    avatar: "/team/nikitamam.jpg"
+                    avatar: "/team/nikitamam.jpeg"
                 }
             ]
         },
@@ -176,20 +176,20 @@ const page = () => {
 
     return (
         <section className="py-12 md:py-32">
-            <div className="mx-auto max-w-3xl px-8 lg:px-0">
+            <div className="mx-auto max-w-5xl px-8 lg:px-0">
                 <h2 className="mb-8 text-primary uppercase text-4xl font-bold md:mb-16 lg:text-5xl">The Faces Behind ASPDC</h2>
                 {
                     everything.map((d, idx) => (
                         <div key={idx}>
-                            <h3 className="mb-6 text-lg font-medium">{d.domainName}</h3>
-                            <div className="grid grid-cols-2 gap-4 border-t py-6 md:grid-cols-4">
+                            <h3 className="mb-3 text-2xl font-medium text-primary">{d.domainName}</h3>
+                            <div className="grid grid-cols-2 gap-4 border-t border-white py-5 md:grid-cols-4">
                                 {d.members.map((member, index) => (
                                     <div key={index}>
-                                        <div className="bg-background size-40 rounded-xl border p-0.5 shadow shadow-zinc-950/5">
+                                        <div className="bg-white size-50 rounded-xl border p-0.5 shadow shadow-zinc-950/5">
                                             <img className="aspect-square rounded-xl object-cover" src={member.avatar} alt={member.name} height="460" width="460" loading="lazy" />
                                         </div>
-                                        <span className="mt-2 block text-sm">{member.name}</span>
-                                        <span className="text-muted-foreground block text-xs">{member.role}</span>
+                                        <span className="mt-2 block text-base">{member.name}</span>
+                                        <span className="text-muted-foreground block text-sm">{member.role}</span>
                                     </div>
                                 ))}
                             </div>

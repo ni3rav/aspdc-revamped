@@ -5,10 +5,10 @@ const Navbar = () => {
     const navItems = [
         { name: 'Home', url: '/' },
         { name: 'Team', url: '/team' },
+        { name: 'Upcoming', url: '/upcoming' },
         { name: 'Events', url: '/events' },
-        { name: 'Gallery', url: '/' },
         { name: 'Projects', url: '/' },
-        { name: 'Leaderboard', url: '/' },
+        { name: 'Digest', url: '/' },
     ]
     return (
         <NavBar items={navItems} className="text-white secnone" />

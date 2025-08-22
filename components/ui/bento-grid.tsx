@@ -41,7 +41,11 @@ export const BentoGridItem = ({
     >
       {header}
       <div className="transition duration-200 group-hover/bento:translate-x-2">
-        {icon}
+        {typeof icon === "string" ? (
+          <img src={icon} alt="" className="rounded-lg" />
+        ) : (
+          icon
+        )}
         <div className="mt-2 mb-2 font-sans font-bold text-neutral-600 dark:text-neutral-200">
           {title}
         </div>
@@ -52,3 +56,8 @@ export const BentoGridItem = ({
     </div>
   );
 };
+
+
+
+// className={i === 3 || i === 6 ? "md:col-span-2" : ""}
+// add this to BentoGridItem to make it span 2 columns
