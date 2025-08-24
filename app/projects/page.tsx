@@ -3,7 +3,7 @@ import { Dcardcode } from '@/components/Dcardcode'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import { Project } from "@/supabase/types"
 
-export const projects: Project[] = [
+const projects: Project[] = [
     {
         id: '1',
         name: 'Floating UI',
@@ -67,27 +67,23 @@ export const projects: Project[] = [
 ]
 const page = () => {
     return (
-        <main className="py-12 md:py-32">
-            <div className="mx-auto max-w-5xl px-8 lg:px-0">
-                <TextScramble className="mb-8 text-primary uppercase text-3xl font-bold md:mb-16 lg:text-4xl">
-                    Projects showcase
-                </TextScramble>
-            </div>
+        <main className="py-12 md:py-32 mx-auto max-w-5xl px-8 lg:px-0">
+            <TextScramble className="mb-8 text-primary uppercase underline underline-offset-5 text-3xl font-bold md:mb-16 lg:text-4xl">
+                Projects Showcase
+            </TextScramble>
 
-            <div className="mx-auto max-w-5xl px-8 lg:px-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
-                    {projects.map((project) => (
-                        <Dcardcode
-                            key={project.id}
-                            title={project.name}
-                            author={project.author}
-                            description={project.description}
-                            imgUrl={project.project_banner_url ?? undefined}
-                            github_url={project.github_url ?? undefined}
-                            liveUrl={project.live_link ?? undefined}
-                        />
-                    ))}
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
+                {projects.map((project) => (
+                    <Dcardcode
+                        key={project.id}
+                        title={project.name}
+                        author={project.author}
+                        description={project.description}
+                        imgUrl={project.project_banner_url ?? undefined}
+                        github_url={project.github_url ?? undefined}
+                        liveUrl={project.live_link ?? undefined}
+                    />
+                ))}
             </div>
         </main>
     )

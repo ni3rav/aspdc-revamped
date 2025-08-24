@@ -21,16 +21,16 @@ const WrapButton: React.FC<WrapButtonProps> = ({
         <Link href={href}>
           <div
             className={cn(
-              "group cursor-pointer border group border-[#3B3A3A] bg-[#151515] gap-2  h-[58px] flex items-center p-[11px] rounded-full",
+              "group cursor-pointer border group border-[#3B3A3A] bg-[#151515] text-sm h-[46px] flex items-center p-[10px] rounded-full",
               className
             )}
           >
               <p className="font-medium tracking-tight mr-3 ml-2 flex items-center gap-2 justify-center group-hover:text-primary">
                 {children}
               </p>
-            <div className="text-[#3b3a3a] group-hover:text-primary group-hover:border-primary group-hover:ml-2  ease-in-out transition-all size-[26px] flex items-center justify-center rounded-full border-2 border-[#3b3a3a]  ">
+            <div className="text-[#3b3a3a] group-hover:text-primary group-hover:border-primary group-hover:ml-2  ease-in-out transition-all size-[20px] flex items-center justify-center rounded-full border-2 border-[#3b3a3a]  ">
               <ArrowRight
-                size={18}
+                size={14}
                 className="group-hover:rotate-45 ease-in-out transition-all "
               />
             </div>

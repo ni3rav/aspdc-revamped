@@ -5,7 +5,6 @@ const page = () => {
     return (
         <div className='min-h-dvh w-screen'>
             <Hero />
-            
         </div>
     )
 }
