@@ -4,6 +4,10 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+.secnone {
+    user-select: none;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /* ===================================
@@ -145,7 +149,7 @@
     /* Sidebar Colors */
     --sidebar: oklch(0.2178 0 0);
     --sidebar-foreground: oklch(1 0 0);
-    --sidebar-primary: oklch(0.7451 0.1577 151.5384);
+    --sidebar-primary: #23c55e;
     --sidebar-primary-foreground: oklch(0 0 0);
     --sidebar-accent: oklch(0.3306 0.0285 154.5649);
     --sidebar-accent-foreground: oklch(0.9551 0 0);
