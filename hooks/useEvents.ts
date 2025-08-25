@@ -30,15 +30,20 @@ export function useUpdateEvent() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: ({ id, event }: { id: string; event: Partial<Event> }) =>
-            updateEvent(id, event),
+        mutationFn: ({ id, event }: { id: string; event: Partial<Event> }) => {
+            const formattedEvent: Partial<Event> = {
+                ...event,
+                ...(event.date && { date: new Date(event.date) }),
+            }
+            return updateEvent(id, formattedEvent)
+        },
         onSuccess: () => {
-            toast.success('event updated successfully')
+            toast.success('Event updated successfully')
             queryClient.invalidateQueries({ queryKey: ['fetch-events'] })
         },
         onError: (error: Error) => {
-            toast.error('Failed to update blog')
-            console.error('Error updating blog:', error.message)
+            toast.error('Failed to update event')
+            console.error('Error updating event:', error.message)
         },
     })
 }
