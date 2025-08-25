@@ -10,7 +10,7 @@ export default function LoginPage() {
                             footerAction: { display: 'none' },
                         },
                     }}
-                    redirectUrl="/"
+                    redirectUrl="/admin"
                 />
             </div>
         </div>
