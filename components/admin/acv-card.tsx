@@ -64,7 +64,9 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
                     <Trophy className="text-primary h-5 w-5" />
                     <div className="text-muted-foreground flex items-center text-sm">
                         <Calendar className="mr-1 h-4 w-4" />
-                        {achievement.date.toLocaleDateString()}
+                        {achievement.date instanceof Date
+                            ? achievement.date.toISOString().split('T')[0]
+                            : achievement.date}
                     </div>
                 </div>
                 <CardTitle className="text-foreground">
@@ -156,9 +158,11 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
                                     type="date"
                                     value={
                                         editData.date
-                                            ? editData.date
-                                                  .toISOString()
-                                                  .split('T')[0]
+                                            ? editData.date instanceof Date
+                                                ? editData.date
+                                                      .toISOString()
+                                                      .split('T')[0]
+                                                : editData.date
                                             : ''
                                     }
                                     onChange={(e) =>

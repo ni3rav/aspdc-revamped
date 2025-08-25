@@ -67,7 +67,9 @@ export function EventCard({ event }: EventCardProps) {
                 <div className="flex items-center justify-between">
                     <div className="text-muted-foreground flex items-center text-sm">
                         <Calendar className="mr-1 h-4 w-4" />
-                        {event.date.toLocaleDateString()}
+                        {event.date instanceof Date
+                            ? event.date.toLocaleDateString()
+                            : new Date(event.date).toLocaleDateString()}
                     </div>
                     {event.imageUrls.length > 0 && (
                         <div className="text-muted-foreground flex items-center text-sm">
@@ -154,9 +156,22 @@ export function EventCard({ event }: EventCardProps) {
                                     type="date"
                                     value={
                                         editData.date
-                                            ? editData.date
-                                                  .toISOString()
-                                                  .split('T')[0]
+                                            ? (() => {
+                                                  const dateObj =
+                                                      editData.date instanceof
+                                                      Date
+                                                          ? editData.date
+                                                          : new Date(
+                                                                editData.date as string
+                                                            )
+                                                  return !isNaN(
+                                                      dateObj.getTime()
+                                                  )
+                                                      ? dateObj
+                                                            .toISOString()
+                                                            .split('T')[0]
+                                                      : ''
+                                              })()
                                             : ''
                                     }
                                     onChange={(e) =>

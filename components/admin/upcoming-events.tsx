@@ -82,7 +82,10 @@ export function UpcomingEventCard({ event }: UpcomingEventCardProps) {
                 <div className="flex items-center justify-between">
                     <div className="text-muted-foreground flex items-center text-sm">
                         <Calendar className="mr-1 h-4 w-4" />
-                        {event.date.toLocaleDateString()}
+                        {(event.date instanceof Date
+                            ? event.date
+                            : new Date(event.date)
+                        ).toLocaleDateString()}
                         {isEventSoon() && (
                             <span className="bg-primary/10 text-primary ml-2 rounded-full px-2 py-1 text-xs">
                                 Soon
@@ -181,9 +184,15 @@ export function UpcomingEventCard({ event }: UpcomingEventCardProps) {
                                     type="date"
                                     value={
                                         editData.date
-                                            ? editData.date
-                                                  .toISOString()
-                                                  .split('T')[0]
+                                            ? editData.date instanceof Date
+                                                ? editData.date
+                                                      .toISOString()
+                                                      .split('T')[0]
+                                                : new Date(
+                                                      editData.date as string
+                                                  )
+                                                      .toISOString()
+                                                      .split('T')[0]
                                             : ''
                                     }
                                     onChange={(e) =>

@@ -68,7 +68,11 @@ export async function updateAchievement(
 ) {
     const adaptedData = {
         ...data,
-        date: data.date ? data.date.toISOString().split('T')[0] : undefined,
+        date: data.date
+            ? typeof data.date === 'string'
+                ? data.date
+                : (data.date as Date).toISOString().split('T')[0]
+            : undefined,
     }
 
     await db

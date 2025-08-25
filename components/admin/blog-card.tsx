@@ -70,7 +70,7 @@ export function BlogCard({ blog }: BlogCardProps) {
                     </div>
                     <div className="text-muted-foreground flex items-center text-sm">
                         <Calendar className="mr-1 h-4 w-4" />
-                        {blog.publishDate.toLocaleDateString()}
+                        {new Date(blog.publishDate).toLocaleDateString()}
                     </div>
                 </div>
                 <CardTitle className="text-foreground">{blog.title}</CardTitle>
@@ -193,7 +193,7 @@ export function BlogCard({ blog }: BlogCardProps) {
                                     type="date"
                                     value={
                                         editData.publishDate
-                                            ? editData.publishDate
+                                            ? new Date(editData.publishDate)
                                                   .toISOString()
                                                   .split('T')[0]
                                             : ''
