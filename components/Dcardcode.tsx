@@ -4,7 +4,6 @@
 import React from 'react'
 import { CardBody, CardContainer, CardItem } from '@/components/ui/3d-card'
 import { Github } from 'lucide-react'
-// import { motion } from 'framer-motion'
 
 export function Dcardcode({
     author,
@@ -23,14 +22,7 @@ export function Dcardcode({
 }) {
     return (
         <CardContainer className="inter-var w-full">
-            {/* <motion.div
-        initial={{ scale: 0.8, opacity: 0, y: 50 }}
-        whileInView={{ scale: 1, opacity: 1, y: 0 }}
-        whileTap={{ scale: 1.05 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true, amount: 0.2 }}
-      > */}
-            <CardBody className="group/card relative min-h-[26rem] w-full rounded-xl border border-white/[0.2] bg-black p-4 hover:shadow-2xl hover:shadow-emerald-500/[0.1] sm:p-6">
+            <CardBody className="group/card relative min-h-[24rem] w-full rounded-xl border border-white/[0.2] bg-black p-4 hover:shadow-2xl hover:shadow-emerald-500/[0.1] sm:p-6">
                 <CardItem
                     translateZ="30"
                     className="text-lg font-bold text-white sm:text-xl"
@@ -86,7 +78,6 @@ export function Dcardcode({
                     </CardItem>
                 </div>
             </CardBody>
-            {/* </motion.div> */}
         </CardContainer>
     )
 }

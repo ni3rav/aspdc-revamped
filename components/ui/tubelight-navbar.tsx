@@ -45,18 +45,20 @@ export function NavBar({ items, className }: NavBarProps) {
                     const isActive = isPathActive(item.url)
 
                     return (
-                        <motion.div
-                            key={item.name}
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 + i * 0.1, duration: 0.4 }}
-                            className={cn(
-                                'relative cursor-pointer rounded-full px-5 py-1 text-lg font-semibold transition-colors',
-                                'text-foreground/80 hover:text-primary',
-                                isActive && 'bg-muted text-primary'
-                            )}
-                        >
-                            <Link href={item.url}>
+                        <Link href={item.url} key={item.name}>
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    delay: 0.2 + i * 0.1,
+                                    duration: 0.4,
+                                }}
+                                className={cn(
+                                    'relative cursor-pointer rounded-full px-5 py-1 text-lg font-semibold transition-colors',
+                                    'text-foreground/80 hover:text-primary',
+                                    isActive && 'bg-muted text-primary'
+                                )}
+                            >
                                 <span className="hidden md:inline">
                                     {item.name}
                                 </span>
@@ -86,8 +88,8 @@ export function NavBar({ items, className }: NavBarProps) {
                                         </motion.div>
                                     </motion.div>
                                 )}
-                            </Link>
-                        </motion.div>
+                            </motion.div>
+                        </Link>
                     )
                 })}
             </motion.div>
