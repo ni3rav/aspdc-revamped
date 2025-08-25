@@ -7,6 +7,8 @@ import {
     UpcomingEvent,
 } from '@/db/types'
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+
 // ----------------- Achievements -----------------
 export async function fetchAchievements(): Promise<Achievement[]> {
     const data = await fetch(`/api/achievements`)
@@ -33,7 +35,7 @@ export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
 
 // ----------------- Projects -----------------
 export async function fetchProjects(): Promise<Project[]> {
-    const data = await fetch(`/api/projects`)
+    const data = await fetch(`${BASE_URL}/api/projects`)
     return await data.json()
 }
 

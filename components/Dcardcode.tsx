@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import React from 'react'
 import { CardBody, CardContainer, CardItem } from '@/components/ui/3d-card'
 import { Github } from 'lucide-react'
-import { motion } from 'framer-motion'
+// import { motion } from 'framer-motion'
 
 export function Dcardcode({
     author,
@@ -52,7 +53,7 @@ export function Dcardcode({
 
                 <CardItem translateZ="50" className="mt-4 w-full">
                     <img
-                        src={imgUrl}
+                        src={imgUrl ?? ''}
                         height="500"
                         width="500"
                         className="h-40 w-full rounded-xl object-cover group-hover/card:shadow-xl sm:h-48"

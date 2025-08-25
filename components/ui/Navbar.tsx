@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import React from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
-import Image from 'next/image'
 import './navbar.css'
 import Link from 'next/link'
 
@@ -225,7 +225,7 @@ const Navbar = () => {
                     {/* Enhanced Logo with compact image and text animation */}
                     <div className="nav-item logo-container group flex cursor-pointer items-center gap-3">
                         <div className="relative">
-                            <Image
+                            <img
                                 src="/aspdc compact.png"
                                 alt="ASPDC Logo"
                                 width={32}

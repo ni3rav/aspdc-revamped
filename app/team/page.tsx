@@ -1,9 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import React from 'react'
 import { motion } from 'framer-motion'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
-import Image from 'next/image'
 
 // Framer Motion variants
 const containerVariants = {
@@ -269,14 +269,12 @@ const page = () => {
                                             : 'bg-primary'
                                     }`}
                                 >
-                                    <Image
+                                    <img
                                         className="aspect-square rounded-xl object-cover"
                                         src={member.avatar}
                                         alt={member.name}
                                         width={800}
                                         height={600}
-                                        placeholder="blur"
-                                        blurDataURL={member.blur}
                                     />
                                 </div>
                                 <div className="flex flex-col">

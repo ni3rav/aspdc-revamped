@@ -30,8 +30,8 @@ export function FloatingNavbar({ basePath = '' }: FloatingNavbarProps) {
     ]
 
     return (
-        <div className="fixed top-4 left-1/2 z-50 -translate-x-1/2">
-            <nav className="bg-background/80 border-border/40 flex items-center gap-4 rounded-full border px-2 py-1.5 shadow-lg shadow-black/5 backdrop-blur-md">
+        <div className="fixed top-1/2 left-4 z-50 -translate-y-1/2">
+            <nav className="bg-background/80 border-border/40 flex flex-col items-stretch gap-2 rounded-2xl border px-2 py-3 shadow-lg shadow-black/5 backdrop-blur-md">
                 {navItems.map((item) => {
                     const fullPath = `${basePath}${item.href}`
                     const isActive =
@@ -47,25 +47,25 @@ export function FloatingNavbar({ basePath = '' }: FloatingNavbarProps) {
                             key={item.href}
                             href={fullPath}
                             className={cn(
-                                'relative rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200',
+                                'relative rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
                                 'hover:scale-105 active:scale-95',
-                                'flex items-center gap-2',
+                                'flex items-center gap-3',
                                 isActive
                                     ? 'bg-primary text-primary-foreground shadow-md'
                                     : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
                             )}
                         >
-                            <IconComponent className="h-4 w-4" />
+                            <IconComponent className="h-5 w-5" />
                             {item.label}
                         </Link>
                     )
                 })}
 
                 <SignedIn>
-                    <div className="border-border/40 ml-2 flex items-center border-l pl-2">
+                    <div className="border-border/40 mt-2 flex items-center border-t pt-2">
                         <SignOutButton>
-                            <button className="text-muted-foreground hover:text-foreground hover:bg-accent/60 flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95">
-                                <LogOut className="h-4 w-4" />
+                            <button className="text-muted-foreground hover:text-foreground hover:bg-accent/60 flex items-center gap-3 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95">
+                                <LogOut className="h-5 w-5" />
                                 Logout
                             </button>
                         </SignOutButton>
