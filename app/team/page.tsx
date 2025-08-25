@@ -100,8 +100,9 @@ const page = () => {
 
                     <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: "100%" }}
+                        whileInView={{ width: "100%" }}
                         transition={{ duration: 1 }}
+                        viewport={{once: true, amount: .2}}
                         className="h-px bg-white"
                     />
 

@@ -117,7 +117,7 @@ const page = () => {
             <TextScramble className="mb-8 text-primary uppercase underline underline-offset-5 text-2xl font-bold md:mb-16 lg:text-4xl">
                 Happening @ ASPDC
             </TextScramble>
-            <BentoGrid className="max-w-4xl mx-auto">
+            <BentoGrid>
                 {items.map((item) => (
                     <BentoGridItem
                         key={item.id}
