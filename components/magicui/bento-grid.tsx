@@ -13,6 +13,7 @@ import {
 
 import { cn } from '@/lib/utils'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { ProgressiveBlur } from '../motion-primitives/progressive-blur'
 
 interface BentoGridProps extends ComponentPropsWithoutRef<'div'> {
     children: ReactNode
@@ -54,17 +55,17 @@ const BentoCard = ({
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [dialogImageIndex, setDialogImageIndex] = useState(0)
 
-    useEffect(() => {
-        if (background.length <= 1) return
+    // useEffect(() => {
+    //     if (background.length <= 1) return
 
-        const interval = setInterval(() => {
-            setCurrentImageIndex((prev) =>
-                prev === background.length - 1 ? 0 : prev + 1
-            )
-        }, 2000)
+    //     const interval = setInterval(() => {
+    //         setCurrentImageIndex((prev) =>
+    //             prev === background.length - 1 ? 0 : prev + 1
+    //         )
+    //     }, 2000)
 
-        return () => clearInterval(interval)
-    }, [background])
+    //     return () => clearInterval(interval)
+    // }, [background])
 
     const handlePrevious = () => {
         setDialogImageIndex((prev) =>
@@ -80,45 +81,32 @@ const BentoCard = ({
 
     return (
         <MorphingDialog>
-            <div
-                className={cn(
-                    'group relative flex flex-col justify-between overflow-hidden rounded-xl border',
-                    'bg-background transform-gpu [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] [border:1px_solid_rgba(255,255,255,.1)]',
-                    className
-                )}
-                {...props}
-            >
-                <MorphingDialogTrigger className="flex flex-col">
-                    <div className="relative h-54 w-full overflow-hidden">
-                        {background.map((image, index) => (
-                            <img
-                                key={index}
-                                src={image}
-                                alt={`${name} - image ${index + 1}`}
-                                className={cn(
-                                    'absolute h-full w-full object-cover transition-all duration-500 group-hover:scale-105',
-                                    index === currentImageIndex
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                )}
-                            />
-                        ))}
-                    </div>
-
-                    <div className="pointer-events-none z-10 flex flex-1 flex-col gap-1 p-4 text-center">
-                        <h3 className="text-primary text-xl font-semibold">
+            <MorphingDialogTrigger className="bg-background relative flex flex-col overflow-hidden rounded-2xl border transition-transform duration-300 hover:scale-105">
+                <div className="relative h-full w-full">
+                    {background.map((image, index) => (
+                        <img
+                            key={index}
+                            src={image}
+                            alt={`${name} - image ${index + 1}`}
+                            className={cn(
+                                'absolute h-full w-full object-cover transition-all duration-300 group-hover:scale-110',
+                                index === currentImageIndex
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                            )}
+                        />
+                    ))}
+                    <ProgressiveBlur
+                        className="pointer-events-none absolute bottom-0 left-0 h-[50%] w-full"
+                        blurIntensity={0.5}
+                    />
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 p-4 text-center">
+                        <h3 className="text-2xl font-semibold text-white">
                             {name}
                         </h3>
-                        <p className="text-neutral-400">
-                            {description.length > 120
-                                ? `${description.slice(0, 60)}...`
-                                : description}
-                        </p>
                     </div>
-
-                    <div className="pointer-events-none absolute inset-0 transform-gpu bg-neutral-800/10 transition-all duration-300" />
-                </MorphingDialogTrigger>
-            </div>
+                </div>
+            </MorphingDialogTrigger>
 
             <MorphingDialogContainer>
                 <MorphingDialogContent className="bg-background relative mx-4 h-[80vh] w-[90vw] max-w-4xl overflow-y-auto rounded-xl p-6 shadow-xl">
@@ -127,7 +115,7 @@ const BentoCard = ({
                     <div className="flex flex-col gap-6">
                         {/* Title and Description Section */}
                         <div className="flex flex-col gap-4">
-                            <MorphingDialogTitle className="text-2xl font-bold text-green-500">
+                            <MorphingDialogTitle className="text-4xl font-bold text-green-500">
                                 {name}
                             </MorphingDialogTitle>
 
