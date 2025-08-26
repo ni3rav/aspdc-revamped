@@ -22,12 +22,7 @@ const Events = async () => {
                         description={item.details}
                         cta="See More"
                         href="#"
-                        background={
-                            <img
-                                src={item.imageUrls[0]}
-                                className="h-64 w-full object-cover"
-                            />
-                        }
+                        background={item.imageUrls} // Pass the array directly
                         className={`transition-transform duration-200 ease-in-out hover:scale-[1.05] ${
                             majorEvents.includes(item.name)
                                 ? 'md:col-span-2'
