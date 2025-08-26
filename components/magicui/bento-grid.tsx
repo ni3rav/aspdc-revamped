@@ -15,7 +15,6 @@ interface BentoCardProps extends ComponentPropsWithoutRef<'div'> {
     name: string
     className: string
     background: string[]
-    // Icon: React.ElementType;
     description: string
     href: string
     cta: string
@@ -67,7 +66,7 @@ const BentoCard = ({
             )}
             {...props}
         >
-            <div className="relative h-64 w-full overflow-hidden">
+            <div className="relative h-64 w-full overflow-hidden transition-normal duration-300 group-hover:h-52">
                 {background.map((image, index) => (
                     <img
                         key={index}
@@ -96,7 +95,7 @@ const BentoCard = ({
                     )}
                 >
                     <Button
-                        variant="link"
+                        variant="default"
                         asChild
                         size="sm"
                         className="pointer-events-auto p-0"
@@ -115,7 +114,7 @@ const BentoCard = ({
                 )}
             >
                 <Button
-                    variant="link"
+                    variant="ghost"
                     asChild
                     size="sm"
                     className="pointer-events-auto p-0"

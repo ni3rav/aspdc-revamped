@@ -34,7 +34,7 @@ export default function RootLayout({
                 <body
                     className={`${spaceGrotesk.className} secnone antialiased`}
                 >
-                    <Toaster richColors position="top-center" />
+                    <Toaster richColors position="top-right" />
                     <QueryProvider>
                         <div className="relative w-screen">
                             <div className="fixed inset-0 -z-10">
