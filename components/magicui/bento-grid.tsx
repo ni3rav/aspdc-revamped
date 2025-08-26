@@ -1,10 +1,18 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { ComponentPropsWithoutRef, ReactNode } from 'react'
+import {
+    MorphingDialog,
+    MorphingDialogContainer,
+    MorphingDialogContent,
+    MorphingDialogTrigger,
+    MorphingDialogClose,
+    MorphingDialogTitle,
+    MorphingDialogDescription,
+} from '@/components/motion-primitives/morphing-dialog'
 
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
 interface BentoGridProps extends ComponentPropsWithoutRef<'div'> {
     children: ReactNode
@@ -44,6 +52,7 @@ const BentoCard = ({
     ...props
 }: BentoCardProps) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
+    const [dialogImageIndex, setDialogImageIndex] = useState(0)
 
     useEffect(() => {
         if (background.length <= 1) return
@@ -52,82 +61,133 @@ const BentoCard = ({
             setCurrentImageIndex((prev) =>
                 prev === background.length - 1 ? 0 : prev + 1
             )
-        }, 3000) // Change image every 3 seconds
+        }, 2000)
 
         return () => clearInterval(interval)
     }, [background])
+
+    const handlePrevious = () => {
+        setDialogImageIndex((prev) =>
+            prev === 0 ? background.length - 1 : prev - 1
+        )
+    }
+
+    const handleNext = () => {
+        setDialogImageIndex((prev) =>
+            prev === background.length - 1 ? 0 : prev + 1
+        )
+    }
+
     return (
-        <div
-            key={name}
-            className={cn(
-                'group relative flex flex-col justify-between overflow-hidden rounded-xl border',
-                'bg-background transform-gpu [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] [border:1px_solid_rgba(255,255,255,.1)]',
-                className
-            )}
-            {...props}
-        >
-            <div className="relative h-64 w-full overflow-hidden transition-normal duration-300 group-hover:h-52">
-                {background.map((image, index) => (
-                    <img
-                        key={index}
-                        src={image}
-                        alt={`${name} - image ${index + 1}`}
-                        className={cn(
-                            'absolute h-full w-full object-cover transition-opacity duration-1000',
-                            index === currentImageIndex
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                        )}
-                    />
-                ))}
-            </div>
-            <div className="p-4">
-                <div className="pointer-events-none z-10 flex transform-gpu flex-col gap-1 transition-all duration-300 lg:group-hover:-translate-y-10">
-                    <h3 className="text-primary text-xl font-semibold">
-                        {name}
-                    </h3>
-                    <p className="max-w-lg text-neutral-400">{description}</p>
-                </div>
-
-                <div
-                    className={cn(
-                        'pointer-events-none flex w-full translate-y-0 transform-gpu flex-row items-center transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 lg:hidden'
-                    )}
-                >
-                    <Button
-                        variant="default"
-                        asChild
-                        size="sm"
-                        className="pointer-events-auto p-0"
-                    >
-                        <a href={href}>
-                            {cta}
-                            <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" />
-                        </a>
-                    </Button>
-                </div>
-            </div>
-
+        <MorphingDialog>
             <div
                 className={cn(
-                    'pointer-events-none absolute bottom-0 hidden w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 lg:flex'
+                    'group relative flex flex-col justify-between overflow-hidden rounded-xl border',
+                    'bg-background transform-gpu [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] [border:1px_solid_rgba(255,255,255,.1)]',
+                    className
                 )}
+                {...props}
             >
-                <Button
-                    variant="ghost"
-                    asChild
-                    size="sm"
-                    className="pointer-events-auto p-0"
-                >
-                    <a href={href}>
-                        {cta}
-                        <ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" />
-                    </a>
-                </Button>
+                <MorphingDialogTrigger className="flex flex-col">
+                    <div className="relative h-54 w-full overflow-hidden">
+                        {background.map((image, index) => (
+                            <img
+                                key={index}
+                                src={image}
+                                alt={`${name} - image ${index + 1}`}
+                                className={cn(
+                                    'absolute h-full w-full object-cover transition-all duration-500 group-hover:scale-105',
+                                    index === currentImageIndex
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                )}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="pointer-events-none z-10 flex flex-1 flex-col gap-1 p-4 text-center">
+                        <h3 className="text-primary text-xl font-semibold">
+                            {name}
+                        </h3>
+                        <p className="text-neutral-400">
+                            {description.length > 120
+                                ? `${description.slice(0, 60)}...`
+                                : description}
+                        </p>
+                    </div>
+
+                    <div className="pointer-events-none absolute inset-0 transform-gpu bg-neutral-800/10 transition-all duration-300" />
+                </MorphingDialogTrigger>
             </div>
 
-            <div className="pointer-events-none absolute inset-0 transform-gpu bg-neutral-800/10 transition-all duration-300" />
-        </div>
+            <MorphingDialogContainer>
+                <MorphingDialogContent className="bg-background relative mx-4 h-[80vh] w-[90vw] max-w-4xl overflow-y-auto rounded-xl p-6 shadow-xl">
+                    <MorphingDialogClose className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" />
+
+                    <div className="flex flex-col gap-6">
+                        {/* Title and Description Section */}
+                        <div className="flex flex-col gap-4">
+                            <MorphingDialogTitle className="text-2xl font-bold text-green-500">
+                                {name}
+                            </MorphingDialogTitle>
+
+                            <MorphingDialogDescription className="prose prose-sm dark:prose-invert">
+                                {description}
+                            </MorphingDialogDescription>
+                        </div>
+
+                        {/* Full-width Image Section */}
+                        <div className="relative h-[400px] w-full overflow-hidden rounded-lg">
+                            {background.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={image}
+                                    alt={`${name} - image ${index + 1}`}
+                                    className={cn(
+                                        'absolute h-full w-full object-cover transition-opacity duration-500',
+                                        index === dialogImageIndex
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                    )}
+                                />
+                            ))}
+
+                            {/* Navigation Arrows */}
+                            <button
+                                onClick={handlePrevious}
+                                className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-all hover:bg-black/70"
+                            >
+                                <ChevronLeftIcon className="h-6 w-6" />
+                            </button>
+
+                            <button
+                                onClick={handleNext}
+                                className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-all hover:bg-black/70"
+                            >
+                                <ChevronRightIcon className="h-6 w-6" />
+                            </button>
+
+                            {/* Image navigation dots */}
+                            <div className="absolute right-0 bottom-4 left-0 flex justify-center gap-2">
+                                {background.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() =>
+                                            setDialogImageIndex(index)
+                                        }
+                                        className={`h-2 w-2 rounded-full transition-colors ${
+                                            index === dialogImageIndex
+                                                ? 'bg-green-500'
+                                                : 'bg-white/50'
+                                        }`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </MorphingDialogContent>
+            </MorphingDialogContainer>
+        </MorphingDialog>
     )
 }
 
