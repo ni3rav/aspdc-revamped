@@ -4,6 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
+import { NeonGradientCard } from '@/components/magicui/neon-gradient-card'
 
 // Framer Motion variants
 const containerVariants = {
@@ -258,24 +259,26 @@ const page = () => {
                                     y: 0,
                                     opacity: 1,
                                     filter: 'blur(0)',
-                                }} // 👈 scroll trigger
-                                viewport={{ once: true, amount: 0.2 }} // triggers when 20% visible
+                                }}
+                                viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.6, ease: 'easeOut' }}
                             >
                                 <div
-                                    className={`size-45 rounded-2xl border p-0.5 ${
-                                        member.role === 'Member'
-                                            ? 'bg-white'
-                                            : 'bg-primary'
-                                    }`}
+                                    // className={`size-45 rounded-2xl border p-0.5 ${member.role === 'Member'
+                                    //         ? 'bg-white'
+                                    //         : 'bg-primary'
+                                    //     }`}
+                                    className={`size-45 rounded-2xl border`}
                                 >
-                                    <img
-                                        className="aspect-square rounded-xl object-cover"
-                                        src={member.avatar}
-                                        alt={member.name}
-                                        width={800}
-                                        height={600}
-                                    />
+                                    <NeonGradientCard role={member.role}>
+                                        <img
+                                            className="aspect-square rounded-xl object-cover"
+                                            src={member.avatar}
+                                            alt={member.name}
+                                            width={800}
+                                            height={600}
+                                        />
+                                    </NeonGradientCard>
                                 </div>
                                 <div className="flex flex-col">
                                     <p className="mt-2 text-base font-medium">
