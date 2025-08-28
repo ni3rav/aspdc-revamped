@@ -19,12 +19,12 @@ const Navbar = () => {
     return (
         <div>
             {/* desktop navbar */}
-            <div className="hidden md:block">
-                <NavBar items={navItems} className="secnone text-white" />
+            <div className="hidden sm:block">
+                <NavBar items={navItems} className="text-white" />
             </div>
 
             {/* mobile navbar*/}
-            <div className="block md:hidden">
+            <div className="block sm:hidden">
                 <MobileNavbar items={navItems} />
             </div>
         </div>

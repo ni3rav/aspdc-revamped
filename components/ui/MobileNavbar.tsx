@@ -26,7 +26,7 @@ const MobileNavbar = ({ items }: NavBarProps) => {
     return (
         <div>
             <>
-                <div className="bg-background fixed top-0 right-0 left-0 z-[5001] flex items-center justify-between border-b border-white/10 p-2 px-4">
+                <div className="fixed top-0 right-0 left-0 z-[5001] flex items-center justify-between border-b border-white/10 p-2 px-4">
                     <Link href={'/'}>
                         <div className="flex items-center">
                             <Image
@@ -56,7 +56,7 @@ const MobileNavbar = ({ items }: NavBarProps) => {
                 )}
                 <div
                     className={cn(
-                        'bg-background fixed top-0 right-0 z-[5000] flex h-full w-64 flex-col p-4 shadow-lg dark:bg-[#0f0f0f]',
+                        'bg-background fixed top-0 right-0 z-[5000] flex h-full w-64 flex-col p-4 shadow-lg',
                         isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
                     )}
                 >
@@ -66,7 +66,7 @@ const MobileNavbar = ({ items }: NavBarProps) => {
                                 key={`mobile-link=${idx}`}
                                 href={navItem.url}
                                 className={cn(
-                                    'relative flex items-center space-x-2 text-neutral-600 hover:text-green-400 dark:text-neutral-50 dark:hover:text-green-400'
+                                    'relative flex items-center space-x-2 text-white hover:text-green-400'
                                 )}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
@@ -75,14 +75,10 @@ const MobileNavbar = ({ items }: NavBarProps) => {
                             </Link>
                         ))}
                         <button
-                            onClick={() =>
-                                window.open(
-                                    'https://72buefq3vo3.typeform.com/to/GfY7emQ2'
-                                )
-                            }
-                            className="hover:animate-hover-pulse relative rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium text-black dark:border-white/[0.2] dark:text-white"
+                            // onClick={() => {}}
+                            className="hover:animate-hover-pulse relative rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium text-white"
                         >
-                            Join Club
+                            Contact us
                             <span className="absolute inset-x-0 -bottom-px mx-auto h-px w-1/2 bg-gradient-to-r from-transparent via-green-500 to-transparent" />
                         </button>
                     </div>
