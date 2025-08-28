@@ -26,7 +26,7 @@ const MobileNavbar = ({ items }: NavBarProps) => {
     return (
         <div>
             <>
-                <div className="fixed top-0 right-0 left-0 z-[5001] flex items-center justify-between border-b border-white/10 p-2 px-4">
+                <div className="fixed top-0 right-0 left-0 z-[5001] flex items-center justify-between border-b border-white/20 bg-black/20 p-2 px-4 shadow-2xl backdrop-blur-2xl">
                     <Link href={'/'}>
                         <div className="flex items-center">
                             <Image
