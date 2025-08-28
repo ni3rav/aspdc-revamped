@@ -14,6 +14,7 @@ import {
 import { cn } from '@/lib/utils'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { ProgressiveBlur } from '../motion-primitives/progressive-blur'
+import Image from 'next/image'
 
 interface BentoGridProps extends ComponentPropsWithoutRef<'div'> {
     children: ReactNode
@@ -43,15 +44,7 @@ const BentoGrid = ({ children, className, ...props }: BentoGridProps) => {
     )
 }
 
-const BentoCard = ({
-    name,
-    className,
-    background,
-    description,
-    href,
-    cta,
-    ...props
-}: BentoCardProps) => {
+const BentoCard = ({ name, background, description }: BentoCardProps) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [dialogImageIndex, setDialogImageIndex] = useState(0)
 
@@ -117,7 +110,7 @@ const BentoCard = ({
             </MorphingDialogTrigger>
 
             <MorphingDialogContainer>
-                <MorphingDialogContent className="bg-background/95 relative mx-4 h-[85vh] w-[95vw] max-w-5xl overflow-hidden rounded-2xl p-8 shadow-2xl backdrop-blur-sm">
+                <MorphingDialogContent className="bg-background/95 relative mx-4 h-[75vh] w-[95vw] max-w-5xl overflow-hidden rounded-2xl p-8 shadow-2xl backdrop-blur-sm">
                     <MorphingDialogClose className="absolute top-6 right-6 z-50 rounded-full bg-black/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-black/40" />
 
                     <div className="flex h-full flex-col gap-8">

@@ -4,9 +4,9 @@ import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 import QueryProvider from '@/lib/query-provider'
 import { ClerkProvider } from '@clerk/nextjs'
-import Navbar from '@/components/layout/Navbar'
+import Navbar from '@/components/Navbar'
 import DotGrid from '@/components/bits/DotGrid/DotGrid'
-import Footer from '@/components/layout/Footer'
+import Footer from '@/components/Footer'
 
 const spaceGrotesk = Space_Grotesk({
     variable: '--font-space-grotesk',
@@ -15,7 +15,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
     title: 'ASPDC',
-    icons: '/aspdcom.png',
+    icons: '/public/aspdccomwobgsvg.svg',
 }
 
 export default function RootLayout({

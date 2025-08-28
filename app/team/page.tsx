@@ -93,7 +93,7 @@ const page = () => {
                 {
                     name: 'Pruthvi Navadiya',
                     role: 'Member',
-                    avatar: '/team/pruthvi.jpg',
+                    avatar: '/team/pruthvi.jpeg',
                     blur: '/team/tiny/pruthvi.jpeg',
                 },
                 {
@@ -263,13 +263,7 @@ const page = () => {
                                 viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.6, ease: 'easeOut' }}
                             >
-                                <div
-                                    // className={`size-45 rounded-2xl border p-0.5 ${member.role === 'Member'
-                                    //         ? 'bg-white'
-                                    //         : 'bg-primary'
-                                    //     }`}
-                                    className={`size-45 rounded-2xl border`}
-                                >
+                                <div className={`size-45 rounded-2xl border`}>
                                     <NeonGradientCard role={member.role}>
                                         <img
                                             className="aspect-square rounded-xl object-cover"
