@@ -17,9 +17,7 @@ export default function FAQ() {
                 className="mb-12 text-center text-3xl font-bold sm:text-4xl lg:text-left lg:text-5xl"
             >
                 Got Questions?{' '}
-                <span className="from-primary bg-gradient-to-r to-emerald-400 bg-clip-text text-transparent">
-                    We Got Answers
-                </span>
+                <span className="text-primary">We Got Answers</span>
             </motion.h1>
 
             <div className="flex flex-col gap-10 lg:flex-row">

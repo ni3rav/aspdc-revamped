@@ -20,8 +20,8 @@ const Events = async () => {
                         key={item.id}
                         name={item.name}
                         description={item.details}
-                        cta="See More"
-                        href="#"
+                        // cta="See More"
+                        // href="#"
                         background={item.imageUrls} // Pass the array directly
                         className={`transition-transform duration-200 ease-in-out hover:scale-[1.05] ${
                             majorEvents.includes(item.name)

@@ -1,6 +1,6 @@
 'use client'
-import { type JSX, useEffect, useState } from 'react'
-import { motion, MotionProps } from 'motion/react'
+import { type JSX, useEffect, useState, useRef } from 'react'
+import { motion, MotionProps, useInView } from 'motion/react'
 
 export type TextScrambleProps = {
     children: string
@@ -33,6 +33,11 @@ export function TextScramble({
     const [displayText, setDisplayText] = useState(children)
     const [isAnimating, setIsAnimating] = useState(false)
     const text = children
+
+    // 👇 Ref + InView hook
+    const ref = useRef(null)
+    const isInView = useInView(ref, { once: true, amount: 1 })
+    // `amount: 1` = only trigger when fully visible
 
     const scramble = async () => {
         if (isAnimating) return
@@ -75,13 +80,12 @@ export function TextScramble({
 
     useEffect(() => {
         if (!trigger) return
-
-        scramble()
+        if (isInView) scramble()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [trigger])
+    }, [isInView, trigger])
 
     return (
-        <MotionComponent className={className} {...props}>
+        <MotionComponent ref={ref} className={className} {...props}>
             {displayText}
         </MotionComponent>
     )

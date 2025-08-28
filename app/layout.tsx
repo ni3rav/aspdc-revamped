@@ -15,7 +15,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
     title: 'ASPDC',
-    icons: '/public/aspdccomwobgsvg.svg',
+    icons: '/Frame2.png',
 }
 
 export default function RootLayout({

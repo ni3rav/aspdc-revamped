@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 import { cn } from '@/lib/utils'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useInView } from 'motion/react'
 import type {
     TargetAndTransition,
     Transition,
     Variant,
     Variants,
 } from 'motion/react'
-import React from 'react'
+import React, { useRef } from 'react'
 
 export type PresetType = 'blur' | 'fade-in-blur' | 'scale' | 'fade' | 'slide'
 
@@ -223,12 +223,15 @@ export function TextEffect({
     const segments = splitText(children, per)
     const MotionTag = motion[as as keyof typeof motion] as typeof motion.div
 
+    const ref = useRef(null)
+    const isInView = useInView(ref, { once: true, amount: 0.3 })
+    // 👆 "amount: 0.3" = animate when 30% of element is visible (feels nicer than 1)
+
     const baseVariants = preset
         ? presetVariants[preset]
         : { container: defaultContainerVariants, item: defaultItemVariants }
 
     const stagger = defaultStaggerTimes[per] / speedReveal
-
     const baseDuration = 0.3 / speedSegment
 
     const customStagger = hasTransition(variants?.container?.visible ?? {})
@@ -264,32 +267,34 @@ export function TextEffect({
     }
 
     return (
-        <AnimatePresence mode="popLayout">
-            {trigger && (
-                <MotionTag
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    variants={computedVariants.container}
-                    className={className}
-                    onAnimationComplete={onAnimationComplete}
-                    onAnimationStart={onAnimationStart}
-                    style={style}
-                >
-                    {per !== 'line' ? (
-                        <span className="sr-only">{children}</span>
-                    ) : null}
-                    {segments.map((segment, index) => (
-                        <AnimationComponent
-                            key={`${per}-${index}-${segment}`}
-                            segment={segment}
-                            variants={computedVariants.item}
-                            per={per}
-                            segmentWrapperClassName={segmentWrapperClassName}
-                        />
-                    ))}
-                </MotionTag>
-            )}
-        </AnimatePresence>
+        <div ref={ref} className={cn('inline-block', className)} style={style}>
+            <AnimatePresence mode="popLayout">
+                {trigger && isInView && (
+                    <MotionTag
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        variants={computedVariants.container}
+                        onAnimationComplete={onAnimationComplete}
+                        onAnimationStart={onAnimationStart}
+                    >
+                        {per !== 'line' ? (
+                            <span className="sr-only">{children}</span>
+                        ) : null}
+                        {segments.map((segment, index) => (
+                            <AnimationComponent
+                                key={`${per}-${index}-${segment}`}
+                                segment={segment}
+                                variants={computedVariants.item}
+                                per={per}
+                                segmentWrapperClassName={
+                                    segmentWrapperClassName
+                                }
+                            />
+                        ))}
+                    </MotionTag>
+                )}
+            </AnimatePresence>
+        </div>
     )
 }
