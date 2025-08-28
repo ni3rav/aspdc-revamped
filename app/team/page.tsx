@@ -253,7 +253,7 @@ const page = () => {
                                 initial={{
                                     y: 40,
                                     opacity: 0,
-                                    filter: 'blur(10px)',
+                                    filter: 'blur(5px)',
                                 }}
                                 whileInView={{
                                     y: 0,
@@ -263,7 +263,9 @@ const page = () => {
                                 viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.6, ease: 'easeOut' }}
                             >
-                                <div className={`size-45 rounded-2xl border`}>
+                                <div
+                                    className={`size-35 rounded-2xl border sm:size-45`}
+                                >
                                     <NeonGradientCard role={member.role}>
                                         <img
                                             className="aspect-square rounded-xl object-cover"

@@ -48,7 +48,7 @@ export default function RootLayout({
                             </div>
                             <Navbar />
                         </div>
-                        {children}
+                        <div className="mt-9 sm:mt-0">{children}</div>
                         <Footer />
                     </QueryProvider>
                 </body>

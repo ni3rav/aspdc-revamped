@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import MobileNavbar from './MobileNavbar'
 import { NavBar } from './ui/tubelight-navbar'
 
 const Navbar = () => {
@@ -10,7 +11,20 @@ const Navbar = () => {
         { name: 'Projects', url: '/projects' },
         { name: 'Digest', url: '/digest' },
     ]
-    return <NavBar items={navItems} className="secnone text-white" />
+
+    return (
+        <div>
+            {/* desktop navbar */}
+            <div className="hidden sm:block">
+                <NavBar items={navItems} className="text-white" />
+            </div>
+
+            {/* mobile navbar*/}
+            <div className="block sm:hidden">
+                <MobileNavbar items={navItems} />
+            </div>
+        </div>
+    )
 }
 
 export default Navbar

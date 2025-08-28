@@ -12,7 +12,7 @@ const Hero = () => {
     return (
         <main className="flex h-screen flex-col overflow-hidden text-white">
             {/* Navbar */}
-            <motion.div className="z-10 flex items-center justify-between px-15 py-6">
+            <motion.div className="z-10 hidden items-center justify-between px-15 py-6 sm:flex">
                 <motion.div
                     initial={{ x: -80, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
