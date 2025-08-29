@@ -1,0 +1,45 @@
+/* Scroll-triggered Text Fill Animation - Left to Right Color Change (Grey to White) */
+.fill-text-scroll {
+    background: linear-gradient(
+        90deg,
+        #ffffff 0%,
+        #ffffff var(--fill-progress, 0%),
+        #6b7280 var(--fill-progress, 0%),
+        #6b7280 100%
+    );
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    will-change: transform;
+    --fill-progress: 0%;
+}
+
+/* Enhanced styles for .animated-point */
+.animated-point {
+    background: linear-gradient(90deg, #ffffff 0%, #6b7280 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    transition: all 0.3s ease;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    box-shadow:
+        0 2px 16px 0 rgba(34, 197, 94, 0.08),
+        0 1.5px 8px 0 rgba(0, 0, 0, 0.08);
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    letter-spacing: 0.02em;
+}
+.animated-point:hover {
+    background: linear-gradient(90deg, #6b7280 0%, #ffffff 100%);
+    box-shadow:
+        0 4px 32px 0 rgba(34, 197, 94, 0.18),
+        0 3px 16px 0 rgba(0, 0, 0, 0.12);
+    border-color: rgba(34, 197, 94, 0.18);
+    transform: scale(1.03) translateY(-2px);
+}
