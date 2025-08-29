@@ -1,0 +1,35 @@
+.animated-terminal-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 24rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f172a 60%, #22c55e22 100%);
+    box-shadow:
+        0 4px 32px 0 rgba(34, 197, 94, 0.18),
+        0 3px 16px 0 rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pixel-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 1rem;
+}
+.terminal-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

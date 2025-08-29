@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
+import AnimatedTerminalCard from '../ui/AnimatedTerminalCard'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -180,34 +181,12 @@ export default function AboutSection() {
                             </li>
                         </ul>
                     </div>
-                    <div className="relative flex h-96 w-full flex-col items-center justify-center rounded-xl bg-gradient-to-br from-green-900/30 via-black/60 to-green-400/10 p-8 shadow-xl">
-                        <div className="flex h-full w-full flex-col items-center justify-center gap-6">
-                            <span className="mb-2 text-2xl font-bold text-green-400 lg:text-4xl">
-                                Terminal Easter Egg
-                            </span>
-                            <div className="h-64 w-full overflow-y-auto rounded-lg border border-green-700 bg-black/80 p-4 font-mono text-sm text-green-300 shadow-lg">
-                                {terminalHistory.map((line, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="whitespace-pre-wrap"
-                                    >
-                                        {line}
-                                    </div>
-                                ))}
-                            </div>
-                            <input
-                                type="text"
-                                className="mt-2 w-full rounded-lg border border-green-700 bg-black/90 p-2 font-mono text-green-300 transition-all focus:ring-2 focus:ring-green-400 focus:outline-none"
-                                placeholder="Enter command..."
-                                value={terminalInput}
-                                onChange={(e) =>
-                                    setTerminalInput(e.target.value)
-                                }
-                                onKeyDown={handleTerminalInput}
-                                autoFocus
-                            />
-                        </div>
-                    </div>
+                    <AnimatedTerminalCard
+                        history={terminalHistory}
+                        inputValue={terminalInput}
+                        onInputChange={setTerminalInput}
+                        onInputKeyDown={handleTerminalInput}
+                    />
                 </div>
             </div>
         </section>
