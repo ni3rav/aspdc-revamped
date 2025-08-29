@@ -59,9 +59,7 @@ export function NavBar({ items, className }: NavBarProps) {
                                     isActive && 'bg-muted text-primary'
                                 )}
                             >
-                                <span className="hidden md:inline">
-                                    {item.name}
-                                </span>
+                                <span className="inline">{item.name}</span>
 
                                 {isActive && (
                                     <motion.div

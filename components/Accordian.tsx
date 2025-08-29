@@ -125,10 +125,28 @@ const accordionItems = [
         title: 'Is there a membership fee?',
         content: (
             <p>
-                Nope, it’s{' '}
+                Nope, it's{' '}
                 <span className="font-semibold text-[#23C55E]">100% free</span>{' '}
                 💚. We want everyone to have access to learning and
                 opportunities.
+            </p>
+        ),
+    },
+    {
+        title: 'Do I need prior experience to attend workshops?',
+        content: (
+            <p>
+                Not at all! Our sessions are designed for beginners and pros
+                alike. Just bring your curiosity 🔥
+            </p>
+        ),
+    },
+    {
+        title: 'How do I become a part of the ASPDC core team?',
+        content: (
+            <p>
+                Keep an eye out for our recruitment drives 👀. We love welcoming
+                passionate folks who want to build, learn, and contribute 🙌
             </p>
         ),
     },
