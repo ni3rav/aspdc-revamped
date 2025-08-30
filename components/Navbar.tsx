@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import MobileNavbar from './MobileNavbar'
 import { NavBar } from './ui/tubelight-navbar'
 

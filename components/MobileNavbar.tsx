@@ -74,7 +74,7 @@ const MobileNavbar = ({ items }: NavBarProps) => {
                     ))}
 
                     {/* Contact Us CTA */}
-                    <div className="pt-6">
+                    {/* <div className="pt-6">
                         <Link
                             href={'/contact'}
                             className="block"
@@ -87,7 +87,7 @@ const MobileNavbar = ({ items }: NavBarProps) => {
                                 Contact Us
                             </NeonGradientCard>
                         </Link>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

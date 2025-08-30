@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -18,8 +18,26 @@ interface NavBarProps {
 
 export function NavBar({ items, className }: NavBarProps) {
     const pathname = usePathname()
+    const [hidden, setHidden] = useState(false)
 
-    // Only exact match for "/", otherwise allow exact or prefix (for nested routes)
+    // Track scroll direction
+    useEffect(() => {
+        let lastScrollY = window.scrollY
+
+        const updateScroll = () => {
+            const currentScrollY = window.scrollY
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                setHidden(true) // scrolling down
+            } else {
+                setHidden(false) // scrolling up
+            }
+            lastScrollY = currentScrollY
+        }
+
+        window.addEventListener('scroll', updateScroll)
+        return () => window.removeEventListener('scroll', updateScroll)
+    }, [])
+
     const isPathActive = (href: string) => {
         if (href === '/') return pathname === '/'
         return pathname === href || pathname.startsWith(href + '/')
@@ -28,10 +46,14 @@ export function NavBar({ items, className }: NavBarProps) {
     return (
         <motion.div
             initial={{ y: -80, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 120, damping: 12 }}
+            animate={{ y: hidden ? -100 : 0, opacity: 1 }}
+            transition={{
+                type: 'spring',
+                stiffness: 200,
+                damping: 25,
+            }}
             className={cn(
-                'fixed left-1/2 z-50 mb-6 -translate-x-1/2 sm:pt-6',
+                'fixed top-4 left-1/2 z-50 -translate-x-1/2 sm:mt-6',
                 className
             )}
         >

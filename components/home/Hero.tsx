@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import WrapButton from '../ui/wrap-button'
 import { ChevronDown, Phone } from 'lucide-react'
 import { TextScramble } from '../motion-primitives/text-scramble'
@@ -9,6 +9,7 @@ import { TextEffect } from '../motion-primitives/text-effect'
 import { motion } from 'framer-motion'
 
 const Hero = () => {
+    const [isTrigger, setIsTrigger] = useState(false)
     return (
         <main className="flex h-screen flex-col overflow-hidden text-white">
             {/* Navbar */}
@@ -32,7 +33,7 @@ const Hero = () => {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.8, ease: 'easeOut' }}
                 >
-                    <WrapButton href="/">
+                    <WrapButton href="#contact">
                         <Phone size={15} />
                         <span className="text-white">Contact Us</span>
                     </WrapButton>
@@ -49,6 +50,9 @@ const Hero = () => {
                     <TextScramble
                         duration={1}
                         className="text-primary text-8xl font-extrabold"
+                        trigger={isTrigger}
+                        onHoverStart={() => setIsTrigger(true)}
+                        onScrambleComplete={() => setIsTrigger(false)}
                     >
                         ASPDC
                     </TextScramble>
