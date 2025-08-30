@@ -248,12 +248,15 @@
 
     /* Scrollbar Hiding */
     .hide-scrollbar {
-        -ms-overflow-style: none; /* Internet Explorer 10+ */
-        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+        scrollbar-width: none;
+        /* Firefox */
     }
 
     .hide-scrollbar::-webkit-scrollbar {
-        display: none; /* Safari and Chrome */
+        display: none;
+        /* Safari and Chrome */
     }
 
     /* Global Scrollbar Hiding */
@@ -267,8 +270,10 @@
     }
 
     html {
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
     }
 }
 
@@ -279,6 +284,7 @@
     0% {
         opacity: 0.95;
     }
+
     100% {
         opacity: 1;
     }
@@ -295,5 +301,15 @@
     body {
         @apply bg-background text-foreground;
         letter-spacing: var(--tracking-normal);
+    }
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0%);
+        }
+
+        to {
+            transform: translateX(-50%);
+        }
     }
 }

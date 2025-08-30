@@ -1,3 +1,10 @@
+/**
+ * About Section Styles
+ * 
+ * Optimized styles for text animations and interactive elements
+ * Performance-focused with GPU acceleration and efficient transitions
+ */
+
 /* Scroll-triggered Text Fill Animation - Left to Right Color Change (Grey to White) */
 .fill-text-scroll {
     background: linear-gradient(
@@ -14,16 +21,20 @@
     color: transparent;
     will-change: transform;
     --fill-progress: 0%;
+
+    /* Performance optimization */
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
-/* Enhanced styles for .animated-point */
+/* Enhanced styles for animated points with performance optimizations */
 .animated-point {
     background: linear-gradient(90deg, #ffffff 0%, #6b7280 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
     box-shadow:
         0 2px 16px 0 rgba(34, 197, 94, 0.08),
@@ -34,12 +45,27 @@
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     letter-spacing: 0.02em;
+
+    /* Performance optimizations */
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
+
 .animated-point:hover {
     background: linear-gradient(90deg, #6b7280 0%, #ffffff 100%);
     box-shadow:
         0 4px 32px 0 rgba(34, 197, 94, 0.18),
         0 3px 16px 0 rgba(0, 0, 0, 0.12);
     border-color: rgba(34, 197, 94, 0.18);
-    transform: scale(1.03) translateY(-2px);
+    transform: scale(1.03) translateY(-2px) translateZ(0);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .fill-text-scroll,
+    .animated-point {
+        transition: none;
+        animation: none;
+    }
 }
