@@ -7,6 +7,7 @@ import { ChevronDown, Phone } from 'lucide-react'
 import { TextScramble } from '../motion-primitives/text-scramble'
 import { TextEffect } from '../motion-primitives/text-effect'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 const Hero = () => {
     const [isTrigger, setIsTrigger] = useState(false)
@@ -20,10 +21,11 @@ const Hero = () => {
                     transition={{ duration: 0.8, ease: 'easeOut' }}
                 >
                     <Link href="/" className="bg-black">
-                        <img
+                        <Image
+                            height={40}
+                            width={130}
                             src="/aspdc.png"
                             alt="ASPDC logo"
-                            className="h-10"
                         />
                     </Link>
                 </motion.div>
