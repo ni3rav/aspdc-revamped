@@ -9,40 +9,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 export default function AboutSection() {
-    const outputRef = useRef<HTMLDivElement>(null)
     const [output, setOutput] = useState('Output will appear here...')
     const [selectedDemo, setSelectedDemo] = useState<string>('')
-    const [stack, setStack] = useState<string[]>([])
     const [terminalInput, setTerminalInput] = useState('')
     const [terminalHistory, setTerminalHistory] = useState<string[]>([
         "Type 'help' to see available commands.",
     ])
-
-    const demoCodes = [
-        {
-            label: 'Hello World (JS)',
-            code: "console.log('Hello, World!');",
-        },
-        {
-            label: 'Sum Function (JS)',
-            code: 'function sum(a, b) {\n  return a + b;\n}\nconsole.log(sum(2, 3));',
-        },
-        {
-            label: 'Factorial (JS)',
-            code: 'function factorial(n) {\n  return n <= 1 ? 1 : n * factorial(n - 1);\n}\nconsole.log(factorial(5));',
-        },
-    ]
-
-    const techOptions = [
-        { name: 'JavaScript', color: 'bg-yellow-300', icon: '🟨' },
-        { name: 'Python', color: 'bg-blue-400', icon: '🐍' },
-        { name: 'TypeScript', color: 'bg-blue-300', icon: '🔷' },
-        { name: 'React', color: 'bg-cyan-300', icon: '⚛️' },
-        { name: 'Node.js', color: 'bg-green-400', icon: '🟩' },
-        { name: 'VS Code', color: 'bg-blue-600', icon: '💻' },
-        { name: 'GitHub', color: 'bg-gray-800', icon: '🐙' },
-        { name: 'Terminal', color: 'bg-black', icon: '⌨️' },
-    ]
 
     const terminalCommands: { [key: string]: string } = {
         help: 'Available commands: help, about, aspdc, joke, clear',
@@ -123,19 +95,6 @@ export default function AboutSection() {
             )
         })
     })
-
-    const handleRun = () => {
-        if (selectedDemo) {
-            setOutput('✅ Output: Demo code executed! (This is a demo output.)')
-        } else {
-            setOutput('Please select a demo code to run.')
-        }
-    }
-
-    const handleClear = () => {
-        setSelectedDemo('')
-        setOutput('Output will appear here...')
-    }
 
     return (
         <section className="relative w-full overflow-hidden bg-black px-4 py-20 sm:px-8 lg:px-16">
