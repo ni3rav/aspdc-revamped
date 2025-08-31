@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import React from 'react'
+import TerminalProfile from '@/components/team/TerminalProfile'
 import { motion } from 'framer-motion'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
@@ -216,13 +217,16 @@ const page = () => {
     ]
 
     return (
-        <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
+        <main
+            className="mx-auto max-w-5xl overflow-y-auto px-8 py-12 md:py-32 lg:px-0"
+            style={{ maxHeight: '100vh' }}
+        >
             <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
                 The Faces Behind ASPDC
             </TextScramble>
 
             {everything.map((d, idx) => (
-                <section key={idx}>
+                <section key={idx} style={{ marginBottom: '3rem' }}>
                     <TextEffect
                         per="char"
                         preset="blur"
@@ -258,35 +262,20 @@ const page = () => {
                                     y: 0,
                                     opacity: 1,
                                     filter: 'blur(0)',
-                                }} // 👈 scroll trigger
-                                viewport={{ once: true, amount: 0.2 }} // triggers when 20% visible
+                                }}
+                                viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.6, ease: 'easeOut' }}
                             >
-                                <div
-                                    className={`size-45 rounded-2xl border p-0.5 ${
-                                        member.role === 'Member'
-                                            ? 'bg-white'
-                                            : 'bg-primary'
-                                    }`}
-                                >
-                                    <img
-                                        className="aspect-square rounded-xl object-cover"
-                                        src={member.avatar}
-                                        alt={member.name}
-                                        width={800}
-                                        height={600}
-                                    />
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="mt-2 text-base font-medium">
-                                        {member.name}
-                                    </p>
-                                    {member.role && (
-                                        <p className="text-muted-foreground text-sm">
-                                            {member.role}
-                                        </p>
-                                    )}
-                                </div>
+                                <TerminalProfile
+                                    name={member.name}
+                                    role={member.role}
+                                    avatar={member.avatar}
+                                    socials={{
+                                        linkedin: '#',
+                                        instagram: '#',
+                                        github: '#',
+                                    }}
+                                />
                             </motion.div>
                         ))}
                     </motion.div>
