@@ -217,10 +217,7 @@ const page = () => {
     ]
 
     return (
-        <main
-            className="mx-auto max-w-5xl overflow-y-auto px-8 py-12 md:py-32 lg:px-0"
-            style={{ maxHeight: '100vh' }}
-        >
+        <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
             <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
                 The Faces Behind ASPDC
             </TextScramble>
