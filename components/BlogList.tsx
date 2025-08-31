@@ -49,10 +49,10 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                 const date = formatDate(post.publishDate)
 
                 return (
-                    <article key={post.id} className="group">
-                        <div className="rounded-3xl p-8 transition-all duration-300 hover:bg-black/30">
+                    <article key={post.id}>
+                        <div className="rounded-3xl p-8 transition-all duration-300">
                             {/* Main layout: Responsive - vertical on mobile, horizontal on desktop */}
-                            <div className="flex flex-col gap-6 md:flex-row md:items-center md:gap-8">
+                            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-center md:gap-8">
                                 {/* Image: Top on mobile, Left on desktop */}
                                 <div className="flex-shrink-0 md:order-1">
                                     {post.coverImage ? (
@@ -64,14 +64,14 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                                     cols: 12,
                                                 }}
                                                 grayscaleAnimation
+                                                pixelFadeInDuration={3000}
+                                                colorRevealDelay={4000}
                                             />
                                             {/* 🙃 tweak according to this data, make it little bit slow from default values */}
                                             {/* grayscaleAnimation	  boolean	  true	  Whether to animate from grayscale to color
-                              pixelFadeInDuration	  number	  1000	  Duration (ms) for each pixel fade-in animation
-                              maxAnimationDelay	    number	  1200	  Maximum random delay (ms) for pixel animation
-                              colorRevealDelay	    number	  1500	  Delay (ms) before revealing color */}
-
-                                            <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-transparent" />
+                                                pixelFadeInDuration	  number	  1000	  Duration (ms) for each pixel fade-in animation
+                                                maxAnimationDelay	  number	  1200	  Maximum random delay (ms) for pixel animation
+                                                colorRevealDelay	  number	  1500	  Delay (ms) before revealing color */}
                                         </div>
                                     ) : (
                                         <div className="md:perspective-1000 md:rotateY-12 md:group-hover:rotateY-0 flex h-48 w-full items-center justify-center rounded-2xl bg-gray-800 transition-transform duration-300 md:h-56 md:w-80 md:transform">

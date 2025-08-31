@@ -81,7 +81,7 @@ export const PixelImage = ({
         ${col * (100 / cols)}% ${(row + 1) * (100 / rows)}%
       )`
 
-            const delay = Math.random() * maxAnimationDelay
+            const delay = (index * 123) % maxAnimationDelay
             return {
                 clipPath,
                 delay,
@@ -90,7 +90,7 @@ export const PixelImage = ({
     }, [rows, cols, maxAnimationDelay])
 
     return (
-        <div className="relative h-72 w-72 select-none md:h-96 md:w-96">
+        <div className="relative h-full w-full select-none">
             {pieces.map((piece, index) => (
                 <div
                     key={index}
