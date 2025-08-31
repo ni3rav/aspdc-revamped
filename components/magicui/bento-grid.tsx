@@ -110,7 +110,7 @@ export const BentoCard = ({
                             transition={{
                                 layout: { duration: 0.18, ease: 'easeOut' },
                             }}
-                            className="fixed inset-0 z-50 m-auto flex h-[75vh] w-[95vw] max-w-5xl flex-col rounded-2xl bg-white/10 p-8 shadow-2xl backdrop-blur-xl"
+                            className="fixed inset-0 z-50 m-auto flex h-[60vh] w-[95vw] max-w-5xl flex-col rounded-2xl bg-white/10 p-8 shadow-2xl backdrop-blur-xl lg:h-[75vh]"
                         >
                             {/* Close Button */}
                             <button
@@ -135,34 +135,34 @@ export const BentoCard = ({
                                 </div>
 
                                 {/* 🔑 Image in expanded view shares layoutId, but fixed height */}
-                                <motion.div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-xl">
+                                <motion.div className="relative flex flex-1 items-center justify-center overflow-hidden rounded-2xl">
                                     <motion.img
                                         layoutId={`card-image-${name}`}
                                         src={background[dialogImageIndex]}
                                         alt={`${name} - image ${dialogImageIndex + 1}`}
-                                        className="w-full rounded-xl object-contain"
+                                        className="w-full rounded-xl object-cover"
                                     />
                                 </motion.div>
 
                                 {/* Navigation */}
                                 {background.length > 1 && (
                                     <>
-                                        <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 justify-between px-12">
+                                        <div className="absolute inset-x-0 top-3/4 z-10 flex -translate-y-1/2 justify-between px-2 lg:top-1/2 lg:px-12">
                                             <button
                                                 onClick={handlePrevious}
-                                                className="rounded-full bg-white/5 p-3 backdrop-blur-lg"
+                                                className="scale-80 rounded-full bg-white/5 p-3 backdrop-blur-lg lg:scale-100"
                                             >
                                                 <ChevronLeftIcon className="h-8 w-8" />
                                             </button>
                                             <button
                                                 onClick={handleNext}
-                                                className="rounded-full bg-white/5 p-3 backdrop-blur-lg"
+                                                className="scale-80 rounded-full bg-white/5 p-3 backdrop-blur-lg lg:scale-100"
                                             >
                                                 <ChevronRightIcon className="h-8 w-8" />
                                             </button>
                                         </div>
 
-                                        <div className="text-primary absolute bottom-6 left-1/2 z-10 -translate-x-1/2 rounded-full px-4 py-2 font-semibold shadow-lg backdrop-blur-lg">
+                                        <div className="text-primary absolute bottom-2 left-1/2 z-10 -translate-x-1/2 rounded-full px-4 py-2 font-black shadow-lg backdrop-blur-lg lg:bottom-10">
                                             {dialogImageIndex + 1} /{' '}
                                             {background.length}
                                         </div>
