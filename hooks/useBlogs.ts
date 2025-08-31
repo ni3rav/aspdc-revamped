@@ -30,8 +30,15 @@ export function useUpdateBlog() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: ({ id, blog }: { id: string; blog: Partial<Blog> }) =>
-            updateBlog(id, blog),
+        mutationFn: ({ id, blog }: { id: string; blog: Partial<Blog> }) => {
+            const formattedBlog: Partial<Blog> = {
+                ...blog,
+                ...(blog.publishDate && {
+                    publishDate: new Date(blog.publishDate),
+                }),
+            }
+            return updateBlog(id, formattedBlog)
+        },
         onSuccess: () => {
             toast.success('Blog updated successfully')
             queryClient.invalidateQueries({ queryKey: ['fetch-blogs'] })

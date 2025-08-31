@@ -35,8 +35,19 @@ export function useUpdateAcv() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: ({ id, acv }: { id: string; acv: Partial<Achievement> }) =>
-            updateAchievement(id, acv),
+        mutationFn: ({
+            id,
+            acv,
+        }: {
+            id: string
+            acv: Partial<Achievement>
+        }) => {
+            const formattedAcv: Partial<Achievement> = {
+                ...acv,
+                ...(acv.date && { date: new Date(acv.date) }),
+            }
+            return updateAchievement(id, formattedAcv)
+        },
         onSuccess: () => {
             toast.success('Achievement updated successfully')
             queryClient.invalidateQueries({ queryKey: ['fetch-achievements'] })

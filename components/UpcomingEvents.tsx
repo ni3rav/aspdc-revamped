@@ -23,7 +23,7 @@ export default function UpcomingEventsPage({
                         duration: 0.5,
                         ease: 'easeOut',
                     }}
-                    className="group hover:shadow-primary/30 relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-neutral-900/70 to-neutral-800/30 shadow-lg backdrop-blur-md transition hover:-translate-y-2"
+                    className="group hover:shadow-primary/30 hover:border-primary/40 relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-neutral-900/70 to-neutral-800/30 shadow-lg backdrop-blur-md"
                 >
                     {/* Event Image */}
                     {event.eventImageUrl && (
