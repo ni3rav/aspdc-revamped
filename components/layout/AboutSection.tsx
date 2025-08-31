@@ -37,7 +37,10 @@ export default function AboutSection() {
 
     // Animation logic
     useGSAP(() => {
-        // Description color fill animation
+        // Check if device is mobile
+        const isMobile = window.innerWidth <= 768
+
+        // Description color fill animation (always enabled)
         const desc = document.getElementById('about-desc')
         if (desc) {
             gsap.set(desc, { opacity: 1 })
@@ -60,26 +63,36 @@ export default function AboutSection() {
             })
         }
 
-        // Text fill animation for points only
+        // Text fill animation for points (desktop only)
         const points = document.querySelectorAll('.animated-point')
         points.forEach((point, idx) => {
-            gsap.to(point, {
-                scrollTrigger: {
-                    trigger: point,
-                    start: 'top 95%',
-                    end: 'top 60%',
-                    scrub: 0.8,
-                },
-                onUpdate: function () {
-                    const progress = this.progress()
-                    ;(point as HTMLElement).style.background =
-                        `linear-gradient(90deg, #ffffff ${progress * 100}%, #6b7280 ${progress * 100}%)`
-                    ;(point as HTMLElement).style.webkitBackgroundClip = 'text'
-                    ;(point as HTMLElement).style.webkitTextFillColor =
-                        'transparent'
-                    ;(point as HTMLElement).style.backgroundClip = 'text'
-                },
-            })
+            if (!isMobile) {
+                gsap.to(point, {
+                    scrollTrigger: {
+                        trigger: point,
+                        start: 'top 95%',
+                        end: 'top 60%',
+                        scrub: 0.8,
+                    },
+                    onUpdate: function () {
+                        const progress = this.progress()
+                        ;(point as HTMLElement).style.background =
+                            `linear-gradient(90deg, #ffffff ${progress * 100}%, #6b7280 ${progress * 100}%)`
+                        ;(point as HTMLElement).style.webkitBackgroundClip =
+                            'text'
+                        ;(point as HTMLElement).style.webkitTextFillColor =
+                            'transparent'
+                        ;(point as HTMLElement).style.backgroundClip = 'text'
+                    },
+                })
+            } else {
+                // Reset styles for mobile - show normal text
+                ;(point as HTMLElement).style.background = 'none'
+                ;(point as HTMLElement).style.webkitBackgroundClip = 'initial'
+                ;(point as HTMLElement).style.webkitTextFillColor = 'initial'
+                ;(point as HTMLElement).style.backgroundClip = 'initial'
+                ;(point as HTMLElement).style.color = '#e5e7eb' // text-gray-200
+            }
         })
     })
 

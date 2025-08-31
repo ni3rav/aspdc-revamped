@@ -1,6 +1,7 @@
 import Hero from '@/components/layout/Hero'
 import AboutSection from '@/components/layout/AboutSection'
 import { FlowingGallery } from '@/components/ui/FlowingGallery'
+import MobileImageGallery from '@/components/ui/MobileImageGallery'
 import ScrollTo from '@/components/ui/ScrollTo'
 import Footer from '@/components/layout/footer'
 import ScrollVelocity from '@/components/ui/VelocityText'
@@ -72,14 +73,29 @@ const page = () => {
                 <AboutSection />
             </Suspense>
 
-            {/* Interactive Gallery Section - Memories showcase */}
-            <section
-                className="relative min-h-[400px] w-full sm:min-h-[500px] md:min-h-[600px]"
-                aria-label="Memories Gallery"
-            >
-                <Suspense fallback={<LoadingFallback />}>
-                    <FlowingGallery items={galleryItems} />
-                </Suspense>
+            {/* Interactive Gallery Section - Desktop and Mobile optimized */}
+            <section className="relative w-full" aria-label="Memories Gallery">
+                {/* Desktop Gallery - Hidden on mobile */}
+                <div className="hidden min-h-[600px] md:block">
+                    <Suspense fallback={<LoadingFallback />}>
+                        <FlowingGallery items={galleryItems} />
+                    </Suspense>
+                </div>
+
+                {/* Mobile Gallery - Hidden on desktop */}
+                <div className="block md:hidden">
+                    <Suspense fallback={<LoadingFallback />}>
+                        <MobileImageGallery
+                            items={galleryItems.map((item) => ({
+                                image: item.image,
+                                alt: item.alt,
+                            }))}
+                            baseVelocity={15}
+                            numCopies={4}
+                            className="bg-background/30"
+                        />
+                    </Suspense>
+                </div>
             </section>
 
             {/* Velocity Text Animation - Responsive marquee */}
