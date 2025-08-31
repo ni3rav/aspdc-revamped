@@ -60,37 +60,26 @@ export default function AboutSection() {
             })
         }
 
-        // More visible points animation
+        // Text fill animation for points only
         const points = document.querySelectorAll('.animated-point')
         points.forEach((point, idx) => {
-            gsap.fromTo(
-                point,
-                { opacity: 0, y: 60, scale: 0.85 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    duration: 1.2,
-                    ease: 'elastic.out(1, 0.6)',
-                    delay: idx * 0.1,
-                    scrollTrigger: {
-                        trigger: point,
-                        start: 'top 95%',
-                        end: 'top 80%',
-                        scrub: 0.5,
-                    },
-                    onUpdate: function () {
-                        const progress = this.progress()
-                        ;(point as HTMLElement).style.background =
-                            `linear-gradient(90deg, #ffffff ${progress * 100}%, #6b7280 ${progress * 100}%)`
-                        ;(point as HTMLElement).style.webkitBackgroundClip =
-                            'text'
-                        ;(point as HTMLElement).style.webkitTextFillColor =
-                            'transparent'
-                        ;(point as HTMLElement).style.backgroundClip = 'text'
-                    },
-                }
-            )
+            gsap.to(point, {
+                scrollTrigger: {
+                    trigger: point,
+                    start: 'top 95%',
+                    end: 'top 60%',
+                    scrub: 0.8,
+                },
+                onUpdate: function () {
+                    const progress = this.progress()
+                    ;(point as HTMLElement).style.background =
+                        `linear-gradient(90deg, #ffffff ${progress * 100}%, #6b7280 ${progress * 100}%)`
+                    ;(point as HTMLElement).style.webkitBackgroundClip = 'text'
+                    ;(point as HTMLElement).style.webkitTextFillColor =
+                        'transparent'
+                    ;(point as HTMLElement).style.backgroundClip = 'text'
+                },
+            })
         })
     })
 

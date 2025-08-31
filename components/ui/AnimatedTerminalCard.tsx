@@ -311,15 +311,11 @@ export default function AnimatedTerminalCard({
 
     /**
      * Effect hook for initialization and cleanup
-     * Sets up ResizeObserver and initial animation
+     * Sets up ResizeObserver without triggering animation by default
      */
     useEffect(() => {
         const initPixelsWrapper = (): void => {
             initPixels()
-        }
-
-        const handleAnimationWrapper = (animationType: keyof Pixel): void => {
-            handleAnimation(animationType)
         }
 
         initPixelsWrapper()
@@ -332,7 +328,7 @@ export default function AnimatedTerminalCard({
             observer.observe(containerRef.current)
         }
 
-        handleAnimationWrapper('appear')
+        // Don't trigger animation by default - only on hover/focus
 
         return () => {
             observer.disconnect()

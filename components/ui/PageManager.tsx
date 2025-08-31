@@ -1,13 +1,17 @@
 'use client'
-import { useLayoutEffect, useEffect } from 'react'
+
+import { useLayoutEffect, useEffect, useState } from 'react'
 
 /**
- * ScrollTo Component
+ * PageManager Component
  *
- * Ultra-aggressive scroll-to-top component that prevents AboutSection flash
+ * Handles page initialization and prevents AboutSection flash
  * Uses both useLayoutEffect and useEffect for maximum coverage
+ * This is a client component that manages page state
  */
-const ScrollTo = () => {
+const PageManager = ({ children }: { children: React.ReactNode }) => {
+    const [isLoaded, setIsLoaded] = useState(false)
+
     // useLayoutEffect runs before browser paint - critical for preventing flash
     useLayoutEffect(() => {
         const forceScrollTop = () => {
@@ -28,12 +32,16 @@ const ScrollTo = () => {
             document.documentElement.style.scrollBehavior
         document.documentElement.style.scrollBehavior = 'auto'
 
+        // Add class to enable overflow after positioning
+        document.documentElement.classList.add('js-loaded')
+
         // Restore after ensuring position
         setTimeout(() => {
             forceScrollTop()
             document.documentElement.style.scrollBehavior =
                 originalScrollBehavior
-        }, 100)
+            setIsLoaded(true)
+        }, 50)
     }, [])
 
     useEffect(() => {
@@ -52,7 +60,6 @@ const ScrollTo = () => {
             setTimeout(scrollToTop, 10),
             setTimeout(scrollToTop, 50),
             setTimeout(scrollToTop, 100),
-            setTimeout(scrollToTop, 200),
         ]
 
         // Handle browser back/forward navigation
@@ -67,14 +74,8 @@ const ScrollTo = () => {
             }
         }
 
-        // Handle focus events
-        const handleFocus = () => {
-            scrollToTop()
-        }
-
         window.addEventListener('popstate', handlePopState)
         document.addEventListener('visibilitychange', handleVisibilityChange)
-        window.addEventListener('focus', handleFocus)
 
         // Cleanup
         return () => {
@@ -84,11 +85,16 @@ const ScrollTo = () => {
                 'visibilitychange',
                 handleVisibilityChange
             )
-            window.removeEventListener('focus', handleFocus)
         }
     }, [])
 
-    return null // This component doesn't render anything
+    return (
+        <div
+            className={`page-container flex min-h-screen w-full flex-col overflow-x-hidden ${isLoaded ? 'loaded' : ''}`}
+        >
+            {children}
+        </div>
+    )
 }
 
-export default ScrollTo
+export default PageManager

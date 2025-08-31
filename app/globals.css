@@ -9,6 +9,56 @@
     user-select: none;
 }
 
+/* Prevent content flash and ensure page starts at top */
+html,
+body {
+    scroll-behavior: auto !important;
+    overflow-x: hidden;
+    /* Force initial position */
+    overscroll-behavior: none;
+}
+
+html {
+    scroll-padding-top: 0;
+    /* Force browser to start at top */
+    scroll-snap-type: none;
+}
+
+body {
+    /* Prevent initial content shifting */
+    position: relative;
+    top: 0;
+    /* Force initial scroll position */
+    margin: 0;
+    padding: 0;
+}
+
+/* Prevent any initial scroll jump - CRITICAL */
+html:not(.js-loaded) {
+    overflow: hidden;
+}
+
+/* Show content only after JS loads and positions correctly */
+.page-container {
+    opacity: 0;
+    transition: opacity 0.1s ease-in;
+}
+
+.page-container.loaded {
+    opacity: 1;
+}
+
+/* Force immediate scroll to top without animation */
+.scroll-to-top {
+    scroll-behavior: auto !important;
+}
+
+/* Prevent initial viewport jump */
+* {
+    scroll-margin-top: 0;
+    scroll-snap-align: none;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /* ===================================
