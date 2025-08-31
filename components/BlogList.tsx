@@ -24,7 +24,7 @@ function getHostname(url: string) {
 
 export function BlogList({ posts }: { posts: Blog[] }) {
     return (
-        <div className="space-y-8 pb-8">
+        <div className="space-y-8">
             {posts.map((post, index) => {
                 const hostname = getHostname(post.link)
                 const date = formatDate(post.publishDate)
@@ -32,19 +32,19 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                 return (
                     <article
                         key={post.id}
-                        className="group mx-auto max-w-6xl"
+                        className="group mx-auto max-w-5xl"
                         style={{
                             animationDelay: `${index * 100}ms`,
                             animationFillMode: 'both',
                         }}
                     >
-                        <div className="hover:border-primary relative rounded-3xl border border-white/20 p-6 backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:bg-white/5 md:p-8">
+                        <div className="hover:border-primary relative w-full rounded-3xl border border-white/20 p-3 backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:bg-white/5 md:p-8">
                             {/* Subtle gradient overlay on hover */}
                             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-neutral-400/0 to-neutral-600/0 transition-all duration-700 group-hover:from-neutral-400/5 group-hover:to-neutral-600/5"></div>
 
                             <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
                                 {/* Enhanced Image Section */}
-                                <div className="relative h-64 w-full overflow-hidden rounded-2xl transition-all duration-700 group-hover:shadow-xl lg:h-80 lg:w-[34rem] lg:group-hover:scale-[1.03]">
+                                <div className="relative mx-auto h-56 w-full max-w-md overflow-hidden rounded-2xl transition-all duration-500 md:h-62 lg:mx-0 lg:h-68 lg:max-w-[30rem] lg:group-hover:scale-[1.03]">
                                     {post.coverImage ? (
                                         <div className="relative h-full w-full">
                                             <PixelImage
@@ -80,7 +80,7 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                 {/* Enhanced Content Section */}
                                 <div className="flex-1 space-y-4 text-center lg:text-left">
                                     {/* Enhanced Title */}
-                                    <h2 className="text-primary line-clamp-3 text-2xl leading-tight font-black md:text-3xl lg:text-4xl">
+                                    <h2 className="text-primary text-xl leading-tight font-black md:text-2xl lg:text-3xl">
                                         {post.title}
                                     </h2>
 
@@ -93,7 +93,7 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
-                                                <span className="hover:bg-primary/20 hover:text-primary rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-neutral-300 transition-colors">
+                                                <span className="hover:bg-primary/20 text-primary hover:text-primary rounded-full bg-white/10 px-3 py-1 text-xs font-medium transition-colors lg:text-neutral-300">
                                                     {hostname}
                                                 </span>
                                             </a>
@@ -105,12 +105,12 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                     </div>
 
                                     {/* Enhanced CTA Button */}
-                                    <div className="flex justify-center gap-4 pt-2 lg:justify-start">
+                                    <div className="flex justify-center gap-4 lg:justify-start lg:pt-2">
                                         <a
                                             href={post.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="group/cta bg-primary inline-flex items-center gap-3 rounded-2xl px-8 py-4 text-base font-bold text-black transition-all duration-500 hover:scale-110 active:scale-95 md:text-lg"
+                                            className="group/cta bg-primary inline-flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-bold text-black transition-all duration-500 hover:scale-105 active:scale-95 md:rounded-2xl md:px-6 md:py-3 md:text-lg"
                                             aria-label={`Read article: ${post.title}`}
                                         >
                                             <span>Read Article</span>
@@ -126,7 +126,7 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                                 )
                                                 toast(`Link Copied`)
                                             }}
-                                            className="rounded-xl border border-white/20 px-4 py-2 text-sm text-neutral-300 transition hover:bg-white/10"
+                                            className="cursor-pointer rounded-lg border border-white/20 px-2 py-1 text-sm text-neutral-300 transition hover:bg-white/10 md:rounded-xl md:px-4 md:py-2"
                                         >
                                             Copy Link
                                         </button>
