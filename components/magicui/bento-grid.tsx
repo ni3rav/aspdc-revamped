@@ -110,7 +110,7 @@ export const BentoCard = ({
                             transition={{
                                 layout: { duration: 0.18, ease: 'easeOut' },
                             }}
-                            className="bg-background fixed inset-0 z-50 m-auto flex h-[75vh] w-[95vw] max-w-5xl flex-col rounded-2xl p-8 shadow-2xl"
+                            className="fixed inset-0 z-50 m-auto flex h-[75vh] w-[95vw] max-w-5xl flex-col rounded-2xl bg-white/10 p-8 shadow-2xl backdrop-blur-xl"
                         >
                             {/* Close Button */}
                             <button
