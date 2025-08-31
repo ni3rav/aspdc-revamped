@@ -2,6 +2,8 @@
 
 import { Blog } from '@/db/types'
 import { PixelImage } from '@/components/magicui/pixel-image'
+import { Calendar, ExternalLink, Link, Link2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 function formatDate(input: string | Date) {
     const d = new Date(input)
@@ -20,43 +22,31 @@ function getHostname(url: string) {
     }
 }
 
-const ShareIcon = ({ size = 20, ...props }) => (
-    <svg
-        aria-hidden="true"
-        fill="none"
-        focusable="false"
-        height={size}
-        role="presentation"
-        viewBox="0 0 24 24"
-        width={size}
-        {...props}
-    >
-        <path
-            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-        />
-    </svg>
-)
-
 export function BlogList({ posts }: { posts: Blog[] }) {
     return (
-        <div className="space-y-8">
-            {posts.map((post) => {
+        <div className="space-y-8 pb-8">
+            {posts.map((post, index) => {
                 const hostname = getHostname(post.link)
                 const date = formatDate(post.publishDate)
 
                 return (
-                    <article key={post.id}>
-                        <div className="rounded-3xl p-8 transition-all duration-300">
-                            {/* Main layout: Responsive - vertical on mobile, horizontal on desktop */}
-                            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-center md:gap-8">
-                                {/* Image: Top on mobile, Left on desktop */}
-                                <div className="flex-shrink-0 md:order-1">
+                    <article
+                        key={post.id}
+                        className="group mx-auto max-w-6xl"
+                        style={{
+                            animationDelay: `${index * 100}ms`,
+                            animationFillMode: 'both',
+                        }}
+                    >
+                        <div className="hover:border-primary relative rounded-3xl border border-white/20 p-6 backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:bg-white/5 md:p-8">
+                            {/* Subtle gradient overlay on hover */}
+                            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-neutral-400/0 to-neutral-600/0 transition-all duration-700 group-hover:from-neutral-400/5 group-hover:to-neutral-600/5"></div>
+
+                            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
+                                {/* Enhanced Image Section */}
+                                <div className="relative h-64 w-full overflow-hidden rounded-2xl transition-all duration-700 group-hover:shadow-xl lg:h-80 lg:w-[34rem] lg:group-hover:scale-[1.03]">
                                     {post.coverImage ? (
-                                        <div className="md:perspective-1000 md:rotateY-12 relative h-64 w-full overflow-hidden rounded-2xl transition-transform duration-300 md:h-80 md:w-[32rem] md:transform">
+                                        <div className="relative h-full w-full">
                                             <PixelImage
                                                 src={post.coverImage}
                                                 customGrid={{
@@ -64,74 +54,102 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                                     cols: 12,
                                                 }}
                                                 grayscaleAnimation
-                                                pixelFadeInDuration={3000}
-                                                colorRevealDelay={4000}
+                                                pixelFadeInDuration={1400}
+                                                maxAnimationDelay={2000}
+                                                colorRevealDelay={1800}
                                             />
-                                            {/* 🙃 tweak according to this data, make it little bit slow from default values */}
-                                            {/* grayscaleAnimation	  boolean	  true	  Whether to animate from grayscale to color
-                                                pixelFadeInDuration	  number	  1000	  Duration (ms) for each pixel fade-in animation
-                                                maxAnimationDelay	  number	  1200	  Maximum random delay (ms) for pixel animation
-                                                colorRevealDelay	  number	  1500	  Delay (ms) before revealing color */}
+                                            {/* Subtle overlay for better text contrast */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
                                         </div>
                                     ) : (
-                                        <div className="md:perspective-1000 md:rotateY-12 md:group-hover:rotateY-0 flex h-48 w-full items-center justify-center rounded-2xl bg-gray-800 transition-transform duration-300 md:h-56 md:w-80 md:transform">
-                                            <div className="h-12 w-12 rounded-xl bg-green-500/30" />
+                                        <div className="flex flex-col items-center justify-center py-24 text-center">
+                                            <div className="mb-6 text-8xl opacity-20">
+                                                📚
+                                            </div>
+                                            <h3 className="mb-2 text-2xl font-bold text-neutral-300">
+                                                No articles yet
+                                            </h3>
+                                            <p className="mb-6 max-w-md text-neutral-400">
+                                                Check back soon for the latest
+                                                blog posts and articles.
+                                            </p>
                                         </div>
                                     )}
                                 </div>
 
-                                {/* Content: Bottom on mobile, Right on desktop */}
-                                <div className="min-w-0 flex-1 md:order-2 md:flex md:flex-col md:justify-center md:text-center">
-                                    {/* Title - Green and bold */}
-                                    <a
-                                        href={post.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="mb-3 block transition-colors duration-200 group-hover:text-green-400"
-                                    >
-                                        <h2 className="line-clamp-2 text-xl leading-tight font-bold text-green-500 md:text-2xl">
-                                            {post.title}
-                                        </h2>
-                                    </a>
+                                {/* Enhanced Content Section */}
+                                <div className="flex-1 space-y-4 text-center lg:text-left">
+                                    {/* Enhanced Title */}
+                                    <h2 className="text-primary line-clamp-3 text-2xl leading-tight font-black md:text-3xl lg:text-4xl">
+                                        {post.title}
+                                    </h2>
 
-                                    {/* Author - White */}
-                                    <p className="mb-2 text-base text-white md:text-lg">
-                                        by {post.author}
-                                    </p>
+                                    {/* Enhanced Metadata */}
+                                    <div className="flex flex-wrap justify-center gap-3 text-sm text-neutral-400 lg:justify-start">
+                                        <span>by {post.author}</span>
+                                        {hostname && (
+                                            <a
+                                                href={`https://${hostname}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <span className="hover:bg-primary/20 hover:text-primary rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-neutral-300 transition-colors">
+                                                    {hostname}
+                                                </span>
+                                            </a>
+                                        )}
+                                        <div className="flex items-center gap-1.5">
+                                            <Calendar size={16} />
+                                            <span>{date}</span>
+                                        </div>
+                                    </div>
 
-                                    {/* Date - White */}
-                                    <p className="mb-2 text-sm text-white/80 md:text-base">
-                                        {date}
-                                    </p>
-
-                                    {/* URL/Hostname - White */}
-                                    <p className="mb-4 text-xs text-white/60 md:mb-6 md:text-sm">
-                                        {hostname}
-                                    </p>
-
-                                    {/* Action button - Sleek green */}
-                                    <a
-                                        href={post.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 rounded-xl bg-green-500 px-5 py-2.5 text-sm font-semibold text-black transition-all duration-200 hover:scale-105 hover:bg-green-400 hover:shadow-lg hover:shadow-green-500/25 md:mx-auto md:gap-3 md:px-6 md:py-3"
-                                    >
-                                        Read Article
-                                        <ShareIcon
-                                            size={16}
-                                            className="text-black md:hidden"
-                                        />
-                                        <ShareIcon
-                                            size={18}
-                                            className="hidden text-black md:block"
-                                        />
-                                    </a>
+                                    {/* Enhanced CTA Button */}
+                                    <div className="flex justify-center gap-4 pt-2 lg:justify-start">
+                                        <a
+                                            href={post.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group/cta bg-primary inline-flex items-center gap-3 rounded-2xl px-8 py-4 text-base font-bold text-black transition-all duration-500 hover:scale-110 active:scale-95 md:text-lg"
+                                            aria-label={`Read article: ${post.title}`}
+                                        >
+                                            <span>Read Article</span>
+                                            <ExternalLink
+                                                size={20}
+                                                className="text-black transition-transform duration-300 group-hover/cta:translate-x-1 group-hover/cta:-translate-y-0.5"
+                                            />
+                                        </a>
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(
+                                                    post.link
+                                                )
+                                                toast(`Link Copied`)
+                                            }}
+                                            className="rounded-xl border border-white/20 px-4 py-2 text-sm text-neutral-300 transition hover:bg-white/10"
+                                        >
+                                            Copy Link
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </article>
                 )
             })}
+
+            {/* Enhanced Empty State */}
+            {posts.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-24 text-center">
+                    <div className="mb-6 text-8xl opacity-20">📚</div>
+                    <h3 className="mb-2 text-2xl font-bold text-neutral-300">
+                        No articles yet
+                    </h3>
+                    <p className="max-w-md text-neutral-400">
+                        Check back soon for the latest blog posts and articles.
+                    </p>
+                </div>
+            )}
         </div>
     )
 }

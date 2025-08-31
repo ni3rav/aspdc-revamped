@@ -53,7 +53,7 @@ export function NavBar({ items, className }: NavBarProps) {
                 damping: 25,
             }}
             className={cn(
-                'fixed top-4 left-1/2 z-50 -translate-x-1/2 sm:mt-6',
+                'fixed top-4 left-1/2 z-50 -translate-x-1/2 sm:mt-2',
                 className
             )}
         >

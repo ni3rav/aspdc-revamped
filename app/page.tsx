@@ -11,7 +11,6 @@ const page = () => {
     return (
         <div className="min-h-dvh w-screen">
             <Hero />
-            <AboutUs />
             <EventShowcase />
             <ScrollVelocityContainer className="text-4xl font-bold md:text-7xl">
                 <ScrollVelocityRow

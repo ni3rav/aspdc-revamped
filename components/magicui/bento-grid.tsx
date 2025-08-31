@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeftIcon, ChevronRightIcon, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ProgressiveBlur } from '../motion-primitives/progressive-blur'
 
 interface BentoGridProps {
     children: React.ReactNode
@@ -59,7 +60,7 @@ export const BentoCard = ({
                     default: { duration: 0.18, ease: 'easeOut' },
                 }}
                 onClick={() => setIsOpen(true)}
-                className="group bg-background relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border transition-all hover:shadow-xl"
+                className="group bg-background relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border transition-all"
             >
                 {/* 🔑 Image has its own layoutId */}
                 <motion.img
@@ -72,10 +73,10 @@ export const BentoCard = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity group-hover:opacity-80" />
 
                 <div className="absolute inset-0 flex flex-col justify-end p-6">
-                    <h3 className="text-2xl font-bold text-white transition-transform group-hover:-translate-y-1">
+                    <h3 className="rounded-full bg-white/5 py-2 text-center text-2xl font-bold text-white backdrop-blur-sm transition-transform group-hover:-translate-y-1">
                         {name}
                     </h3>
-                    <p className="mt-2 line-clamp-2 scale-95 transform text-sm text-white/80 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
+                    <p className="mt-2 line-clamp-2 scale-80 transform text-sm text-white/80 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
                         {description}
                     </p>
                 </div>

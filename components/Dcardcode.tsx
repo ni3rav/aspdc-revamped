@@ -24,7 +24,7 @@ export function Dcardcode({
         <CardContainer className="inter-var w-full">
             <CardBody className="group/card relative min-h-[24rem] w-full rounded-xl border border-white/[0.2] bg-black p-4 hover:shadow-2xl hover:shadow-emerald-500/[0.1] sm:p-6">
                 <CardItem
-                    translateZ="30"
+                    translateZ="70"
                     className="text-lg font-bold text-white sm:text-xl"
                 >
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:gap-2">
@@ -37,13 +37,13 @@ export function Dcardcode({
 
                 <CardItem
                     as="p"
-                    translateZ="40"
+                    translateZ="50"
                     className="mt-2 line-clamp-3 text-sm text-neutral-200"
                 >
                     {description}
                 </CardItem>
 
-                <CardItem translateZ="50" className="mt-4 w-full">
+                <CardItem translateZ="70" className="mt-4 w-full">
                     <img
                         src={imgUrl ?? ''}
                         height="500"
@@ -55,7 +55,7 @@ export function Dcardcode({
 
                 <div className="mt-4 flex items-center justify-between sm:mt-8">
                     <CardItem
-                        translateZ={15}
+                        translateZ="30"
                         as="a"
                         href={liveUrl}
                         target="_blank"
@@ -67,7 +67,7 @@ export function Dcardcode({
                     </CardItem>
 
                     <CardItem
-                        translateZ={15}
+                        translateZ="30"
                         as="a"
                         href={github_url}
                         target="_blank"
