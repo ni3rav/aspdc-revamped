@@ -1,122 +1,261 @@
 .terminalProfile {
-    background: #18181b;
-    border-radius: 1.2rem;
-    box-shadow: 0 4px 24px 0 #00000022;
-    max-width: 340px;
+    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+    border-radius: 16px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    max-width: 320px;
+    height: 400px;
     margin: auto;
-    font-family: 'Fira Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
-    color: #e5e7eb;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    color: #ffffff;
     overflow: hidden;
-    border: 1px solid #23232b;
-    transition: box-shadow 0.2s;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.terminalProfile:hover {
+    transform: translateY(-8px);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 .terminalHeader {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: #23232b;
-    padding: 0.6rem 1rem;
-    border-bottom: 1px solid #23232b;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 12px 16px;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
 }
+
 .dotRed,
 .dotYellow,
 .dotGreen {
-    width: 0.7rem;
-    height: 0.7rem;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     display: inline-block;
 }
+
 .dotRed {
-    background: #ff5f56;
+    background: #ff5f5f;
 }
+
 .dotYellow {
     background: #ffbd2e;
 }
+
 .dotGreen {
-    background: #27c93f;
-}
-.terminalTitle {
-    margin-left: auto;
-    font-size: 0.95rem;
-    color: #a3a3a3;
-    font-weight: 500;
+    background: #28ca42;
 }
 .terminalBody {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1.2rem 1rem 1.5rem 1rem;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
-.avatarWrap {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+
+.imageContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 12px #00000033;
+    border-radius: 16px;
 }
+
 .avatar {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
-    display: block;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.terminalText {
-    width: 100%;
-    text-align: left;
+
+.terminalProfile:hover .avatar {
+    transform: scale(1.1);
 }
-.line {
-    font-size: 1rem;
-    color: #a3e635;
-    margin-top: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.01em;
+
+.nameOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    color: white;
+    padding: 24px 20px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+    z-index: 5;
+    transition: all 0.3s ease;
 }
-.prompt {
-    color: #22d3ee;
-    margin-right: 0.5em;
+
+.terminalProfile:hover .nameOverlay {
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
 }
-.response {
-    font-size: 1.08rem;
-    color: #e5e7eb;
-    margin-left: 1.5em;
-    margin-bottom: 0.2em;
-    font-weight: 600;
-}
-.socialsWrap {
+.infoOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(20, 20, 20, 0.9) 100%
+    );
+    backdrop-filter: blur(8px);
+    padding: 60px 20px 20px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 15;
+    border-radius: 16px;
     display: flex;
-    gap: 0.7em;
-    margin-left: 1.5em;
-    margin-top: 0.3em;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.terminalProfile:hover .infoOverlay {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.commandLine {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+    animation: fadeInCommand 0.2s ease forwards;
+}
+
+@keyframes fadeInCommand {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.prompt {
+    color: #00d4aa;
+    margin-right: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.command {
+    color: #ffd700;
+    font-weight: 500;
+}
+
+.output {
+    color: #ffffff;
+    font-weight: 400;
+    margin-left: 20px;
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.cursor {
+    background: #00d4aa;
+    color: #00d4aa;
+    font-weight: bold;
+    animation: blink 1s infinite;
+    margin-left: 2px;
+    width: 8px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+@keyframes blink {
+    0%,
+    50% {
+        opacity: 1;
+    }
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.socialLinks {
+    display: flex;
+    gap: 8px;
+    margin-left: 20px;
+    margin-top: 10px;
     flex-wrap: wrap;
+    animation: fadeInSocials 0.25s ease forwards;
 }
+
+@keyframes fadeInSocials {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .socialLink {
-    color: #60a5fa;
-    background: #23232b;
-    border-radius: 0.5em;
-    padding: 0.2em 0.7em;
-    font-size: 0.98em;
+    color: #00d4aa;
+    background: rgba(0, 212, 170, 0.1);
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 10px;
     text-decoration: none;
-    transition:
-        background 0.2s,
-        color 0.2s;
-    border: 1px solid #23232b;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
+
 .socialLink:hover {
-    background: #1e293b;
-    color: #38bdf8;
+    color: #ffffff;
+    background: rgba(0, 212, 170, 0.2);
+    border-color: rgba(0, 212, 170, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 212, 170, 0.2);
 }
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .terminalProfile {
-        max-width: 98vw;
-        font-size: 0.97em;
+        max-width: 280px;
+        height: 360px;
     }
-    .avatarWrap {
-        width: 60px;
-        height: 60px;
+
+    .nameOverlay {
+        font-size: 16px;
+        padding: 20px 16px 16px;
     }
-    .terminalBody {
-        padding: 1rem 0.5rem 1.2rem 0.5rem;
+
+    .infoOverlay {
+        padding: 50px 16px 16px;
+    }
+
+    .commandLine {
+        font-size: 13px;
+    }
+
+    .output {
+        font-size: 12px;
     }
 }
