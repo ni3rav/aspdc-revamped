@@ -12,7 +12,7 @@ const ImageCard = ({ img }: { img: string }) => {
     return (
         <figure
             className={cn(
-                'relative h-48 w-48 cursor-pointer overflow-hidden rounded-xl border sm:h-72 sm:w-72 lg:h-80 lg:w-80'
+                'relative h-48 w-48 cursor-pointer overflow-hidden rounded-xl border sm:h-64 sm:w-64 lg:h-72 lg:w-72'
             )}
         >
             <img
@@ -29,42 +29,54 @@ const EventShowcase = async () => {
     const images = items.flatMap((event) => event.imageUrls.slice(0, 2))
     const firstRow = images.slice(0, Math.ceil(images.length / 2))
     const secondRow = images.slice(Math.ceil(images.length / 2))
+
     return (
-        <section className="py-16 text-center">
+        <section className="flex min-h-screen flex-col items-center justify-center py-20 text-center">
+            {/* Title */}
             <TextScramble
                 duration={1}
-                className="text-primary text-5xl font-extrabold tracking-tight md:text-5xl"
+                className="text-primary text-5xl font-extrabold tracking-tight md:text-7xl"
             >
                 Gallery
             </TextScramble>
+
+            {/* Description */}
             <TextEffect
                 per="char"
                 preset="blur"
                 speedReveal={2}
-                className="mt-3 text-lg text-gray-400"
+                className="mt-6 max-w-2xl text-xl text-gray-400 md:text-2xl"
             >
                 A glimpse into our past events — moments of learning,
                 collaboration, and fun.
             </TextEffect>
 
-            <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg py-10">
-                <Marquee pauseOnHover className="[--duration:20s]">
+            {/* Gallery */}
+            <div className="relative mt-12 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg py-10">
+                <Marquee pauseOnHover className="gap-6 [--duration:20s]">
                     {firstRow.map((img: any, idx: number) => (
                         <ImageCard key={`${img}-${idx}`} img={img} />
                     ))}
                 </Marquee>
-                <Marquee reverse pauseOnHover className="[--duration:20s]">
+                <Marquee
+                    reverse
+                    pauseOnHover
+                    className="gap-6 [--duration:20s]"
+                >
                     {secondRow.map((img: any, idx: number) => (
                         <ImageCard key={`${img}-${idx}`} img={img} />
                     ))}
                 </Marquee>
             </div>
 
-            <Link href={'/events'}>
-                <InteractiveHoverButton>
-                    Relive the Moments
-                </InteractiveHoverButton>
-            </Link>
+            {/* Button */}
+            <div className="mt-12">
+                <Link href={'/events'}>
+                    <InteractiveHoverButton>
+                        Relive the Moments
+                    </InteractiveHoverButton>
+                </Link>
+            </div>
         </section>
     )
 }

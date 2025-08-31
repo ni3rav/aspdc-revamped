@@ -18,7 +18,7 @@ export default function FAQContactPage() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="mb-12 text-center text-3xl font-bold sm:text-4xl lg:text-5xl"
+                className="mb-12 text-center text-5xl font-bold md:text-7xl"
             >
                 Got Questions?{' '}
                 <span className="text-primary">We Got Answers</span>

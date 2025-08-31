@@ -171,7 +171,7 @@ function ScrollVelocityRowImpl({
         <div
             ref={containerRef}
             className={cn(
-                'w-full overflow-hidden whitespace-nowrap',
+                'mb-5 w-full overflow-hidden whitespace-nowrap',
                 className
             )}
             {...props}

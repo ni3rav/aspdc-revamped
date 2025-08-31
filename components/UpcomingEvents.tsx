@@ -51,16 +51,8 @@ export default function UpcomingEventsPage({
                 }
 
                 return (
-                    <motion.article
+                    <article
                         key={event.id}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{
-                            delay: i * 0.1,
-                            duration: 0.5,
-                            ease: 'easeOut',
-                        }}
                         className="group hover:shadow-primary/30 hover:border-primary/40 relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-neutral-900/70 to-neutral-800/30 shadow-lg backdrop-blur-md"
                     >
                         {/* Event Image */}
@@ -139,17 +131,13 @@ export default function UpcomingEventsPage({
                                 )}
                             </div>
                         </div>
-                    </motion.article>
+                    </article>
                 )
             })}
 
             {/* Empty State */}
             {sortedEvents.length === 0 && (
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center"
-                >
+                <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
                     <span className="animate-bounce text-7xl">👩‍💻</span>
                     <h2 className="mt-6 text-3xl font-bold text-neutral-100">
                         No Upcoming Events
@@ -157,7 +145,7 @@ export default function UpcomingEventsPage({
                     <p className="mt-2 text-neutral-400">
                         Stay tuned — something exciting is cooking at ASPDC!
                     </p>
-                </motion.div>
+                </div>
             )}
         </section>
     )
