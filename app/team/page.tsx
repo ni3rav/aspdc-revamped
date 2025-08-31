@@ -180,7 +180,7 @@ const page = () => {
                 {
                     name: 'Malhar Patel',
                     role: 'Member',
-                    avatar: '/team/malhar.jpg',
+                    avatar: '/team/malhar.jpeg',
                     blur: '/team/tiny/malhar.jpeg',
                 },
                 {
@@ -253,12 +253,14 @@ const page = () => {
                                 initial={{
                                     y: 40,
                                     opacity: 0,
-                                    filter: 'blur(5px)',
+                                    scale: 0.8,
+                                    // filter: 'blur(5px)',
                                 }}
                                 whileInView={{
                                     y: 0,
                                     opacity: 1,
-                                    filter: 'blur(0)',
+                                    scale: 1,
+                                    // filter: 'blur(0)',
                                 }}
                                 viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.6, ease: 'easeOut' }}

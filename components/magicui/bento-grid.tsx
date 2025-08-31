@@ -105,7 +105,10 @@ export const BentoCard = ({
                         >
                             {/* Close Button */}
                             <button
-                                onClick={() => setIsOpen(false)}
+                                onClick={() => {
+                                    setIsOpen(false)
+                                    setDialogImageIndex(0)
+                                }}
                                 className="absolute top-6 right-6 z-50 rounded-full bg-black/40 p-2 text-white hover:bg-black/60"
                             >
                                 <X className="h-6 w-6" />

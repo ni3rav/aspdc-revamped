@@ -1,107 +1,131 @@
-/* eslint-disable react/no-unescaped-entities */
 'use client'
 
-import React from 'react'
-import { motion } from 'framer-motion'
-import { useAnimateOnView } from '../hooks/useAnimateOnView'
-import ReactionTest from '../ReactionTest'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
+import { Code2, Rocket, PartyPopper } from 'lucide-react'
+import { TextScramble } from '../motion-primitives/text-scramble'
+import { TextEffect } from '../motion-primitives/text-effect'
 
-export default function AboutUs() {
-    const { ref, isInView } = useAnimateOnView(0.1)
+const cards = [
+    {
+        title: "What's ASPDC All About",
+        body: `ASPDC is a squad of tech-loving students who geek out over code and love to share the knowledge. No gatekeeping here — just good vibes and great learning.`,
+        icon: Code2,
+    },
+    {
+        title: 'Our Vibe',
+        body: `We're all about creating a chill space where you can level up your coding skills, whether you're a total newbie or already dreaming in Python.`,
+        icon: PartyPopper,
+    },
+    {
+        title: "What We've Got Going On",
+        body: [
+            '🔥 Lit workshops on everything from websites to AI',
+            '🤝 Coding hangouts where we tackle projects together',
+            '🏆 Flex your skills in coding competitions',
+            '🚀 Network with industry pros (aka future bosses)',
+            '🎯 A judgment-free zone to try, fail, and crush it',
+        ],
+        icon: Rocket,
+    },
+]
 
-    const fadeInLeft = (delay = 0) => ({
-        hidden: { x: -20, opacity: 0, filter: 'blur(10px)' },
-        visible: {
-            x: 0,
-            opacity: 1,
-            filter: 'blur(0)',
-            transition: { duration: 0.6, delay },
-        },
+export default function AboutGrid() {
+    const containerRef = useRef(null)
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ['start start', 'end end'],
     })
 
-    return (
-        <motion.section
-            ref={ref}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            variants={{ visible: { transition: { staggerChildren: 0.25 } } }}
-            className="relative mx-auto grid max-w-6xl gap-12 px-6 py-20 text-gray-200 lg:grid-cols-2"
-        >
-            {/* Left content */}
-            <div className="space-y-14">
-                {[
-                    {
-                        title: "What's ASPDC All About",
-                        body: `ASPDC is a squad of tech-loving students who geek out
-                        over code and love to share the knowledge. No
-                        gatekeeping here — just good vibes and great learning.`,
-                    },
-                    {
-                        title: 'Our Vibe',
-                        body: `We're all about creating a chill space where you can
-                        level up your coding skills, whether you're a total
-                        newbie or already dreaming in Python. It's like a 24/7
-                        hackathon — minus the stress and energy drinks.`,
-                    },
-                ].map((section, i) => (
-                    <motion.div key={i}>
-                        <motion.h2
-                            className="text-primary text-3xl font-extrabold sm:text-4xl"
-                            variants={fadeInLeft(0)}
-                        >
-                            {section.title}
-                        </motion.h2>
-                        <motion.p
-                            className="mt-3 text-sm leading-relaxed sm:text-base"
-                            variants={fadeInLeft(0.2)}
-                        >
-                            {section.body}
-                        </motion.p>
-                    </motion.div>
-                ))}
+    // Title disappears in the first quarter
+    const xTitle = useTransform(scrollYProgress, [0, 0.25], ['0%', '-100%'])
+    const opacityTitle = useTransform(scrollYProgress, [0, 0.25], [1, 0])
 
-                {/* Features */}
-                <motion.div>
-                    <motion.h2
-                        className="text-primary text-3xl font-extrabold sm:text-4xl"
-                        variants={fadeInLeft(0)}
+    // Cards slide in AFTER the title is gone
+    const xCards = useTransform(
+        scrollYProgress,
+        [0.25, 1],
+        ['100%', `-${(cards.length - 1) * 100}%`]
+    )
+
+    return (
+        <section
+            ref={containerRef}
+            // dynamic height = (cards.length + 1) * 100vh
+            className={`relative h-[${cards.length + 1}00vh]`}
+        >
+            {/* Sticky stage */}
+            <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+                {/* Title */}
+                <motion.div
+                    style={{ x: xTitle, opacity: opacityTitle }}
+                    className="absolute left-0 flex w-screen flex-col items-center justify-center space-y-4 px-4 text-center"
+                >
+                    <TextScramble className="text-primary text-4xl font-extrabold sm:text-5xl md:text-6xl">
+                        🚀 About Us
+                    </TextScramble>
+                    <TextEffect
+                        per="word"
+                        preset="blur"
+                        className="max-w-xl text-base text-gray-400 sm:max-w-2xl sm:text-lg md:text-xl"
                     >
-                        What We've Got Going On
-                    </motion.h2>
-                    <motion.ul
-                        className="mt-4 list-inside list-disc space-y-2 text-sm sm:text-base"
-                        variants={fadeInLeft(0.2)}
-                    >
-                        {[
-                            'Lit workshops on everything from building killer websites to AI',
-                            'Coding hangouts where we tackle projects together',
-                            'Chances to flex your skills in coding competitions',
-                            'Networking opps with tech industry pros (aka future bosses)',
-                            'A judgment-free zone to try, fail, and crush it',
-                        ].map((item, idx) => (
-                            <li key={idx}>{item}</li>
-                        ))}
-                    </motion.ul>
+                        A sneak peek into the vibes, mission, and fun at ASPDC
+                        ✨
+                    </TextEffect>
+                </motion.div>
+
+                {/* Cards */}
+                <motion.div style={{ x: xCards }} className="flex">
+                    {cards.map((card, i) => {
+                        const Icon = card.icon
+                        return (
+                            <motion.div
+                                key={i}
+                                className="flex w-screen items-center justify-center px-4"
+                            >
+                                <div className="flex w-full max-w-sm flex-col gap-4 rounded-2xl border bg-neutral-900 p-6 shadow-xl sm:max-w-md sm:p-8 lg:max-w-2xl">
+                                    {/* Title with icon */}
+                                    <div className="flex items-center gap-3">
+                                        <Icon className="text-primary h-6 w-6 shrink-0" />
+                                        <TextScramble className="text-lg font-bold text-white sm:text-xl md:text-2xl">
+                                            {card.title}
+                                        </TextScramble>
+                                    </div>
+
+                                    {/* Body */}
+                                    {Array.isArray(card.body) ? (
+                                        <ul className="list-inside list-disc space-y-2 pl-2 text-sm text-gray-300 sm:text-base">
+                                            {card.body.map((item, idx) => (
+                                                <motion.li
+                                                    key={idx}
+                                                    initial={{
+                                                        opacity: 0,
+                                                        x: 40,
+                                                    }}
+                                                    whileInView={{
+                                                        opacity: 1,
+                                                        x: 0,
+                                                    }}
+                                                    transition={{
+                                                        delay: 0.2 + idx * 0.1,
+                                                    }}
+                                                    viewport={{ once: true }}
+                                                >
+                                                    {item}
+                                                </motion.li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-sm leading-relaxed text-gray-300 sm:text-base">
+                                            {card.body}
+                                        </p>
+                                    )}
+                                </div>
+                            </motion.div>
+                        )
+                    })}
                 </motion.div>
             </div>
-
-            {/* Reaction Test */}
-            <motion.div
-                className="relative flex h-full flex-col items-center justify-center gap-4 rounded-2xl bg-black text-center"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.8 }}
-            >
-                <h2 className="text-primary text-xl font-bold">
-                    ⚡ Test Your Reflexes!
-                </h2>
-                <p className="max-w-sm text-sm text-gray-400">
-                    Click as soon as the screen turns{' '}
-                    <span className="text-primary">green</span>. Let's see how
-                    fast you really are 👀
-                </p>
-                <ReactionTest />
-            </motion.div>
-        </motion.section>
+        </section>
     )
 }
