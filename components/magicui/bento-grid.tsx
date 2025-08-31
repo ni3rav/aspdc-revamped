@@ -37,6 +37,7 @@ export const BentoCard = ({
 }: BentoCardProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [dialogImageIndex, setDialogImageIndex] = useState(0)
+    const [hover, setHover] = useState(false)
 
     const handlePrevious = () => {
         setDialogImageIndex((prev) =>
@@ -54,6 +55,8 @@ export const BentoCard = ({
         <>
             {/* Compact Card */}
             <motion.div
+                onHoverStart={() => setHover(true)}
+                onHoverEnd={() => setHover(false)}
                 layoutId={`card-${name}`}
                 transition={{
                     layout: { duration: 0.18, ease: 'easeOut' },
@@ -75,14 +78,16 @@ export const BentoCard = ({
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity group-hover:opacity-80" />
 
-                <div className="absolute inset-0 flex flex-col justify-end p-6">
+                <motion.div
+                    className={`absolute inset-0 flex flex-col justify-end p-6 transition-transform duration-300 ${!hover && 'translate-y-20'}`}
+                >
                     <h3 className="text-primary group-hover:text-primary border-primary rounded-full py-2 text-center text-2xl font-bold transition-colors duration-300 group-hover:border group-hover:bg-black/5 group-hover:backdrop-blur-md">
                         {name}
                     </h3>
                     {/* <p className="mt-2 text-sm text-white/80 line-clamp-2 bg-black/5 backdrop-blur-md rounded-full h-12 px-4 py-1">
                         {description}
                     </p> */}
-                </div>
+                </motion.div>
             </motion.div>
 
             {/* Expanded View */}
