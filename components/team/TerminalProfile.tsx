@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styles from './TerminalProfile.module.css'
 
 export interface TerminalProfileProps {
@@ -12,23 +12,6 @@ export interface TerminalProfileProps {
     }
 }
 
-const typeText = (
-    text: string,
-    setter: React.Dispatch<React.SetStateAction<string>>,
-    speed: number = 40
-) => {
-    let index = 0
-    const timer = setInterval(() => {
-        if (index <= text.length) {
-            setter(text.slice(0, index))
-            index++
-        } else {
-            clearInterval(timer)
-        }
-    }, speed)
-    return timer
-}
-
 const TerminalProfile: React.FC<TerminalProfileProps> = ({
     name,
     role,
@@ -40,35 +23,90 @@ const TerminalProfile: React.FC<TerminalProfileProps> = ({
     const [typedRole, setTypedRole] = useState('')
     const [showSocials, setShowSocials] = useState(false)
 
+    // Refs to store timer IDs for cleanup
+    const timersRef = useRef<NodeJS.Timeout[]>([])
+    const intervalsRef = useRef<NodeJS.Timeout[]>([])
+
+    // Cleanup function to clear all timers and intervals
+    const clearAllTimers = () => {
+        timersRef.current.forEach((timer) => clearTimeout(timer))
+        intervalsRef.current.forEach((interval) => clearInterval(interval))
+        timersRef.current = []
+        intervalsRef.current = []
+    }
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            clearAllTimers()
+        }
+    }, [])
+
+    const typeText = (
+        text: string,
+        setter: React.Dispatch<React.SetStateAction<string>>,
+        speed: number = 40
+    ) => {
+        let index = 0
+        const timer = setInterval(() => {
+            if (index <= text.length) {
+                setter(text.slice(0, index))
+                index++
+            } else {
+                clearInterval(timer)
+                // Remove from intervals array when done
+                const timerIndex = intervalsRef.current.indexOf(timer)
+                if (timerIndex > -1) {
+                    intervalsRef.current.splice(timerIndex, 1)
+                }
+            }
+        }, speed)
+
+        // Store interval for cleanup
+        intervalsRef.current.push(timer)
+        return timer
+    }
+
     const handleMouseEnter = () => {
+        // Clear any existing timers
+        clearAllTimers()
+
         setIsHovered(true)
         setTypedName('')
         setTypedRole('')
         setShowSocials(false)
 
-        setTimeout(() => {
+        const timer1 = setTimeout(() => {
             typeText(name, setTypedName)
 
-            setTimeout(
+            const timer2 = setTimeout(
                 () => {
                     if (role) {
                         typeText(role, setTypedRole, 35)
-                        setTimeout(
+                        const timer3 = setTimeout(
                             () => {
                                 if (socials) setShowSocials(true)
                             },
                             role.length * 35 + 200
                         )
+                        timersRef.current.push(timer3)
                     } else if (socials) {
-                        setTimeout(() => setShowSocials(true), 200)
+                        const timer4 = setTimeout(
+                            () => setShowSocials(true),
+                            200
+                        )
+                        timersRef.current.push(timer4)
                     }
                 },
                 name.length * 40 + 250
             )
+            timersRef.current.push(timer2)
         }, 150)
+        timersRef.current.push(timer1)
     }
 
     const handleMouseLeave = () => {
+        clearAllTimers()
         setIsHovered(false)
         setTypedName('')
         setTypedRole('')
