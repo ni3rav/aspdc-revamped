@@ -9,8 +9,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 export default function AboutSection() {
-    const [output, setOutput] = useState('Output will appear here...')
-    const [selectedDemo, setSelectedDemo] = useState<string>('')
     const [terminalInput, setTerminalInput] = useState('')
     const [terminalHistory, setTerminalHistory] = useState<string[]>([
         "Type 'help' to see available commands.",

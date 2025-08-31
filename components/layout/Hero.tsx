@@ -10,7 +10,7 @@ import { motion } from 'framer-motion'
 
 const Hero = () => {
     return (
-        <main className="flex h-screen flex-col overflow-hidden text-white">
+        <main className="main-option-2 flex h-screen flex-col overflow-hidden text-white">
             {/* Navbar */}
             <motion.div className="z-10 flex items-center justify-between px-15 py-6">
                 <motion.div
