@@ -1,4 +1,5 @@
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
+import UpcomingEventsPage from '@/components/UpcomingEvents'
 import { fetchUpcomingEvents } from '@/db/queries'
 import { UpcomingEvent } from '@/db/types'
 
@@ -9,7 +10,7 @@ export default async function UpcomingEvents() {
             <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
                 Mark Your Calenders
             </TextScramble>
-            {JSON.stringify(upcomingEvent)}
+            <UpcomingEventsPage events={upcomingEvent} />
         </main>
     )
 }

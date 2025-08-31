@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import { NeonGradientCard } from '@/components/magicui/neon-gradient-card'
+import Image from 'next/image'
 
 // Framer Motion variants
 const containerVariants = {
@@ -269,8 +270,9 @@ const page = () => {
                                     className={`size-35 rounded-2xl border sm:size-45`}
                                 >
                                     <NeonGradientCard role={member.role}>
-                                        <img
+                                        <Image
                                             className="aspect-square rounded-xl object-cover"
+                                            blurDataURL={member.blur}
                                             src={member.avatar}
                                             alt={member.name}
                                             width={800}

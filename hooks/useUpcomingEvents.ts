@@ -42,7 +42,13 @@ export function useUpdateUpcomingEvent() {
         }: {
             id: string
             event: Partial<UpcomingEvent>
-        }) => updateUpcomingEvent(id, event),
+        }) => {
+            const formattedEvent: Partial<UpcomingEvent> = {
+                ...event,
+                ...(event.date && { date: new Date(event.date) }),
+            }
+            return updateUpcomingEvent(id, formattedEvent)
+        },
         onSuccess: () => {
             toast.success('upcoming event updated successfully')
             queryClient.invalidateQueries({

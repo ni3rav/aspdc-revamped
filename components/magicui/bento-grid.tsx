@@ -73,7 +73,7 @@ export const BentoCard = ({
                     layoutId={`card-image-${name}`}
                     src={background[0]}
                     alt={name}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover transition-all duration-500 group-hover:scale-105"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity group-hover:opacity-80" />

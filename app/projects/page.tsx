@@ -8,7 +8,7 @@ const Projects = async () => {
     const projects: Project[] = await fetchProjects()
 
     return (
-        <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
+        <main className="mx-auto min-h-screen max-w-5xl px-8 py-12 md:py-32 lg:px-0">
             <TextScramble className="text-primary mb-8 text-3xl font-bold uppercase md:mb-16 lg:text-4xl">
                 Projects Showcase
             </TextScramble>
