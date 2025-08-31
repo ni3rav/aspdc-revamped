@@ -4,7 +4,7 @@ import { fetchEvents } from '@/db/queries'
 import { Event } from '@/db/types'
 import React from 'react'
 
-const majorEvents = ['Hackspire', 'Hackfest', 'Adani Pump']
+const majorEvents = ['Hackspire', 'Tech Talk: Future of AI', 'Tech Fest']
 
 const Events = async () => {
     const items: Event[] = await fetchEvents()
