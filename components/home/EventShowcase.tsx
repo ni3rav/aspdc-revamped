@@ -47,7 +47,7 @@ const EventShowcase = async () => {
                 collaboration, and fun.
             </TextEffect>
 
-            <div className="relative flex max-h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg py-10">
+            <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg py-10">
                 <Marquee pauseOnHover className="[--duration:20s]">
                     {firstRow.map((img: any, idx: number) => (
                         <ImageCard key={`${img}-${idx}`} img={img} />

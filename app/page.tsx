@@ -1,4 +1,3 @@
-import AboutUs from '@/components/home/AboutUs'
 import EventShowcase from '@/components/home/EventShowcase'
 import FAQ from '@/components/home/FAQ'
 import Hero from '@/components/home/Hero'

@@ -95,41 +95,51 @@
     --shadow-opacity: var(--shadow-opacity);
     --animate-background-position-spin: background-position-spin 3000ms infinite
         alternate;
+
     @keyframes background-position-spin {
         0% {
             background-position: top center;
         }
+
         100% {
             background-position: bottom center;
         }
     }
+
     --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
+
     @keyframes orbit {
         0% {
             transform: rotate(calc(var(--angle) * 1deg))
                 translateY(calc(var(--radius) * 1px))
                 rotate(calc(var(--angle) * -1deg));
         }
+
         100% {
             transform: rotate(calc(var(--angle) * 1deg + 360deg))
                 translateY(calc(var(--radius) * 1px))
                 rotate(calc((var(--angle) * -1deg) - 360deg));
         }
     }
+
     --animate-marquee: marquee var(--duration) infinite linear;
     --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+
     @keyframes marquee {
         from {
             transform: translateX(0);
         }
+
         to {
             transform: translateX(calc(-100% - var(--gap)));
         }
     }
+
     @keyframes marquee-vertical {
         from {
             transform: translateY(0);
         }
+
         to {
             transform: translateY(calc(-100% - var(--gap)));
         }
@@ -271,55 +281,20 @@
         );
     }
 
-    /* ===================================
-     SECOND PAGE ABOUT SECTION STYLES
-     =================================== */
-
-    .about-card {
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        box-shadow:
-            0 25px 50px -12px rgba(0, 0, 0, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        will-change: transform, border-color;
-    }
-
-    .about-card:hover {
-        border-color: rgba(34, 197, 94, 0.6);
-        box-shadow:
-            0 35px 60px -12px rgba(0, 0, 0, 0.6),
-            0 0 40px rgba(34, 197, 94, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    }
-
-    .about-bg-element {
-        animation: float 6s ease-in-out infinite;
-    }
-
-    .about-bg-element:nth-child(2) {
-        animation-delay: -2s;
-    }
-
-    .about-bg-element:nth-child(3) {
-        animation-delay: -4s;
-    }
-
-    .about-bg-element:nth-child(4) {
-        animation-delay: -6s;
-    }
-
     @keyframes float {
         0%,
         100% {
             transform: translateY(0px) rotate(0deg);
         }
+
         25% {
             transform: translateY(-10px) rotate(90deg);
         }
+
         50% {
             transform: translateY(-5px) rotate(180deg);
         }
+
         75% {
             transform: translateY(-15px) rotate(270deg);
         }
@@ -348,86 +323,6 @@
         transform: translateY(-3px);
         box-shadow: 0 20px 40px rgba(34, 197, 94, 0.3);
     }
-
-    /* Performance Optimized Classes */
-    .binary-number {
-        transition: none; /* Let GSAP handle all transitions */
-        will-change: color, transform, text-shadow;
-        backface-visibility: hidden;
-        transform-style: preserve-3d;
-        contain: layout style paint;
-        pointer-events: none;
-        transform-origin: center center;
-    }
-    ma .main {
-        contain: layout style paint;
-        transform: translateZ(0);
-        background-attachment: fixed;
-        will-change: transform;
-    }
-
-    .main-option-2 {
-        background: linear-gradient(
-            to bottom,
-            rgba(6, 78, 59, 0.302) 0%,
-            rgba(0, 0, 0, 1) 100%
-        );
-    }
-
-    /* Animation Optimized Elements */
-    .mainLogo,
-    .img1,
-    .img3,
-    .img4 {
-        will-change: transform, opacity, filter;
-        backface-visibility: hidden;
-        transform-style: preserve-3d;
-        contain: layout style paint;
-        transform-origin: center center;
-    }
-
-    /* Scroll Container Optimization */
-    .scroll-container {
-        contain: layout style paint;
-        will-change: scroll-position;
-    }
-
-    /* Scrollbar Hiding */
-    .hide-scrollbar {
-        -ms-overflow-style: none; /* Internet Explorer 10+ */
-        scrollbar-width: none; /* Firefox */
-    }
-
-    .hide-scrollbar::-webkit-scrollbar {
-        display: none; /* Safari and Chrome */
-    }
-
-    /* Global Scrollbar Hiding */
-    ::-webkit-scrollbar {
-        width: 0px;
-        background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: transparent;
-    }
-
-    html {
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* Internet Explorer 10+ */
-    }
-}
-
-/* ===================================
-   KEYFRAME ANIMATIONS
-   =================================== */
-@keyframes subtle-pulse {
-    0% {
-        opacity: 0.95;
-    }
-    100% {
-        opacity: 1;
-    }
 }
 
 /* ===================================
@@ -442,15 +337,4 @@
         @apply bg-background text-foreground;
         letter-spacing: var(--tracking-normal);
     }
-}
-
-/* ===================================
-   COMPONENT STYLES
-   =================================== */
-.scrollText span {
-    background: linear-gradient(to bottom, red 0%, red 0%, #075d27 0%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    background-size: 100% 0%;
-    background-repeat: no-repeat;
 }
