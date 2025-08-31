@@ -150,6 +150,16 @@ const accordionItems = [
             </p>
         ),
     },
+    {
+        title: 'Can I suggest an event idea?',
+        content: (
+            <p>
+                Absolutely! If you've got a cool idea just reach out on our
+                socials or talk to a core team member. Let's build something
+                awesome together 🚀
+            </p>
+        ),
+    },
 ]
 
 const AccordionComp: React.FC = () => {
