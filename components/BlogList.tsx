@@ -2,7 +2,7 @@
 
 import { Blog } from '@/db/types'
 import { PixelImage } from '@/components/magicui/pixel-image'
-import { Calendar, ExternalLink, Link, Share2 } from 'lucide-react'
+import { Calendar, ExternalLink, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
 
