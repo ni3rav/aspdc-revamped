@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import Image from 'next/image'
-import { FaInstagram, FaXTwitter } from 'react-icons/fa6'
 import { Instagram, Linkedin, Twitter } from 'lucide-react'
 
 // Framer Motion variants
@@ -19,11 +18,14 @@ const containerVariants = {
 }
 
 const page = () => {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+
     const everything = [
         {
             domainName: 'Faculty Mentor',
             members: [
                 {
+                    id: 1,
                     name: 'Dr. Nikita Joshi',
                     role: 'Faculty Mentor',
                     avatar: '/team/nikitamam.jpeg',
@@ -35,12 +37,14 @@ const page = () => {
             domainName: 'Leadership',
             members: [
                 {
+                    id: 2,
                     name: 'Nirav Maheta',
                     role: 'President',
                     avatar: '/team/nirav.jpg',
                     blur: '/team/tiny/nirav.jpeg',
                 },
                 {
+                    id: 3,
                     name: 'Sahil Patel',
                     role: 'Vice President',
                     avatar: '/team/sahil.jpg',
@@ -52,30 +56,35 @@ const page = () => {
             domainName: 'WebDev',
             members: [
                 {
+                    id: 4,
                     name: 'Harshil Upadhyay',
                     role: 'Lead',
                     avatar: '/team/harshil.jpg',
                     blur: '/team/tiny/harshil.jpeg',
                 },
                 {
+                    id: 5,
                     name: 'Rudra Patel',
                     role: 'Member',
                     avatar: '/team/rudra.jpeg',
                     blur: '/team/tiny/rudra.jpeg',
                 },
                 {
+                    id: 6,
                     name: 'Dwij Gosai',
                     role: 'Member',
                     avatar: '/team/dwij.jpg',
                     blur: '/team/tiny/dwij.jpeg',
                 },
                 {
+                    id: 7,
                     name: 'Tirth Choksi',
                     role: 'Member',
                     avatar: '/team/tirthc.jpg',
                     blur: '/team/tiny/tirthc.jpeg',
                 },
                 {
+                    id: 8,
                     name: 'Sharanya',
                     role: 'Member',
                     avatar: '/team/sharanya.jpg',
@@ -87,30 +96,35 @@ const page = () => {
             domainName: 'DSA',
             members: [
                 {
+                    id: 9,
                     name: 'Pratham Gavadia',
                     role: 'Lead',
                     avatar: '/team/prathams.jpg',
                     blur: '/team/tiny/prathams.jpeg',
                 },
                 {
+                    id: 10,
                     name: 'Pruthvi Navadiya',
                     role: 'Member',
                     avatar: '/team/pruthvi.jpeg',
                     blur: '/team/tiny/pruthvi.jpeg',
                 },
                 {
+                    id: 11,
                     name: 'Harry Panchal',
                     role: 'Member',
                     avatar: '/team/harry.jpg',
                     blur: '/team/tiny/harry.jpeg',
                 },
                 {
+                    id: 12,
                     name: 'Jhanvi Patel',
                     role: 'Member',
                     avatar: '/team/jhanvi.jpg',
                     blur: '/team/tiny/jhanvi.jpeg',
                 },
                 {
+                    id: 13,
                     name: 'Tirth Jain',
                     role: 'Member',
                     avatar: '/team/tirthj.jpg',
@@ -122,30 +136,35 @@ const page = () => {
             domainName: 'Machine Learning',
             members: [
                 {
+                    id: 14,
                     name: 'Vrajesh Sharma',
                     role: 'Lead',
                     avatar: '/team/vrajesh.jpg',
                     blur: '/team/tiny/vrajesh.jpeg',
                 },
                 {
+                    id: 15,
                     name: 'Saurabh Singh',
                     role: 'Member',
                     avatar: '/team/saurabh.jpg',
                     blur: '/team/tiny/saurabh.jpeg',
                 },
                 {
+                    id: 16,
                     name: 'Sharv Mehta',
                     role: 'Member',
                     avatar: '/team/sharv.jpg',
                     blur: '/team/tiny/sharv.jpeg',
                 },
                 {
+                    id: 17,
                     name: 'Samarth Shrivastava',
                     role: 'Member',
                     avatar: '/team/samarth.jpeg',
                     blur: '/team/tiny/samarth.jpeg',
                 },
                 {
+                    id: 18,
                     name: 'Dhruval Patel',
                     role: 'Member',
                     avatar: '/team/dhruval.jpg',
@@ -157,12 +176,14 @@ const page = () => {
             domainName: 'Design',
             members: [
                 {
+                    id: 19,
                     name: 'Yaksh Vadaliya',
                     role: 'Lead',
                     avatar: '/team/yaksh2.jpg',
                     blur: '/team/tiny/yaksh2.jpeg',
                 },
                 {
+                    id: 20,
                     name: 'Ved Parmar',
                     role: 'Lead',
                     avatar: '/team/ved.jpg',
@@ -174,30 +195,35 @@ const page = () => {
             domainName: 'Public Relations',
             members: [
                 {
+                    id: 21,
                     name: 'Deep Adatiya',
                     role: 'Lead',
                     avatar: '/team/deep2.jpg',
                     blur: '/team/tiny/deep2.jpeg',
                 },
                 {
+                    id: 22,
                     name: 'Malhar Patel',
                     role: 'Member',
                     avatar: '/team/malhar.jpeg',
                     blur: '/team/tiny/malhar.jpeg',
                 },
                 {
+                    id: 23,
                     name: 'Darshi Prajapati',
                     role: 'Member',
                     avatar: '/team/darshi.jpg',
                     blur: '/team/tiny/darshi.jpeg',
                 },
                 {
+                    id: 24,
                     name: 'Avyay Kachhia',
                     role: 'Member',
                     avatar: '/team/avyay.jpg',
                     blur: '/team/tiny/avyay.jpeg',
                 },
                 {
+                    id: 25,
                     name: 'Heer Rana',
                     role: 'Member',
                     avatar: '/team/heer.jpg',
@@ -209,6 +235,7 @@ const page = () => {
             domainName: 'Social Media',
             members: [
                 {
+                    id: 26,
                     name: 'Pratham Patel',
                     role: 'Lead',
                     avatar: '/team/prathama.jpg',
@@ -249,15 +276,21 @@ const page = () => {
                         initial="hidden"
                         animate="show"
                     >
-                        {d.members.map((member, index) => (
+                        {d.members.map((member) => (
                             <motion.div
-                                key={index}
+                                key={member.id}
                                 initial={{ y: 40, opacity: 0, scale: 0.8 }}
                                 whileInView={{ y: 0, opacity: 1, scale: 1 }}
                                 viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.6, ease: 'easeOut' }}
                             >
-                                <div className="group relative h-[320px] w-full overflow-hidden rounded-2xl">
+                                <motion.div
+                                    onHoverStart={() =>
+                                        setHoveredIndex(member.id)
+                                    }
+                                    onHoverEnd={() => setHoveredIndex(null)}
+                                    className="group relative h-[260px] w-full overflow-hidden rounded-2xl md:h-[320px]"
+                                >
                                     {/* Background image */}
                                     <Image
                                         className="h-full w-full object-cover"
@@ -272,7 +305,7 @@ const page = () => {
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
                                     {/* Description */}
-                                    <div className="absolute -bottom-3 left-3 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3">
+                                    <div className="absolute bottom-2 left-3 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3">
                                         {/* Name + role */}
                                         <div className="">
                                             <p className="font-semibold">
@@ -284,13 +317,37 @@ const page = () => {
                                         </div>
 
                                         {/* Hover icons */}
-                                        <div className="mt-2 flex gap-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                                            <Instagram />
-                                            <Twitter />
-                                            <Linkedin />
+                                        <div className="mt-2 flex gap-2 lg:hidden">
+                                            <Instagram size={20} />
+                                            <Twitter size={20} />
+                                            <Linkedin size={20} />
                                         </div>
+                                        <AnimatePresence>
+                                            {hoveredIndex === member.id && (
+                                                <motion.div
+                                                    initial={{
+                                                        opacity: 0,
+                                                        y: 10,
+                                                        scale: 0.8,
+                                                    }}
+                                                    animate={{
+                                                        opacity: 1,
+                                                        y: 0,
+                                                        scale: 1,
+                                                    }}
+                                                    transition={{
+                                                        duration: 0.3,
+                                                    }}
+                                                    className="mt-2 hidden gap-2 lg:flex"
+                                                >
+                                                    <Instagram className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
+                                                    <Twitter className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
+                                                    <Linkedin className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
                                     </div>
-                                </div>
+                                </motion.div>
                             </motion.div>
                         ))}
                     </motion.div>

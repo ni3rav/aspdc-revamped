@@ -84,7 +84,7 @@ export const BentoCard = ({
                     <h3 className="text-primary border-primary rounded-full border py-2 text-center text-2xl font-bold backdrop-blur-md transition-colors duration-300 group-hover:bg-black/5 group-hover:backdrop-blur-md lg:backdrop-blur-none">
                         {name}
                     </h3>
-                    <p className="border-secondary mt-2 line-clamp-2 hidden h-12 rounded-full border bg-black/5 px-4 py-1 text-sm text-white/80 backdrop-blur-md lg:block">
+                    <p className="border-secondary mt-2 line-clamp-2 hidden h-12 items-center justify-center rounded-full border bg-black/20 px-4 py-1 text-sm text-white/80 lg:flex">
                         {description}
                     </p>
                 </motion.div>

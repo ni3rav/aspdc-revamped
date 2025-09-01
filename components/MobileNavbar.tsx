@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { FiMenu, FiX, FiChevronRight } from 'react-icons/fi'
-import { NeonGradientCard } from './magicui/neon-gradient-card'
 
 interface NavItem {
     name: string
