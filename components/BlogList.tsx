@@ -4,6 +4,7 @@ import { Blog } from '@/db/types'
 import { PixelImage } from '@/components/magicui/pixel-image'
 import { Calendar, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
+import { Button } from './ui/button'
 
 function formatDate(input: string | Date) {
     const d = new Date(input)
@@ -15,6 +16,24 @@ function formatDate(input: string | Date) {
 }
 
 export function BlogList({ posts }: { posts: Blog[] }) {
+    const handleShare = async ({ post }: { post: Blog }) => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: post.title,
+                    text: `Check out this article: ${post.title} by ${post.author}`,
+                    url: post.link,
+                })
+            } catch (error) {
+                console.error('Error sharing:', error)
+                toast.error('Failed to share the link.')
+            }
+        } else {
+            await navigator.clipboard.writeText(post.link)
+            toast.success('Copied the link to clipboard!')
+        }
+    }
+
     return (
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post, index) => {
@@ -89,17 +108,13 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                             className="text-black transition-transform duration-300 group-hover/cta:translate-x-1"
                                         />
                                     </a>
-                                    <button
-                                        onClick={() => {
-                                            navigator.clipboard.writeText(
-                                                post.link
-                                            )
-                                            toast(`Link Copied`)
-                                        }}
-                                        className="cursor-pointer rounded-lg border border-white/20 px-3 py-2 text-xs text-neutral-300 transition hover:bg-white/10"
+                                    <Button
+                                        onClick={() => handleShare({ post })}
+                                        className="hover:bg-accent cursor-pointer transition"
+                                        variant="outline"
                                     >
-                                        Copy
-                                    </button>
+                                        Share
+                                    </Button>
                                 </div>
                             </div>
                         </div>
