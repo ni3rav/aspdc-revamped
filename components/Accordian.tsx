@@ -58,7 +58,11 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.35, ease: 'easeInOut' }}
+                        transition={{
+                            type: 'spring',
+                            damping: 8, // controls bounciness
+                            stiffness: 80, // controls speed
+                        }}
                         className="overflow-hidden"
                     >
                         <div className="px-5 pb-5 text-sm leading-relaxed text-gray-300">
