@@ -11,7 +11,7 @@ const page = () => {
         <div className="min-h-dvh w-screen">
             <Hero />
             <EventShowcase />
-            <ScrollVelocityContainer className="text-4xl font-bold md:text-7xl">
+            <ScrollVelocityContainer className="text-4xl font-bold md:text-5xl">
                 <ScrollVelocityRow
                     baseVelocity={20}
                     direction={1}
