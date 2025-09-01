@@ -6,13 +6,16 @@ import { TextEffect } from '../motion-primitives/text-effect'
 import { InteractiveHoverButton } from '../magicui/interactive-hover-button'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { Marquee } from '../magicui/marquee'
+import {
+    ScrollVelocityContainer,
+    ScrollVelocityRow,
+} from '../magicui/scroll-based-velocity'
 
 const ImageCard = ({ img }: { img: string }) => {
     return (
         <figure
             className={cn(
-                'relative h-48 w-48 cursor-pointer overflow-hidden rounded-xl border sm:h-64 sm:w-64 lg:h-72 lg:w-72'
+                'relative mr-3 h-48 w-48 overflow-hidden rounded-xl border sm:h-64 sm:w-64 md:mr-6 lg:h-72 lg:w-72'
             )}
         >
             <img
@@ -52,31 +55,25 @@ const EventShowcase = async () => {
             </TextEffect>
 
             {/* Gallery */}
-            <div className="relative mt-12 flex w-full flex-col items-center justify-center overflow-hidden rounded-lg py-10">
-                <Marquee pauseOnHover className="gap-6 [--duration:20s]">
+            <ScrollVelocityContainer className="my-12">
+                <ScrollVelocityRow direction={1} baseVelocity={10}>
                     {firstRow.map((img: any, idx: number) => (
                         <ImageCard key={`${img}-${idx}`} img={img} />
                     ))}
-                </Marquee>
-                <Marquee
-                    reverse
-                    pauseOnHover
-                    className="gap-6 [--duration:20s]"
-                >
+                </ScrollVelocityRow>
+                <ScrollVelocityRow direction={-1} baseVelocity={10}>
                     {secondRow.map((img: any, idx: number) => (
                         <ImageCard key={`${img}-${idx}`} img={img} />
                     ))}
-                </Marquee>
-            </div>
+                </ScrollVelocityRow>
+            </ScrollVelocityContainer>
 
             {/* Button */}
-            <div className="mt-12">
-                <Link href={'/events'}>
-                    <InteractiveHoverButton>
-                        Relive the Moments
-                    </InteractiveHoverButton>
-                </Link>
-            </div>
+            <Link href={'/events'}>
+                <InteractiveHoverButton>
+                    Relive the Moments
+                </InteractiveHoverButton>
+            </Link>
         </section>
     )
 }
