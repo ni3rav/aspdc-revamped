@@ -27,39 +27,74 @@ import { eq } from 'drizzle-orm'
 
 // ----------------- Insertions -----------------
 export async function addProject(project: NewProject) {
-    await db.insert(projects).values(project)
+    try {
+        await db.insert(projects).values(project)
+    } catch (error) {
+        console.error('Error in addProject:', error)
+        throw error
+    }
 }
 
 export async function addAchievement(achievement: NewAchievement) {
-    await db.insert(achievements).values({
-        ...achievement,
-        date: achievement.date.toISOString().split('T')[0], // convert Date → YYYY-MM-DD
-    })
+    try {
+        await db.insert(achievements).values({
+            ...achievement,
+            date: achievement.date.toISOString().split('T')[0], // convert Date → YYYY-MM-DD
+        })
+    } catch (error) {
+        console.error('Error in addAchievement:', error)
+        throw error
+    }
 }
 
 export async function addBlog(blog: NewBlog) {
-    await db.insert(blogs).values(blog)
+    try {
+        await db.insert(blogs).values(blog)
+    } catch (error) {
+        console.error('Error in addBlog:', error)
+        throw error
+    }
 }
 
 export async function addEvent(event: NewEvent) {
-    await db.insert(events).values(event)
+    try {
+        await db.insert(events).values(event)
+    } catch (error) {
+        console.error('Error in addEvent:', error)
+        throw error
+    }
 }
 
 export async function addLeaderboardEntry(entry: NewLeaderboardEntry) {
-    await db.insert(leaderboard).values(entry)
+    try {
+        await db.insert(leaderboard).values(entry)
+    } catch (error) {
+        console.error('Error in addLeaderboardEntry:', error)
+        throw error
+    }
 }
 
 export async function addUpcomingEvent(event: NewUpcomingEvent) {
-    await db.insert(upcomingEvents).values(event)
+    try {
+        await db.insert(upcomingEvents).values(event)
+    } catch (error) {
+        console.error('Error in addUpcomingEvent:', error)
+        throw error
+    }
 }
 
 // ----------------- Updates -----------------
 export async function updateProject(id: string, updates: Partial<Project>) {
-    return await db
-        .update(projects)
-        .set(updates)
-        .where(eq(projects.id, id))
-        .returning()
+    try {
+        return await db
+            .update(projects)
+            .set(updates)
+            .where(eq(projects.id, id))
+            .returning()
+    } catch (error) {
+        console.error('Error in updateProject:', error)
+        throw error
+    }
 }
 
 export async function updateAchievement(
@@ -75,71 +110,126 @@ export async function updateAchievement(
             : undefined,
     }
 
-    await db
-        .update(achievements)
-        .set(adaptedData)
-        .where(eq(achievements.id, id))
+    try {
+        await db
+            .update(achievements)
+            .set(adaptedData)
+            .where(eq(achievements.id, id))
+    } catch (error) {
+        console.error('Error in updateAchievement:', error)
+        throw error
+    }
 }
 
 export async function updateBlog(id: string, updates: Partial<Blog>) {
-    return await db
-        .update(blogs)
-        .set(updates)
-        .where(eq(blogs.id, id))
-        .returning()
+    try {
+        return await db
+            .update(blogs)
+            .set(updates)
+            .where(eq(blogs.id, id))
+            .returning()
+    } catch (error) {
+        console.error('Error in updateBlog:', error)
+        throw error
+    }
 }
 
 export async function updateEvent(id: string, updates: Partial<Event>) {
-    return await db
-        .update(events)
-        .set(updates)
-        .where(eq(events.id, id))
-        .returning()
+    try {
+        return await db
+            .update(events)
+            .set(updates)
+            .where(eq(events.id, id))
+            .returning()
+    } catch (error) {
+        console.error('Error in updateEvent:', error)
+        throw error
+    }
 }
 
 export async function updateLeaderboardEntry(
     id: string,
     updates: Partial<LeaderboardEntry>
 ) {
-    return await db
-        .update(leaderboard)
-        .set(updates)
-        .where(eq(leaderboard.id, id))
-        .returning()
+    try {
+        return await db
+            .update(leaderboard)
+            .set(updates)
+            .where(eq(leaderboard.id, id))
+            .returning()
+    } catch (error) {
+        console.error('Error in updateLeaderboardEntry:', error)
+        throw error
+    }
 }
 
 export async function updateUpcomingEvent(
     id: string,
     updates: Partial<UpcomingEvent>
 ) {
-    return await db
-        .update(upcomingEvents)
-        .set(updates)
-        .where(eq(upcomingEvents.id, id))
-        .returning()
+    try {
+        return await db
+            .update(upcomingEvents)
+            .set(updates)
+            .where(eq(upcomingEvents.id, id))
+            .returning()
+    } catch (error) {
+        console.error('Error in updateUpcomingEvent:', error)
+        throw error
+    }
 }
 
 // ----------------- Deletions -----------------
 export async function deleteProject(id: string) {
-    await db.delete(projects).where(eq(projects.id, id))
+    try {
+        await db.delete(projects).where(eq(projects.id, id))
+    } catch (error) {
+        console.error('Error in deleteProject:', error)
+        throw error
+    }
 }
 
 export async function deleteAchievement(id: string) {
-    await db.delete(achievements).where(eq(achievements.id, id))
+    try {
+        await db.delete(achievements).where(eq(achievements.id, id))
+    } catch (error) {
+        console.error('Error in deleteAchievement:', error)
+        throw error
+    }
 }
 
 export async function deleteBlog(id: string) {
-    await db.delete(blogs).where(eq(blogs.id, id))
+    try {
+        await db.delete(blogs).where(eq(blogs.id, id))
+    } catch (error) {
+        console.error('Error in deleteBlog:', error)
+        throw error
+    }
 }
 
 export async function deleteEvent(id: string) {
-    await db.delete(events).where(eq(events.id, id))
+    try {
+        await db.delete(events).where(eq(events.id, id))
+    } catch (error) {
+        console.error('Error in deleteEvent:', error)
+        throw error
+    }
 }
 
 export async function deleteLeaderboardEntry(id: string) {
-    await db.delete(leaderboard).where(eq(leaderboard.id, id))
+    try {
+        await db.delete(leaderboard).where(eq(leaderboard.id, id))
+    } catch (error) {
+        console.error('Error in deleteLeaderboardEntry:', error)
+        throw error
+    }
 }
 
 export async function deleteUpcomingEvent(id: string) {
-    await db.delete(upcomingEvents).where(eq(upcomingEvents.id, id))
+    try {
+        await db.delete(upcomingEvents).where(eq(upcomingEvents.id, id))
+    } catch (error) {
+        console.error('Error in deleteUpcomingEvent:', error)
+        throw error
+    }
 }
