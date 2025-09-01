@@ -22,12 +22,12 @@ export function Dcardcode({
 }) {
     return (
         <CardContainer className="inter-var w-full">
-            <CardBody className="group/card relative min-h-[24rem] w-full rounded-xl border border-white/[0.2] bg-black p-4 hover:shadow-2xl hover:shadow-emerald-500/[0.1] sm:p-6">
+            <CardBody className="group/card relative min-h-[28rem] w-full rounded-xl border border-white/[0.2] bg-black p-4 hover:shadow-2xl hover:shadow-emerald-500/[0.1] sm:p-6">
                 <CardItem
                     translateZ="70"
                     className="text-lg font-bold text-white sm:text-xl"
                 >
-                    <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:gap-2">
+                    <div className="flex flex-col gap-1">
                         <span className="truncate">{title}</span>
                         <span className="text-sm text-gray-400">
                             by {author}
@@ -38,7 +38,7 @@ export function Dcardcode({
                 <CardItem
                     as="p"
                     translateZ="50"
-                    className="mt-2 line-clamp-3 text-sm text-neutral-200"
+                    className="mt-6 line-clamp-2 text-sm text-neutral-200/85"
                 >
                     {description}
                 </CardItem>
@@ -57,25 +57,27 @@ export function Dcardcode({
                     <CardItem
                         translateZ="30"
                         as="a"
-                        href={liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="sm:text-md hover:text-primary flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium sm:px-4"
-                    >
-                        <Github size={18} />
-                        Github
-                    </CardItem>
-
-                    <CardItem
-                        translateZ="30"
-                        as="a"
                         href={github_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="sm:text-md hover:text-primary rounded-xl bg-gradient-to-r from-white to-gray-200 px-3 py-2 text-sm font-semibold text-black shadow-md sm:px-4"
+                        className="sm:text-md hover:text-primary text-primary flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium sm:px-4 lg:text-white"
                     >
-                        Live Demo →
+                        <Github size={18} />
+                        Source Code
                     </CardItem>
+
+                    {liveUrl && (
+                        <CardItem
+                            translateZ="30"
+                            as="a"
+                            href={liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="sm:text-md hover:text-primary text-primary rounded-xl bg-gradient-to-r from-white to-gray-200 px-3 py-2 text-sm font-semibold shadow-md sm:px-4 lg:text-black"
+                        >
+                            Live Demo →
+                        </CardItem>
+                    )}
                 </div>
             </CardBody>
         </CardContainer>
