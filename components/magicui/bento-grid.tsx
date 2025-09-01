@@ -65,7 +65,7 @@ export const BentoCard = ({
                 onClick={() => setIsOpen(true)}
                 className={cn(
                     'group bg-background relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border transition-all',
-                    className // <-- apply it here
+                    className
                 )}
             >
                 {/* 🔑 Image has its own layoutId */}
@@ -79,12 +79,10 @@ export const BentoCard = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity group-hover:opacity-80" />
 
                 <motion.div
-                    className={`absolute inset-0 flex flex-col justify-end p-6 transition-transform duration-300 ${!hover && 'lg:translate-y-35'}`}
+                    className={`absolute bottom-0 m-3 flex scale-80 flex-col justify-end rounded-xl bg-black/5 p-3 opacity-0 backdrop-blur-sm transition-all duration-300 ${hover && 'scale-100 opacity-100'}`}
                 >
-                    <h3 className="text-primary border-primary rounded-full border py-2 text-center text-2xl font-bold backdrop-blur-md transition-colors duration-300 group-hover:bg-black/5 group-hover:backdrop-blur-md lg:backdrop-blur-none">
-                        {name}
-                    </h3>
-                    <p className="border-secondary mt-2 line-clamp-2 hidden h-12 items-center justify-center rounded-full border bg-black/20 px-4 py-1 text-sm text-white/80 lg:flex">
+                    <h3 className="text-primary text-2xl font-bold">{name}</h3>
+                    <p className="mt-2 line-clamp-2 hidden items-center justify-center text-sm text-white/80 lg:flex">
                         {description}
                     </p>
                 </motion.div>

@@ -59,14 +59,6 @@ const Hero = () => {
                     </TextScramble>
                 </motion.div>
 
-                {/* <TextEffect
-                    per="word"
-                    preset="blur"
-                    className="mt-4 text-sm font-semibold tracking-wider text-gray-300 uppercase sm:text-base"
-                >
-                    Adani Students Programming and Development Club
-                </TextEffect> */}
-
                 <TextEffect
                     per="word"
                     preset="blur"
