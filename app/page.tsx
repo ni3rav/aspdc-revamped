@@ -117,11 +117,6 @@ const page = () => {
             <Suspense fallback={<LoadingFallback />}>
                 <FAQ />
             </Suspense>
-
-            {/* Footer Section - Playful, branded, animated */}
-            <Suspense fallback={<LoadingFallback />}>
-                <Footer />
-            </Suspense>
         </PageManager>
     )
 }

@@ -6,6 +6,7 @@ import QueryProvider from '@/lib/query-provider'
 import { ClerkProvider } from '@clerk/nextjs'
 import Navbar from '@/components/layout/Navbar'
 import DotGrid from '@/components/bits/DotGrid/DotGrid'
+import Footer from '@/components/layout/footer'
 
 const spaceGrotesk = Space_Grotesk({
     variable: '--font-space-grotesk',
@@ -100,6 +101,7 @@ export default function RootLayout({
                             <Navbar />
                         </div>
                         {children}
+                        <Footer />
                     </QueryProvider>
                 </body>
             </html>
