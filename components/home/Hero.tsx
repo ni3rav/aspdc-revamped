@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import WrapButton from '../ui/wrap-button'
 import { ChevronDown, Phone } from 'lucide-react'
 import { TextScramble } from '../motion-primitives/text-scramble'
@@ -51,7 +50,7 @@ const Hero = () => {
                 >
                     <TextScramble
                         duration={1}
-                        className="text-primary text-8xl font-extrabold"
+                        className="text-primary text-5xl font-extrabold tracking-tight text-balance sm:text-6xl md:text-7xl lg:text-8xl"
                         trigger={isTrigger}
                         onHoverStart={() => setIsTrigger(true)}
                         onScrambleComplete={() => setIsTrigger(false)}
@@ -60,20 +59,31 @@ const Hero = () => {
                     </TextScramble>
                 </motion.div>
 
+                {/* <TextEffect
+                    per="word"
+                    preset="blur"
+                    className="mt-4 text-sm font-semibold tracking-wider text-gray-300 uppercase sm:text-base"
+                >
+                    Adani Students Programming and Development Club
+                </TextEffect> */}
+
                 <TextEffect
                     per="word"
                     preset="blur"
-                    className="text-lg text-gray-300 sm:text-xl"
+                    className="mt-4 text-2xl text-gray-200 sm:text-3xl md:text-4xl"
                 >
-                    Adani Students Programming and Development Club
+                    For the Students, By the Students
                 </TextEffect>
 
                 <TextEffect
                     per="word"
                     preset="blur"
-                    className="mt-6 text-sm text-gray-400 sm:text-4xl"
+                    className="mt-6 max-w-3xl text-lg leading-relaxed text-gray-400 sm:text-xl"
                 >
-                    For The Students, By The Students
+                    Adani Students Programming and Developement Club (ASPDC) is
+                    a welcoming space to learn, grow, and innovate across web
+                    development, AI, and competitive programming at Adani
+                    University.
                 </TextEffect>
             </div>
 
@@ -83,8 +93,20 @@ const Hero = () => {
                 transition={{ duration: 1, delay: 0.5 }}
                 className="mb-10 flex flex-col items-center justify-center gap-3 text-xl"
             >
-                <p>Scroll down to explore</p>
-                <ChevronDown />
+                <p className="sr-only">Scroll down to explore</p>
+                <motion.p
+                    aria-hidden="true"
+                    initial={{ opacity: 0.7 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                        duration: 0.6,
+                        repeat: Number.POSITIVE_INFINITY,
+                        repeatType: 'mirror',
+                    }}
+                >
+                    Scroll down to explore
+                </motion.p>
+                <ChevronDown aria-hidden="true" />
             </motion.div>
         </main>
     )

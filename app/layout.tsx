@@ -33,7 +33,7 @@ export default function RootLayout({
         >
             <html lang="en">
                 <body
-                    className={`${spaceGrotesk.className} secnone antialiased`}
+                    className={`${spaceGrotesk.className} secnone overflow-x-hidden antialiased`}
                 >
                     <Toaster richColors position="top-right" />
                     <QueryProvider>
