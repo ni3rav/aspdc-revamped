@@ -94,9 +94,9 @@ const FlowingGallery: FC<FlowingGalleryProps> = ({ items = [] }) => {
     }, [activeImage])
 
     return (
-        <div className="w-full bg-[#060010]" ref={containerRef}>
+        <div className="w-full bg-black/90" ref={containerRef}>
             {/* Interactive Header Section */}
-            <header className="group bg-gradient-to-b from-[#060010] to-[#0a0018] py-20 text-center">
+            <header className="group bg-gradient-to-b from-black/90 to-black/80 py-20 text-center">
                 <div className="cursor-pointer">
                     <VariableProximity
                         label="MEMORIES"
@@ -113,7 +113,7 @@ const FlowingGallery: FC<FlowingGalleryProps> = ({ items = [] }) => {
 
             {/* Main Gallery Container */}
             <div
-                className="relative h-[600px] w-full cursor-none bg-transparent md:h-screen"
+                className="relative h-[600px] w-full cursor-none bg-black/80 md:h-screen"
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
                 role="region"

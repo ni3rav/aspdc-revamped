@@ -12,7 +12,7 @@
     min-height: 24rem;
     border-radius: 1rem;
     overflow: hidden;
-    background: linear-gradient(135deg, #0f172a 60%, #22c55e22 100%);
+    background: linear-gradient(135deg, #090909 90%, #000000 100%);
     box-shadow:
         0 4px 32px 0 rgba(34, 197, 94, 0.18),
         0 3px 16px 0 rgba(0, 0, 0, 0.12);
