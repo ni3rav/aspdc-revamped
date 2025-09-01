@@ -2,7 +2,7 @@
 
 import { Blog } from '@/db/types'
 import { PixelImage } from '@/components/magicui/pixel-image'
-import { Calendar, ExternalLink } from 'lucide-react'
+import { Calendar, ExternalLink, Link, Share2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
 
@@ -59,9 +59,9 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                             src={post.coverImage}
                                             customGrid={{ rows: 8, cols: 12 }}
                                             grayscaleAnimation
-                                            pixelFadeInDuration={1400}
-                                            maxAnimationDelay={2000}
-                                            colorRevealDelay={1800}
+                                            pixelFadeInDuration={750}
+                                            maxAnimationDelay={950}
+                                            colorRevealDelay={950}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
                                     </div>
@@ -96,7 +96,7 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                 </div>
 
                                 {/* CTA Buttons */}
-                                <div className="flex justify-center gap-3 pt-2">
+                                <div className="flex justify-center gap-2 pt-2">
                                     <a
                                         href={post.link}
                                         target="_blank"
@@ -107,15 +107,16 @@ export function BlogList({ posts }: { posts: Blog[] }) {
                                         <span>Read</span>
                                         <ExternalLink
                                             size={16}
-                                            className="text-black transition-transform duration-300 group-hover/cta:translate-x-1"
+                                            className="transition-transform duration-300 group-hover/cta:translate-x-1"
                                         />
                                     </a>
                                     <Button
                                         onClick={() => handleShare({ post })}
-                                        className="hover:bg-accent cursor-pointer transition"
-                                        variant="outline"
+                                        className="hover:bg-secondary cursor-pointer rounded-lg transition"
+                                        variant="ghost"
                                     >
                                         Share
+                                        <Share2 size={16} />
                                     </Button>
                                 </div>
                             </div>
