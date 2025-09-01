@@ -27,6 +27,8 @@ export function BlogList({ posts }: { posts: Blog[] }) {
             } catch (error) {
                 console.error('Error sharing:', error)
                 toast.error('Failed to share the link.')
+            } finally {
+                navigator.clipboard.writeText(post.link)
             }
         } else {
             await navigator.clipboard.writeText(post.link)

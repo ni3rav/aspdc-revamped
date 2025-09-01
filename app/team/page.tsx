@@ -4,8 +4,9 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
-import { NeonGradientCard } from '@/components/magicui/neon-gradient-card'
 import Image from 'next/image'
+import { FaInstagram, FaXTwitter } from 'react-icons/fa6'
+import { Instagram, Linkedin, Twitter } from 'lucide-react'
 
 // Framer Motion variants
 const containerVariants = {
@@ -24,7 +25,7 @@ const page = () => {
             members: [
                 {
                     name: 'Dr. Nikita Joshi',
-                    role: '',
+                    role: 'Faculty Mentor',
                     avatar: '/team/nikitamam.jpeg',
                     blur: '/team/tiny/nikitamam.jpeg',
                 },
@@ -251,44 +252,44 @@ const page = () => {
                         {d.members.map((member, index) => (
                             <motion.div
                                 key={index}
-                                initial={{
-                                    y: 40,
-                                    opacity: 0,
-                                    scale: 0.8,
-                                    // filter: 'blur(5px)',
-                                }}
-                                whileInView={{
-                                    y: 0,
-                                    opacity: 1,
-                                    scale: 1,
-                                    // filter: 'blur(0)',
-                                }}
+                                initial={{ y: 40, opacity: 0, scale: 0.8 }}
+                                whileInView={{ y: 0, opacity: 1, scale: 1 }}
                                 viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.6, ease: 'easeOut' }}
                             >
-                                <div
-                                    className={`size-35 rounded-2xl border sm:size-45`}
-                                >
-                                    <NeonGradientCard role={member.role}>
-                                        <Image
-                                            className="aspect-square rounded-xl object-cover"
-                                            blurDataURL={member.blur}
-                                            src={member.avatar}
-                                            alt={member.name}
-                                            width={800}
-                                            height={600}
-                                        />
-                                    </NeonGradientCard>
-                                </div>
-                                <div className="flex flex-col">
-                                    <p className="mt-2 text-base font-medium">
-                                        {member.name}
-                                    </p>
-                                    {member.role && (
-                                        <p className="text-muted-foreground text-sm">
-                                            {member.role}
-                                        </p>
-                                    )}
+                                <div className="group relative h-[320px] w-full overflow-hidden rounded-2xl">
+                                    {/* Background image */}
+                                    <Image
+                                        className="h-full w-full object-cover"
+                                        blurDataURL={member.blur}
+                                        src={member.avatar}
+                                        alt={member.name}
+                                        fill // ensures it fills the card
+                                        sizes="(max-width: 768px) 100vw, 25vw"
+                                    />
+
+                                    {/* Gradient overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+
+                                    {/* Description */}
+                                    <div className="absolute -bottom-3 left-3 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3">
+                                        {/* Name + role */}
+                                        <div className="">
+                                            <p className="font-semibold">
+                                                {member.name}
+                                            </p>
+                                            <p className="text-sm opacity-80">
+                                                {member.role}
+                                            </p>
+                                        </div>
+
+                                        {/* Hover icons */}
+                                        <div className="mt-2 flex gap-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                                            <Instagram />
+                                            <Twitter />
+                                            <Linkedin />
+                                        </div>
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
