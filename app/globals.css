@@ -336,5 +336,27 @@
     body {
         @apply bg-background text-foreground;
         letter-spacing: var(--tracking-normal);
+        scroll-behavior: smooth;
+    }
+
+    body {
+        --sb-track-color: #23c55e00;
+        --sb-thumb-color: #23c55e67;
+        --sb-size: 5px;
+    }
+
+    body::-webkit-scrollbar {
+        width: var(--sb-size);
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background: var(--sb-thumb-color);
+        border-radius: 5px;
+    }
+
+    @supports not selector(::-webkit-scrollbar) {
+        body {
+            scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+        }
     }
 }
