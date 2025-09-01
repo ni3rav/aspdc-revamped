@@ -18,6 +18,7 @@ const EmojiConfetti: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const particles = useRef<Particle[]>([])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const emojis = ['🧑‍💻', '🖥️', '🐍', '🌍', '✨', '⚡', '🖱️', '💿']
 
     useEffect(() => {

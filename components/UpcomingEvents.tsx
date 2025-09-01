@@ -1,9 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { UpcomingEvent } from '@/db/types'
 import { Calendar, MapPin, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 
 export default function UpcomingEventsPage({
     events,
@@ -27,7 +27,7 @@ export default function UpcomingEventsPage({
 
     return (
         <section className="mx-auto grid max-w-7xl gap-10 px-6 pb-24 text-neutral-200 md:grid-cols-2 lg:grid-cols-3">
-            {sortedEvents.map((event, i) => {
+            {sortedEvents.map((event) => {
                 const eventDate = new Date(event.date)
                 eventDate.setHours(0, 0, 0, 0)
 

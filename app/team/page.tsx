@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 import React, { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -17,7 +16,7 @@ const containerVariants = {
     },
 }
 
-const page = () => {
+export default function Page() {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
     const everything = [
@@ -238,8 +237,8 @@ const page = () => {
                     id: 26,
                     name: 'Pratham Patel',
                     role: 'Lead',
-                    avatar: '/team/prathama.jpg',
-                    blur: '/team/tiny/pratham.jpeg',
+                    avatar: '/team/pratham-patel.jpg',
+                    blur: '/team/tiny/pratham-patel.jpeg',
                 },
             ],
         },
@@ -356,5 +355,3 @@ const page = () => {
         </main>
     )
 }
-
-export default page

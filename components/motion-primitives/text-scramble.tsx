@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-import { type JSX, useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion, MotionProps, useInView } from 'motion/react'
 
 export type TextScrambleProps = {
@@ -21,28 +22,23 @@ export function TextScramble({
     duration = 0.8,
     speed = 0.04,
     characterSet = defaultChars,
-    className,
+    className = '',
     as: Component = 'p',
     trigger = true,
     onScrambleComplete,
     ...props
 }: TextScrambleProps) {
-    const MotionComponent = motion.create(
-        Component as keyof JSX.IntrinsicElements
-    )
     const [displayText, setDisplayText] = useState(children)
     const [isAnimating, setIsAnimating] = useState(false)
     const text = children
 
-    // 👇 Ref + InView hook
-    const ref = useRef(null)
+    // Use a more explicit ref type
+    const ref = useRef<HTMLElement>(null)
     const isInView = useInView(ref, { once: true, amount: 1 })
-    // `amount: 1` = only trigger when fully visible
 
     const scramble = async () => {
         if (isAnimating) return
         setIsAnimating(true)
-
         const steps = duration / speed
         let step = 0
 
@@ -84,8 +80,11 @@ export function TextScramble({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isInView, trigger])
 
+    // Create the motion component with explicit typing
+    const MotionComponent = motion.create(Component as any)
+
     return (
-        <MotionComponent ref={ref} className={className} {...props}>
+        <MotionComponent ref={ref} className={className} {...(props as any)}>
             {displayText}
         </MotionComponent>
     )

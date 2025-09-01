@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 import { fetchEvents } from '@/db/queries'
 import { Event } from '@/db/types'
 import React from 'react'
