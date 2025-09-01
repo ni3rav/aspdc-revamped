@@ -8,7 +8,7 @@ import {
 
 const page = () => {
     return (
-        <div className="min-h-dvh w-screen">
+        <div className="min-h-dvh">
             <Hero />
             <EventShowcase />
             <ScrollVelocityContainer className="text-4xl font-bold md:text-5xl">
