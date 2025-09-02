@@ -145,21 +145,12 @@ const accordionItems = [
         ),
     },
     {
-        title: 'How do I become a part of the ASPDC core team?',
-        content: (
-            <p>
-                Keep an eye out for our recruitment drives 👀. We love welcoming
-                passionate folks who want to build, learn, and contribute 🙌
-            </p>
-        ),
-    },
-    {
         title: 'Can I suggest an event idea?',
         content: (
             <p>
-                Absolutely! If you've got a cool idea just reach out on our
-                socials or talk to a core team member. Let's build something
-                awesome together 🚀
+                Absolutely! If you've got a cool idea just email us right here
+                or reach out on our socials. Let's build something awesome
+                together 🚀
             </p>
         ),
     },

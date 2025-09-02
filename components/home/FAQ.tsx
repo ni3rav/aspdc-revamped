@@ -6,8 +6,42 @@ import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { MagicCard } from '../magicui/magic-card'
 import AccordionComp from '../Accordian'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 export default function FAQContactPage() {
+    const [sendMail, setSendMail] = useState({
+        subject: '',
+        body: '',
+    })
+
+    const openEmail = (e: any) => {
+        e.preventDefault()
+        const recipient = 'aspdc@adaniuni.ac.in'
+        const subject = encodeURIComponent(`${sendMail.subject}`)
+        const body = encodeURIComponent(`${sendMail.body}`)
+        if (subject.trim().length === 0 || body.trim().length === 0) {
+            toast.error('Looks like you missed the subject or message!')
+            return
+        }
+
+        try {
+            // Attempt to open the default email client
+            window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`
+            setTimeout(() => {
+                toast.success('Feedback sent successfully')
+            }, 1500)
+        } catch (e) {
+            // Fallback to Gmail if the default email client is not available
+            window.open(
+                `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`,
+                '_blank'
+            )
+            setTimeout(() => {
+                toast.success('Feedback sent successfully')
+            }, 1500)
+        }
+    }
     return (
         <div
             id="contact"
@@ -57,21 +91,20 @@ export default function FAQContactPage() {
                             <form className="space-y-6">
                                 <div>
                                     <label className="mb-2 block font-medium">
-                                        Name
+                                        Subject
                                     </label>
                                     <Input
+                                        value={sendMail.subject}
+                                        onChange={(
+                                            e: React.ChangeEvent<HTMLInputElement>
+                                        ) =>
+                                            setSendMail({
+                                                ...sendMail,
+                                                subject: e.target.value,
+                                            })
+                                        }
                                         type="text"
-                                        placeholder="Your Name"
-                                        className="border-none bg-[#1f1f1f]"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="mb-2 block font-medium">
-                                        Email
-                                    </label>
-                                    <Input
-                                        type="email"
-                                        placeholder="you@example.com"
+                                        placeholder="Enter Subject"
                                         className="border-none bg-[#1f1f1f]"
                                     />
                                 </div>
@@ -80,6 +113,15 @@ export default function FAQContactPage() {
                                         Message
                                     </label>
                                     <Textarea
+                                        value={sendMail.body}
+                                        onChange={(
+                                            e: React.ChangeEvent<HTMLTextAreaElement>
+                                        ) =>
+                                            setSendMail({
+                                                ...sendMail,
+                                                body: e.target.value,
+                                            })
+                                        }
                                         placeholder="Write your message..."
                                         rows={4}
                                         className="border-none bg-[#1f1f1f]"
@@ -87,7 +129,8 @@ export default function FAQContactPage() {
                                 </div>
                                 <Button
                                     type="submit"
-                                    className="bg-primary w-full rounded-lg px-6 py-3 font-semibold text-black shadow-md hover:bg-[#1ea64f]"
+                                    className="bg-primary hover:bg-primary/70 w-full cursor-pointer rounded-lg px-6 py-3 font-semibold text-black shadow-md"
+                                    onClick={(e) => openEmail(e)}
                                 >
                                     Send Message
                                 </Button>
