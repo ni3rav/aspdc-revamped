@@ -15,6 +15,7 @@ export default function FAQContactPage() {
         body: '',
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const openEmail = (e: any) => {
         e.preventDefault()
         const recipient = 'aspdc@adaniuni.ac.in'
@@ -32,6 +33,7 @@ export default function FAQContactPage() {
                 toast.success('Feedback sent successfully')
             }, 1500)
         } catch (e) {
+            console.error('Error opening email client:', e)
             // Fallback to Gmail if the default email client is not available
             window.open(
                 `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`,
