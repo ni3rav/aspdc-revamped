@@ -460,12 +460,16 @@ export default function Page() {
                                                             href={
                                                                 member.instagram
                                                             }
+                                                            target="_blank"
                                                         >
                                                             <Instagram className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
                                                         </Link>
                                                     )}
                                                     {member.x && (
-                                                        <Link href={member.x}>
+                                                        <Link
+                                                            href={member.x}
+                                                            target="_blank"
+                                                        >
                                                             <Twitter className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
                                                         </Link>
                                                     )}
@@ -474,6 +478,7 @@ export default function Page() {
                                                             href={
                                                                 member.linkedin
                                                             }
+                                                            target="_blank"
                                                         >
                                                             <Linkedin className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
                                                         </Link>
@@ -481,6 +486,7 @@ export default function Page() {
                                                     {member.github && (
                                                         <Link
                                                             href={member.github}
+                                                            target="_blank"
                                                         >
                                                             <Github className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
                                                         </Link>
