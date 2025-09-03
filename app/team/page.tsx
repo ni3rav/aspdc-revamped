@@ -142,6 +142,13 @@ export default function Page() {
                     blur: '/team/tiny/vrajesh.jpeg',
                 },
                 {
+                    id: 27,
+                    name: 'Mohit Manglani',
+                    role: 'Member',
+                    avatar: '/team/mohit.jpeg',
+                    blur: '/team/tiny/mohit.jpeg',
+                },
+                {
                     id: 15,
                     name: 'Saurabh Singh',
                     role: 'Member',

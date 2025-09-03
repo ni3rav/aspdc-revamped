@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
@@ -23,9 +24,14 @@ const MobileNavbar = ({ items }: NavBarProps) => {
     }
 
     return (
-        <div>
+        <>
             {/* Top Bar */}
-            <div className="fixed top-0 right-0 left-0 z-[5001] flex items-center justify-between border-b border-white/20 bg-black/20 p-2 px-4 shadow-2xl backdrop-blur-2xl">
+            <motion.div
+                initial={{ y: -60 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+                className="fixed top-0 right-0 left-0 z-[5001] flex items-center justify-between border-b border-white/20 bg-black/20 p-2 px-4 shadow-2xl backdrop-blur-2xl"
+            >
                 <Link href={'/'}>
                     <div className="flex items-center">
                         <Image
@@ -43,7 +49,7 @@ const MobileNavbar = ({ items }: NavBarProps) => {
                         <FiMenu size={28} />
                     )}
                 </button>
-            </div>
+            </motion.div>
 
             {/* Full-screen Overlay Menu */}
             <div
@@ -89,7 +95,7 @@ const MobileNavbar = ({ items }: NavBarProps) => {
                     </div> */}
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
