@@ -445,9 +445,38 @@ export default function Page() {
 
                                         {/* Hover icons */}
                                         <div className="mt-2 flex gap-2 lg:hidden">
-                                            <Instagram size={20} />
-                                            <Twitter size={20} />
-                                            <Linkedin size={20} />
+                                            {member.instagram && (
+                                                <Link
+                                                    href={member.instagram}
+                                                    target="_blank"
+                                                >
+                                                    <Instagram className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
+                                                </Link>
+                                            )}
+                                            {member.x && (
+                                                <Link
+                                                    href={member.x}
+                                                    target="_blank"
+                                                >
+                                                    <Twitter className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
+                                                </Link>
+                                            )}
+                                            {member.linkedin && (
+                                                <Link
+                                                    href={member.linkedin}
+                                                    target="_blank"
+                                                >
+                                                    <Linkedin className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
+                                                </Link>
+                                            )}
+                                            {member.github && (
+                                                <Link
+                                                    href={member.github}
+                                                    target="_blank"
+                                                >
+                                                    <Github className="hover:text-primary cursor-pointer transition-all duration-150 hover:-translate-y-1" />
+                                                </Link>
+                                            )}
                                         </div>
                                         <AnimatePresence>
                                             {hoveredIndex === member.id && (
