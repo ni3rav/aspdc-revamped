@@ -9,7 +9,7 @@ const Navbar = () => {
         { name: 'Events', url: '/events' },
         { name: 'Projects', url: '/projects' },
         { name: 'Blogs', url: '/blogs' },
-        // { name: 'Digest', url: '/digest' },
+        { name: 'Digest', url: '/digest' },
     ]
 
     return (

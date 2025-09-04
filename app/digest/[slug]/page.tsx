@@ -8,8 +8,9 @@ export default async function Digest({
     const resolvedParams = await params
     const { slug } = resolvedParams
 
-    const post = await fetchDigestBySlug(slug)
-    const data = JSON.stringify(post)
+    const data = await fetchDigestBySlug(slug).then((post) =>
+        JSON.stringify(post)
+    )
 
     return <div>{data}</div>
 }
