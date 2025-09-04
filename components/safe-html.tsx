@@ -1,7 +1,4 @@
-'use client'
-
-import { useMemo } from 'react'
-import DOMPurify from 'dompurify'
+import sanitizeHtml from 'sanitize-html'
 
 interface SafeHtmlContentProps {
     content: string
@@ -9,40 +6,11 @@ interface SafeHtmlContentProps {
 }
 
 export function SafeHtmlContent({ content, className }: SafeHtmlContentProps) {
-    const sanitizedContent = useMemo(() => {
-        return DOMPurify.sanitize(content, {
-            ALLOWED_TAGS: [
-                'p',
-                'br',
-                'strong',
-                'em',
-                'u',
-                'h1',
-                'h2',
-                'h3',
-                'h4',
-                'h5',
-                'h6',
-                'ul',
-                'ol',
-                'li',
-                'blockquote',
-                'a',
-                'img',
-                'code',
-                'pre',
-                'span',
-                'div',
-            ],
-            ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id'],
-            ALLOW_DATA_ATTR: false,
-        })
-    }, [content])
-
+    const clean = sanitizeHtml(content)
     return (
         <div
             className={className}
-            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+            dangerouslySetInnerHTML={{ __html: clean }}
         />
     )
 }

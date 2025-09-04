@@ -20,20 +20,19 @@ export async function fetchAllDigest({
             offset,
             category,
         })
-        return { success: true, data: digest }
+        return digest
     } catch (error) {
         console.error(error)
-        return { success: false, data: [] }
+        return null
     }
 }
 
-// get digest by slug
 export async function fetchDigestBySlug(slug: string) {
     try {
         const post = await zenblog.posts.get({ slug })
-        return { success: true, data: post }
+        return post
     } catch (error) {
         console.error(error)
-        return { success: false, data: [] }
+        return null
     }
 }
