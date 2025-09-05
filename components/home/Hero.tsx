@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 
 const Hero = () => {
-    const [isTrigger, setIsTrigger] = useState(false)
+    const [isTrigger, setIsTrigger] = useState(true)
     return (
         <main className="flex h-screen flex-col overflow-hidden text-white">
             {/* Navbar */}
