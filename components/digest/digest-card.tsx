@@ -49,7 +49,13 @@ export function PostCard({ post, className }: PostCardProps) {
                 className="focus-visible:ring-ring focus-visible:ring-offset-background block rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                 aria-label={`Read ${post.title}`}
             >
-                <Card className="border-border bg-card text-card-foreground hover:bg-accent hover:text-accent-foreground h-full overflow-hidden transition-colors">
+                <Card
+                    className={cn(
+                        'h-full overflow-hidden rounded-lg border-0 bg-white/5 shadow-md backdrop-blur-sm transition-all',
+                        'hover:bg-primary/10 text-white hover:shadow-lg',
+                        className
+                    )}
+                >
                     {/* Media */}
                     <div className="relative aspect-video w-full">
                         <Image
@@ -67,10 +73,10 @@ export function PostCard({ post, className }: PostCardProps) {
 
                     <CardHeader className="space-y-2">
                         {/* Meta */}
-                        <div className="text-muted-foreground flex items-center justify-between gap-2 text-xs">
+                        <div className="flex items-center justify-between gap-2 text-xs text-gray-300">
                             <div className="flex items-center gap-2">
                                 {post.category ? (
-                                    <Badge variant="secondary">
+                                    <Badge className="bg-primary/90 rounded-full px-2 py-0.5 text-white">
                                         {post.category.name}
                                     </Badge>
                                 ) : null}
@@ -80,12 +86,12 @@ export function PostCard({ post, className }: PostCardProps) {
                             </time>
                         </div>
 
-                        <CardTitle className="text-balance">
+                        <CardTitle className="text-lg font-semibold text-white">
                             {post.title}
                         </CardTitle>
 
                         {firstTwoAuthors.length ? (
-                            <p className="text-muted-foreground text-xs">
+                            <p className="text-xs text-gray-400">
                                 {'By '}
                                 {firstTwoAuthors.map((a) => a.name).join(', ')}
                                 {extraAuthors > 0
@@ -95,7 +101,7 @@ export function PostCard({ post, className }: PostCardProps) {
                         ) : null}
 
                         {post.excerpt ? (
-                            <p className="text-muted-foreground text-sm">
+                            <p className="line-clamp-3 text-sm text-gray-300">
                                 {post.excerpt}
                             </p>
                         ) : null}
@@ -108,17 +114,13 @@ export function PostCard({ post, className }: PostCardProps) {
                                 {post.tags.slice(0, 4).map((tag) => (
                                     <Badge
                                         key={tag.slug}
-                                        variant="outline"
-                                        className="rounded-full"
+                                        className="rounded-full border border-white/20 bg-white/10 text-gray-200"
                                     >
                                         {tag.name}
                                     </Badge>
                                 ))}
                                 {post.tags.length > 4 ? (
-                                    <Badge
-                                        variant="outline"
-                                        className="rounded-full"
-                                    >
+                                    <Badge className="rounded-full border border-white/20 bg-white/10 text-gray-200">
                                         +{post.tags.length - 4}
                                     </Badge>
                                 ) : null}
