@@ -16,7 +16,11 @@ const OtherPosts: React.FC<OtherPostsProps> = ({ posts, latestPost }) => {
 
     // Unique categories
     const categories = Array.from(
-        new Set(posts.map((p) => p.category?.name).filter(Boolean))
+        new Set(
+            posts
+                .map((p) => p.category?.name)
+                .filter((c): c is string => Boolean(c))
+        )
     )
 
     // Filter posts based on active category
