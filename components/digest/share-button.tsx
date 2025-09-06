@@ -34,10 +34,10 @@ export function ShareButton({
             aria-label={copied ? 'Link copied!' : title}
         >
             {copied ? (
-                <>
-                    <Check className="mr-2 h-4 w-4" />
+                <div className="text-primary flex items-center justify-center gap-2">
+                    <Check className="h-4 w-4" />
                     Copied!
-                </>
+                </div>
             ) : (
                 <>
                     <Share2 className="mr-2 h-4 w-4" />

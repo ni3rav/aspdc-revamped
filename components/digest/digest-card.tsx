@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, useReducedMotion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
@@ -11,6 +10,7 @@ import { Post } from 'zenblog/types'
 type PostCardProps = {
     post: Post
     className?: string
+    id: number
 }
 
 function formatDate(iso: string) {
@@ -25,24 +25,17 @@ function formatDate(iso: string) {
     }
 }
 
-export function PostCard({ post, className }: PostCardProps) {
+export function PostCard({ post, className, id }: PostCardProps) {
     const href = `/digest/${post.slug}`
     const firstTwoAuthors = post.authors?.slice(0, 2) ?? []
     const extraAuthors = Math.max((post.authors?.length ?? 0) - 2, 0)
-    const reduceMotion = useReducedMotion()
 
     return (
-        <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-            animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
-            whileHover={reduceMotion ? {} : { y: -2, scale: 1.01 }}
-            transition={{
-                type: 'spring',
-                stiffness: 260,
-                damping: 24,
-                mass: 0.6,
-            }}
-            className={cn('h-full', className)}
+        <div
+            className={cn(
+                `animate-in slide-in-from-bottom-10 h-full`,
+                className
+            )}
         >
             <Link
                 href={href}
@@ -129,6 +122,6 @@ export function PostCard({ post, className }: PostCardProps) {
                     </CardContent>
                 </Card>
             </Link>
-        </motion.div>
+        </div>
     )
 }

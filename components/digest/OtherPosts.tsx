@@ -62,8 +62,8 @@ const OtherPosts: React.FC<OtherPostsProps> = ({ posts, latestPost }) => {
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredPosts
                     .filter((p) => p.slug !== latestPost.slug) // exclude featured post
-                    .map((post) => (
-                        <PostCard key={post.slug} post={post} />
+                    .map((post, id) => (
+                        <PostCard key={post.slug} post={post} id={id} />
                     ))}
             </div>
         </>

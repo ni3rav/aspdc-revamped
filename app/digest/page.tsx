@@ -2,104 +2,11 @@ import OtherPosts from '@/components/digest/OtherPosts'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import { fetchAllDigest } from '@/lib/cms'
 import Image from 'next/image'
+import Link from 'next/link'
 
 async function AllDigest() {
     const posts = await fetchAllDigest().then((res) => res?.data)
-    // const posts = [
-    //     {
-    //         "title": "post 4",
-    //         "slug": "post-4",
-    //         "published_at": "2025-09-03T10:59:21.494+00:00",
-    //         "excerpt": "excerpt 4",
-    //         "cover_image": "",
-    //         "tags": [],
-    //         "authors": [
-    //             {
-    //                 "slug": "ni3rav",
-    //                 "name": "Nirav",
-    //                 "image_url": "https://images.zenblog.com/authors/ni3rav-363843.jpeg",
-    //                 "bio": "god's favourite idiot",
-    //                 "website": "https://ni3rav.me",
-    //                 "twitter": "https://x.com/ni3rav",
-    //                 "website_url": "https://ni3rav.me",
-    //                 "twitter_url": "https://x.com/ni3rav"
-    //             }
-    //         ],
-    //         "category": null
-    //     },
-    //     {
-    //         "title": "post 3",
-    //         "slug": "post-3",
-    //         "published_at": "2025-09-03T10:58:23.491+00:00",
-    //         "excerpt": "excerpt 3",
-    //         "cover_image": "",
-    //         "tags": [],
-    //         "authors": [
-    //             {
-    //                 "slug": "ni3rav",
-    //                 "name": "Nirav",
-    //                 "image_url": "https://images.zenblog.com/authors/ni3rav-363843.jpeg",
-    //                 "bio": "god's favourite idiot",
-    //                 "website": "https://ni3rav.me",
-    //                 "twitter": "https://x.com/ni3rav",
-    //                 "website_url": "https://ni3rav.me",
-    //                 "twitter_url": "https://x.com/ni3rav"
-    //             }
-    //         ],
-    //         "category": {
-    //             "name": "demo",
-    //             "slug": "demo"
-    //         }
-    //     },
-    //     {
-    //         "title": "post 2",
-    //         "slug": "post-2",
-    //         "published_at": "2025-09-03T10:57:09.874+00:00",
-    //         "excerpt": "excerpt 2",
-    //         "cover_image": "",
-    //         "tags": [],
-    //         "authors": [
-    //             {
-    //                 "slug": "ni3rav",
-    //                 "name": "Nirav",
-    //                 "image_url": "https://images.zenblog.com/authors/ni3rav-363843.jpeg",
-    //                 "bio": "god's favourite idiot",
-    //                 "website": "https://ni3rav.me",
-    //                 "twitter": "https://x.com/ni3rav",
-    //                 "website_url": "https://ni3rav.me",
-    //                 "twitter_url": "https://x.com/ni3rav"
-    //             }
-    //         ],
-    //         "category": {
-    //             "name": "demo",
-    //             "slug": "demo"
-    //         }
-    //     },
-    //     {
-    //         "title": "post 1",
-    //         "slug": "post-1",
-    //         "published_at": "2025-09-03T10:56:04.274+00:00",
-    //         "excerpt": "excerpt 1",
-    //         "cover_image": "",
-    //         "tags": [],
-    //         "authors": [
-    //             {
-    //                 "slug": "ni3rav",
-    //                 "name": "Nirav",
-    //                 "image_url": "https://images.zenblog.com/authors/ni3rav-363843.jpeg",
-    //                 "bio": "god's favourite idiot",
-    //                 "website": "https://ni3rav.me",
-    //                 "twitter": "https://x.com/ni3rav",
-    //                 "website_url": "https://ni3rav.me",
-    //                 "twitter_url": "https://x.com/ni3rav"
-    //             }
-    //         ],
-    //         "category": {
-    //             "name": "demo",
-    //             "slug": "demo"
-    //         }
-    //     }
-    // ]
+
     if (!posts || posts.length === 0) {
         return (
             <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
@@ -127,7 +34,10 @@ async function AllDigest() {
             </TextScramble>
 
             {/* Featured Post */}
-            <div className="group mb-16 grid items-center gap-8 rounded-lg bg-white/3 backdrop-blur-sm md:grid-cols-2">
+            <Link
+                href={`/digest/${latestPost.slug}`}
+                className="group hover:bg-primary/6 mb-16 grid items-center gap-8 rounded-lg bg-white/3 backdrop-blur-sm md:grid-cols-2"
+            >
                 {/* Left - Image */}
                 <div className="relative overflow-hidden rounded-xl shadow-md">
                     <Image
@@ -178,7 +88,7 @@ async function AllDigest() {
                         </time>
                     </div>
                 </div>
-            </div>
+            </Link>
 
             <div className="bg-primary/40 my-10 h-1 w-full rounded-full md:hidden" />
 

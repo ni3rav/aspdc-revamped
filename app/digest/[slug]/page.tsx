@@ -26,86 +26,109 @@ export default async function Digest({
 
     const post = await fetchDigestBySlug(slug).then((res) => res?.data)
 
-    return (
-        <>
-            <div className="bg-background animate-in fade-in min-h-screen duration-500">
-                <div className="container mx-auto max-w-4xl px-4 py-8">
-                    {/* Back Button */}
-                    <div className="animate-in slide-in-from-left-4 mb-8 delay-100 duration-300">
-                        <Button
-                            variant="ghost"
-                            asChild
-                            className="text-muted-foreground hover:text-foreground transition-colors"
+    if (!post) {
+        return (
+            <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
+                <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
+                    <span className="animate-bounce text-7xl">📰</span>
+                    <h2 className="mt-6 text-3xl font-bold text-neutral-100">
+                        Post Not Found
+                    </h2>
+                    <p className="mt-2 text-neutral-400">
+                        Looks like this digest doesn't exist yet.
+                    </p>
+                    <Button variant="ghost" asChild className="mt-6">
+                        <Link
+                            href="/digest"
+                            className="flex items-center gap-2"
                         >
-                            <Link
-                                href="/digest"
-                                className="flex items-center gap-2"
-                            >
-                                <ArrowLeft className="h-4 w-4" />
-                                Back to posts
-                            </Link>
-                        </Button>
+                            <ArrowLeft className="h-4 w-4" /> Back to Digests
+                        </Link>
+                    </Button>
+                </div>
+            </main>
+        )
+    }
+
+    return (
+        <main className="animate-in fade-in mx-auto max-w-4xl px-6 py-16 duration-500 md:py-24">
+            {/* Back Button */}
+            <div className="animate-in slide-in-from-left-4 mb-8 delay-100 duration-300">
+                <Button
+                    variant="ghost"
+                    asChild
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                    <Link href="/digest" className="flex items-center gap-2">
+                        <ArrowLeft className="h-4 w-4" />
+                        Back to posts
+                    </Link>
+                </Button>
+            </div>
+
+            {/* Card wrapper */}
+            <div className="border-border/50 animate-in slide-in-from-bottom-10 space-y-8 rounded-2xl border bg-white/5 p-6 shadow-lg backdrop-blur-lg duration-300 md:p-8">
+                {/* Top Row: Date + Share */}
+                <div className="text-muted-foreground flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4" />
+                        <time dateTime={post?.published_at}>
+                            {formatDate(
+                                post?.published_at ||
+                                    '2025-09-03T10:59:21.494+00:00'
+                            )}
+                        </time>
                     </div>
+                    <ShareButton title={`Share "${post?.title}"`} />
+                </div>
 
-                    {/* Cover Image */}
-                    {post?.cover_image && (
-                        <div className="relative mb-12 overflow-hidden rounded-2xl">
-                            <Image
-                                src={post?.cover_image || '/placeholder.svg'}
-                                alt={post?.title}
-                                width={1200}
-                                height={600}
-                                className="h-72 w-full object-cover transition-transform duration-700 hover:scale-105 md:h-[28rem]"
-                                priority
-                            />
-                            <div className="from-background/70 via-background/40 absolute inset-0 bg-gradient-to-t to-transparent" />
-                        </div>
+                {/* Title + Category */}
+                <header className="space-y-4 text-center">
+                    {post?.category && (
+                        <Badge className="bg-primary/90 rounded-full px-3 py-1 text-sm text-white">
+                            {post?.category.name}
+                        </Badge>
                     )}
+                    <h1 className="text-foreground text-3xl font-extrabold tracking-tight md:text-5xl">
+                        {post?.title}
+                    </h1>
+                    {post?.excerpt && (
+                        <p className="text-muted-foreground mx-auto max-w-2xl text-base leading-relaxed md:text-lg">
+                            {post?.excerpt}
+                        </p>
+                    )}
+                </header>
 
-                    {/* Article Header */}
-                    <header className="animate-in fade-in slide-in-from-bottom-4 mb-12 space-y-6 text-center delay-200 duration-500">
-                        {post?.category && (
-                            <Badge
-                                variant="secondary"
-                                className="rounded-full px-3 py-1 text-sm"
-                            >
-                                {post?.category.name}
-                            </Badge>
-                        )}
-                        <h1 className="text-foreground text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
-                            {post?.title}
-                        </h1>
-                        {post?.excerpt && (
-                            <p className="text-muted-foreground mx-auto max-w-2xl text-lg leading-relaxed md:text-xl">
-                                {post?.excerpt}
-                            </p>
-                        )}
-                        <div className="text-muted-foreground flex flex-col items-center justify-center gap-3 text-sm sm:flex-row sm:gap-6">
-                            <div className="flex items-center gap-2">
-                                <Calendar className="h-4 w-4" />
-                                <time dateTime={post?.published_at}>
-                                    {formatDate(
-                                        post?.published_at ||
-                                            '2025-09-03T10:59:21.494+00:00'
-                                    )}
-                                </time>
-                            </div>
-                            <ShareButton title={`Share "${post?.title}"`} />
-                        </div>
-                    </header>
+                {/* Cover Image */}
+                {post && (
+                    <div className="relative aspect-[16/9] overflow-hidden rounded-xl shadow-md">
+                        <Image
+                            src={
+                                post?.cover_image ||
+                                '/placeholder.svg?height=360&width=640&query=post%20cover'
+                            }
+                            alt={post?.title}
+                            fill
+                            className="object-contain transition-transform duration-700 hover:scale-105 md:object-cover"
+                            priority
+                        />
+                        <div className="from-background/90 via-background/40 absolute inset-0 bg-gradient-to-t to-transparent" />
+                    </div>
+                )}
 
-                    {/* Authors */}
-                    <section className="bg-card border-border animate-in fade-in slide-in-from-bottom-4 mb-12 rounded-2xl border p-8 shadow-sm">
-                        <h2 className="text-card-foreground mb-6 text-lg font-semibold tracking-wide uppercase">
+                {/* Authors */}
+                {post?.authors?.length > 0 && (
+                    <section className="border-border/40 border-t pt-6">
+                        <h2 className="text-card-foreground mb-4 text-sm font-semibold tracking-wide uppercase">
                             Written by
                         </h2>
-                        <div className="grid gap-6 sm:grid-cols-2">
+                        <div className="flex flex-wrap gap-4">
                             {post?.authors.map((author) => (
                                 <div
                                     key={author.slug}
-                                    className="border-border/60 hover:bg-muted/30 flex items-center gap-4 rounded-xl border p-4 transition-colors"
+                                    className="border-border/40 flex items-center gap-3 rounded-lg border bg-white/5 p-3 transition hover:bg-white/10"
                                 >
-                                    <Avatar className="ring-background h-14 w-14 overflow-hidden rounded-full ring-2">
+                                    <Avatar className="ring-background h-10 w-10 overflow-hidden rounded-full ring-2">
                                         <AvatarImage
                                             src={
                                                 author.image_url ||
@@ -119,22 +142,17 @@ export default async function Digest({
                                                 .toUpperCase()}
                                         </AvatarFallback>
                                     </Avatar>
-                                    <div className="flex-1">
-                                        <h3 className="text-card-foreground text-base font-semibold">
+                                    <div>
+                                        <h3 className="text-card-foreground text-sm font-semibold">
                                             {author.name}
                                         </h3>
-                                        {author.bio && (
-                                            <p className="text-muted-foreground mb-1 line-clamp-2 text-sm">
-                                                {author.bio}
-                                            </p>
-                                        )}
-                                        <div className="flex items-center gap-3 text-xs">
+                                        <div className="text-muted-foreground flex items-center gap-2 text-xs">
                                             {author.website_url && (
                                                 <a
                                                     href={author.website_url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+                                                    className="hover:text-foreground flex items-center gap-1"
                                                 >
                                                     <ExternalLink className="h-3 w-3" />
                                                     Website
@@ -145,7 +163,7 @@ export default async function Digest({
                                                     href={author.twitter_url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+                                                    className="hover:text-foreground flex items-center gap-1"
                                                 >
                                                     <Twitter className="h-3 w-3" />
                                                     Twitter
@@ -157,35 +175,35 @@ export default async function Digest({
                             ))}
                         </div>
                     </section>
+                )}
 
-                    {/* Tags */}
-                    {post?.tags && post?.tags.length > 0 && (
-                        <section className="animate-in fade-in slide-in-from-bottom-4 mb-12 delay-700 duration-500">
-                            <div className="flex flex-wrap justify-center gap-2">
-                                {post?.tags.map((tag) => (
-                                    <Badge
-                                        key={tag.slug}
-                                        variant="outline"
-                                        className="hover:bg-accent hover:text-accent-foreground rounded-full px-3 py-1 text-xs transition-colors"
-                                    >
-                                        #{tag.name}
-                                    </Badge>
-                                ))}
-                            </div>
-                        </section>
-                    )}
+                {/* Tags */}
+                {post?.tags && post?.tags.length > 0 && (
+                    <section className="border-border/40 border-t pt-6">
+                        <div className="flex flex-wrap justify-center gap-2">
+                            {post?.tags.map((tag) => (
+                                <Badge
+                                    key={tag.slug}
+                                    variant="outline"
+                                    className="hover:bg-primary/20 hover:text-primary rounded-full px-3 py-1 text-xs transition-colors"
+                                >
+                                    #{tag.name}
+                                </Badge>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
-                    {/* Article Content */}
-                    <article className="prose prose-lg prose-neutral dark:prose-invert animate-in fade-in slide-in-from-bottom-4 max-w-none delay-1000 duration-500">
-                        <SafeHtmlContent
-                            content={
-                                post?.html_content ||
-                                '<h1>Oops no content, how this coming up huihui</h1>'
-                            }
-                        />
-                    </article>
-                </div>
+                {/* Article Content */}
+                <article className="prose prose-base md:prose-lg prose-neutral dark:prose-invert animate-in fade-in slide-in-from-bottom-4 max-w-none">
+                    <SafeHtmlContent
+                        content={
+                            post?.html_content ||
+                            '<h1>Oops no content available.</h1>'
+                        }
+                    />
+                </article>
             </div>
-        </>
+        </main>
     )
 }
