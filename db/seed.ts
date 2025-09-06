@@ -1,115 +1,110 @@
-// seed.ts
-import {
-    events,
-    projects,
-    leaderboard,
-    achievements,
-    upcomingEvents,
-    blogs,
-} from './schema'
+import { achievements, blogs, events, projects } from './schema'
 import { db } from './drizzle'
 
-async function main() {
-    console.log('🌱 Starting seed...')
+const achievementsData = [
+    {
+        title: 'Achievement 1',
+        description: 'Description for achievement 1.',
+        date: new Date('2024-01-01'),
+        imageUrl: 'https://example.com/ach1.jpg',
+    },
+    {
+        title: 'Achievement 2',
+        description: 'Description for achievement 2.',
+        date: new Date('2024-02-01'),
+        imageUrl: 'https://example.com/ach2.jpg',
+    },
+]
 
-    // // Clear tables first (optional, be careful in production!)
-    // await db.delete(events)
-    // await db.delete(projects)
-    // await db.delete(leaderboard)
-    // await db.delete(achievements)
-    // await db.delete(upcomingEvents)
-    // await db.delete(blogs)
+const blogsData = [
+    {
+        title: 'Blog Post 1',
+        author: 'Author A',
+        link: 'https://example.com/blog1',
+        publishDate: new Date('2024-03-01'),
+        coverImage: 'https://example.com/blog1.jpg',
+    },
+    {
+        title: 'Blog Post 2',
+        author: 'Author B',
+        link: 'https://example.com/blog2',
+        publishDate: new Date('2024-04-01'),
+        coverImage: 'https://example.com/blog2.jpg',
+    },
+]
 
-    // Insert events
-    await db.insert(events).values([
-        {
-            name: 'Hackathon 2025',
-            date: new Date('2025-09-10T10:00:00Z'),
-            details: 'A 24-hour coding challenge.',
-            imageUrls: ['https://example.com/hackathon.png'],
-        },
-        {
-            name: 'Tech Talk',
-            date: new Date('2025-08-25T17:00:00Z'),
-            details: 'A session on modern web development.',
-            imageUrls: [],
-        },
-    ])
+const eventsData = [
+    {
+        name: 'Event 1',
+        date: new Date('2024-05-01'),
+        details: 'Details for event 1.',
+        imageUrls: [
+            'https://example.com/event1a.jpg',
+            'https://example.com/event1b.jpg',
+        ],
+    },
+    {
+        name: 'Event 2',
+        date: new Date('2024-06-01'),
+        details: 'Details for event 2.',
+        imageUrls: ['https://example.com/event2a.jpg'],
+    },
+]
 
-    // Insert projects
-    await db.insert(projects).values([
-        {
-            name: 'Club Website',
-            author: 'Nirav',
-            description: 'A website for the coding club.',
-            liveLink: 'https://club.example.com',
-            githubUrl: 'https://github.com/example/club-website',
-            projectBannerUrl: 'https://example.com/banner.png',
-        },
-        {
-            name: 'AI Chatbot',
-            author: 'Team Alpha',
-            description: 'A chatbot for answering FAQs.',
-            githubUrl: 'https://github.com/example/ai-chatbot',
-        },
-    ])
+const projectsData = [
+    {
+        name: 'Project 1',
+        author: 'Dev A',
+        description: 'Description for project 1.',
+        githubUrl: 'https://github.com/dev/project1',
+        projectBannerUrl: 'https://example.com/proj1.jpg',
+    },
+    {
+        name: 'Project 2',
+        author: 'Dev B',
+        description: 'Description for project 2.',
+        githubUrl: 'https://github.com/dev/project2',
+        projectBannerUrl: 'https://example.com/proj2.jpg',
+    },
+]
 
-    // Insert leaderboard
-    await db.insert(leaderboard).values([
-        { rank: 1, username: 'codeMaster', rating: 2450 },
-        { rank: 2, username: 'bugHunter', rating: 2200 },
-        { rank: 3, username: 'nirav', rating: 2100 },
-    ])
+// Function to insert data
+async function insertData() {
+    try {
+        console.log('Starting data insertion...')
 
-    // Insert achievements
-    // Insert achievements
-    await db.insert(achievements).values([
-        {
-            title: 'First Place - Hackathon',
-            description: 'Won first place in the inter-college hackathon.',
-            date: '2025-01-15', // ✅ string format
-            imageUrl: 'https://example.com/trophy.png',
-        },
-        {
-            title: 'Best Project Award',
-            description: 'Recognized for building an innovative project.',
-            date: '2025-05-20', // ✅ string format
-        },
-    ])
+        // Insert achievements
+        console.log('Inserting achievements...')
+        for (const achievement of achievementsData) {
+            await db.insert(achievements).values({
+                ...achievement,
+                date: achievement.date.toISOString(),
+            })
+        }
 
-    // Insert upcoming events
-    await db.insert(upcomingEvents).values([
-        {
-            name: 'CodeSprint 2025',
-            date: new Date('2025-09-30T09:00:00Z'),
-            description: 'Annual competitive programming contest.',
-            location: 'Main Auditorium',
-            registrationLink: 'https://example.com/register',
-            eventImageUrl: 'https://example.com/codesprint.png',
-        },
-    ])
+        // Insert blogs
+        console.log('Inserting blogs...')
+        for (const blog of blogsData) {
+            await db.insert(blogs).values(blog)
+        }
 
-    // Insert blogs
-    await db.insert(blogs).values([
-        {
-            title: 'Getting Started with TypeScript',
-            author: 'Alice',
-            link: 'https://blog.example.com/typescript',
-            publishDate: new Date('2025-06-10T00:00:00Z'),
-            coverImage: 'https://example.com/ts-blog.png',
-        },
-        {
-            title: 'The Future of AI',
-            author: 'Bob',
-            link: 'https://blog.example.com/ai-future',
-            publishDate: new Date('2025-07-15T00:00:00Z'),
-        },
-    ])
+        // Insert events
+        console.log('Inserting events...')
+        for (const event of eventsData) {
+            await db.insert(events).values(event)
+        }
 
-    console.log('✅ Seed completed!')
+        // Insert projects
+        console.log('Inserting projects...')
+        for (const project of projectsData) {
+            await db.insert(projects).values(project)
+        }
+
+        console.log('Data insertion completed successfully!')
+    } catch (error) {
+        console.error('Error inserting data:', error)
+    }
 }
 
-main().catch((err) => {
-    console.error('❌ Seeding failed', err)
-    process.exit(1)
-})
+// Run the insertion
+insertData()

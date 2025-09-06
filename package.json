@@ -8,7 +8,8 @@
         "start": "next start",
         "lint": "next lint",
         "prettier": "pnpm dlx prettier --write .",
-        "prepare": "husky"
+        "prepare": "husky",
+        "db:push": "drizzle-kit push"
     },
     "lint-staged": {
         "*.{js,ts,tsx,css,md}": "pnpm dlx prettier --write ."
