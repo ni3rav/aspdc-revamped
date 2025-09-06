@@ -6,7 +6,7 @@ import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Github, Instagram, Linkedin, Twitter } from 'lucide-react'
-import Fallback from '@/components/Fallback'
+import EmptyStateCard from '@/components/EmptyStateCard'
 
 // Framer Motion variants
 const containerVariants = {
@@ -378,31 +378,10 @@ export default function Page() {
     if (!everything || everything.length === 0) {
         return (
             <main className="mx-auto flex min-h-screen max-w-5xl items-center justify-center px-8 py-12 md:py-32 lg:px-0">
-                <Fallback
-                    message="No team members found."
-                    illustration={
-                        <svg
-                            width="80"
-                            height="80"
-                            fill="none"
-                            viewBox="0 0 80 80"
-                        >
-                            <circle cx="40" cy="40" r="40" fill="#18181b" />
-                            <path
-                                d="M24 54c0-8.837 7.163-16 16-16s16 7.163 16 16"
-                                stroke="#52525b"
-                                strokeWidth="2.5"
-                                strokeLinecap="round"
-                            />
-                            <circle
-                                cx="40"
-                                cy="34"
-                                r="8"
-                                stroke="#52525b"
-                                strokeWidth="2.5"
-                            />
-                        </svg>
-                    }
+                <EmptyStateCard
+                    emoji="👥"
+                    heading="No Team Members"
+                    subtext="Our team will be revealed soon. Stay tuned!"
                 />
             </main>
         )

@@ -3,7 +3,7 @@ import { Dcardcode } from '@/components/Dcardcode'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import { Project } from '@/db/types'
 import { fetchProjects } from '@/db/queries'
-import Fallback from '@/components/Fallback'
+import EmptyStateCard from '@/components/EmptyStateCard'
 
 const Projects = async () => {
     const projects: Project[] = await fetchProjects()
@@ -11,24 +11,10 @@ const Projects = async () => {
     if (!projects || projects.length === 0) {
         return (
             <main className="mx-auto flex min-h-screen max-w-5xl items-center justify-center px-8 py-12 md:py-32 lg:px-0">
-                <Fallback
-                    message="No projects found."
-                    illustration={
-                        <svg
-                            width="80"
-                            height="80"
-                            fill="none"
-                            viewBox="0 0 80 80"
-                        >
-                            <circle cx="40" cy="40" r="40" fill="#18181b" />
-                            <path
-                                d="M25 40h30M40 25v30"
-                                stroke="#52525b"
-                                strokeWidth="2.5"
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                    }
+                <EmptyStateCard
+                    emoji="🛠️"
+                    heading="No Projects Found"
+                    subtext="Stay tuned — new projects will appear here soon!"
                 />
             </main>
         )
