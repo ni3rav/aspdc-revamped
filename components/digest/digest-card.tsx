@@ -29,6 +29,7 @@ export function PostCard({ post, className, id }: PostCardProps) {
     const href = `/digest/${post.slug}`
     const firstTwoAuthors = post.authors?.slice(0, 2) ?? []
     const extraAuthors = Math.max((post.authors?.length ?? 0) - 2, 0)
+    console.log(`id: ${id}`)
 
     return (
         <div
