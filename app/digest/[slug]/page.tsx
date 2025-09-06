@@ -83,7 +83,7 @@ export default async function Digest({
                 </div>
 
                 {/* Title + Category */}
-                <header className="space-y-4 text-center">
+                <header className="space-y-4">
                     {post?.category && (
                         <Badge className="bg-primary/90 rounded-full px-3 py-1 text-sm text-white">
                             {post?.category.name}
@@ -93,7 +93,7 @@ export default async function Digest({
                         {post?.title}
                     </h1>
                     {post?.excerpt && (
-                        <p className="text-muted-foreground mx-auto max-w-2xl text-base leading-relaxed md:text-lg">
+                        <p className="text-muted-foreground max-w-2xl text-base leading-relaxed md:text-lg">
                             {post?.excerpt}
                         </p>
                     )}
