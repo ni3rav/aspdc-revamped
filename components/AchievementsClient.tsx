@@ -1,55 +1,86 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Achievement } from '@/db/types'
+import { Calendar } from 'lucide-react'
+import { useState } from 'react'
 
-function formatDate(date: Date) {
-    return date.toLocaleDateString('en-US', {
-        month: 'short',
-        year: 'numeric',
-    })
-}
-
-export default function AchievementsPage({ ach }: { ach: Achievement[] }) {
+export default function AchievementsMasonry({ ach }: { ach: Achievement[] }) {
+    const [hoverState, setHoverState] = useState(-1)
     return (
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {ach.map((a, i) => (
-                <motion.div
-                    key={a.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1, duration: 0.4 }}
-                >
-                    <Card className="group overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-lg">
-                        {a.imageUrl && (
-                            <div className="relative h-40 w-full overflow-hidden">
-                                <Image
-                                    src={a.imageUrl}
-                                    alt={a.title}
-                                    fill
-                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                />
+        <div className="mx-auto max-w-7xl scroll-smooth px-4 py-16 sm:px-8">
+            {/* Masonry grid */}
+            <motion.div
+                className="columns-1 gap-6 space-y-6 sm:columns-2 lg:columns-3"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.15 } },
+                }}
+            >
+                {ach.map((item, i) => (
+                    <motion.div
+                        onHoverStart={() => setHoverState(i)}
+                        onHoverEnd={() => setHoverState(-1)}
+                        key={item.title}
+                        className="group relative break-inside-avoid overflow-hidden rounded-2xl bg-black/40 shadow-lg"
+                        variants={{
+                            hidden: { opacity: 0, y: 50 },
+                            visible: { opacity: 1, y: 0 },
+                        }}
+                        transition={{ duration: 0.6, ease: 'easeOut' }}
+                        whileHover={{ scaleX: 1.05 }}
+                    >
+                        {/* Image */}
+                        <motion.img
+                            src={item.imageUrl || '/placeholder.svg'}
+                            alt={item.title}
+                            initial={false}
+                            animate={
+                                hoverState === i
+                                    ? { height: 320 }
+                                    : { height: 'auto' }
+                            }
+                            transition={{ duration: 0.5, ease: 'easeOut' }}
+                            className={`h-auto w-full transform object-cover transition-transform duration-500 group-hover:scale-105`}
+                            loading="lazy"
+                        />
+
+                        {/* Content */}
+                        <motion.div
+                            initial={false}
+                            animate={
+                                hoverState === i
+                                    ? { opacity: 1, y: 0 }
+                                    : { opacity: 0, y: -10 }
+                            }
+                            transition={{ duration: 0.3, ease: 'easeOut' }}
+                            className="absolute bottom-0 left-0 w-full rounded-lg bg-black/60 p-5 text-white"
+                        >
+                            <h3 className="text-primary text-xl font-bold">
+                                {item.title}
+                            </h3>
+                            <div className="mt-1 flex items-center gap-2 text-sm text-gray-200">
+                                <Calendar className="h-4 w-4" />
+                                <span>
+                                    {new Date(item.date).toLocaleDateString(
+                                        'en-US',
+                                        {
+                                            month: 'short',
+                                            year: 'numeric',
+                                        }
+                                    )}
+                                </span>
                             </div>
-                        )}
-                        <CardHeader className="space-y-2">
-                            <CardTitle className="line-clamp-2">
-                                {a.title}
-                            </CardTitle>
-                            <Badge variant="secondary" className="text-xs">
-                                {formatDate(a.date)}
-                            </Badge>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground line-clamp-3 text-sm">
-                                {a.description}
+                            <p className="mt-2 text-sm text-gray-100">
+                                {item.description}
                             </p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
-            ))}
+                        </motion.div>
+                    </motion.div>
+                ))}
+            </motion.div>
         </div>
     )
 }

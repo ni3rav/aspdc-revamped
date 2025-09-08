@@ -4,10 +4,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-.secnone {
-    user-select: none;
-}
-
 @custom-variant dark (&:is(.dark *));
 
 /* ===================================
