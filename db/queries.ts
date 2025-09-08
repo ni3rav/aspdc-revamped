@@ -7,12 +7,7 @@ import {
     UpcomingEvent,
 } from '@/db/types'
 
-let BASE_URL: string
-if (process.env.NODE_ENV === 'production') {
-    BASE_URL = 'https://aspdc.vercel.app'
-} else {
-    BASE_URL = 'http://localhost:3000'
-}
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
 
 // ----------------- Achievements -----------------
 export async function fetchAchievements(): Promise<Achievement[]> {
