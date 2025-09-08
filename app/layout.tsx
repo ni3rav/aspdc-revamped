@@ -15,7 +15,10 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
     title: 'ASPDC',
-    icons: '/Frame2.png',
+    icons: {
+        icon: '/favicon_io/favicon.ico',
+        apple: '/favicon_io/apple-touch-icon.png',
+    },
 }
 
 export default function RootLayout({
@@ -32,27 +35,6 @@ export default function RootLayout({
             }}
         >
             <html lang="en">
-                <head>
-                    <link
-                        rel="apple-touch-icon"
-                        sizes="180x180"
-                        href="/apple-touch-icon.png"
-                    />
-                    <link
-                        rel="icon"
-                        type="image/png"
-                        sizes="32x32"
-                        href="/favicon-32x32.png"
-                    />
-                    <link
-                        rel="icon"
-                        type="image/png"
-                        sizes="16x16"
-                        href="/favicon-16x16.png"
-                    />
-                    <link rel="icon" href="/favicon.ico" />
-                    <link rel="manifest" href="/site.webmanifest"></link>
-                </head>
                 <body
                     className={`${spaceGrotesk.className} secnone overflow-x-hidden antialiased`}
                 >
