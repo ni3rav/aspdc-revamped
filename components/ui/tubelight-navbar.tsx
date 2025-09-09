@@ -236,17 +236,18 @@ export function NavBarMd({ items, className }: NavBarProps) {
                             'text-foreground/80 hover:text-primary'
                         )}
                     >
-                        <span className="inline">Others</span>
+                        d<span className="inline">Others</span>
                     </motion.div>
 
                     {/* Dropdown */}
                     {isOpen && (
-                        <div className="absolute top-full left-1/2 mt-1 w-40 -translate-x-1/2 rounded-xl bg-black shadow-lg ring-1 ring-white/10">
+                        <div className="absolute top-full left-1/2 w-40 -translate-x-1/2 pt-2">
                             <motion.ul
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.3 }}
+                                className="rounded-xl bg-black shadow-lg ring-1 ring-white/10"
                             >
                                 {menuItems.map((item, i) => (
                                     <motion.li
