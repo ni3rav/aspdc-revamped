@@ -82,7 +82,7 @@ export const BentoCard = ({
                     className={`absolute bottom-0 m-3 flex flex-col justify-end rounded-xl bg-black/5 p-3 backdrop-blur-sm transition-all duration-300 lg:scale-80 lg:opacity-0 ${hover && 'lg:scale-100 lg:opacity-100'}`}
                 >
                     <h3 className="text-primary text-2xl font-bold">{name}</h3>
-                    <p className="mt-2 hidden h-10 items-center justify-center text-sm text-ellipsis text-white/80 lg:flex">
+                    <p className="mt-2 hidden h-10 items-center justify-center text-sm text-ellipsis text-white/80 xl:flex">
                         {description}
                     </p>
                 </motion.div>

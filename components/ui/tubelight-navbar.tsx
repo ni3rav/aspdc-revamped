@@ -17,7 +17,7 @@ interface NavBarProps {
     className?: string
 }
 
-export function NavBarLg({ items, className }: NavBarProps) {
+export function NavBarXl({ items, className }: NavBarProps) {
     const pathname = usePathname()
     const [hidden, setHidden] = useState(false)
 
@@ -76,7 +76,7 @@ export function NavBarLg({ items, className }: NavBarProps) {
                                     duration: 0.4,
                                 }}
                                 className={cn(
-                                    'relative cursor-pointer rounded-full px-5 py-1 text-lg font-semibold transition-colors',
+                                    'relative cursor-pointer rounded-full px-4 py-1 text-lg font-semibold transition-colors',
                                     'text-foreground/80 hover:text-primary',
                                     isActive && 'bg-muted text-primary'
                                 )}
@@ -117,7 +117,7 @@ export function NavBarLg({ items, className }: NavBarProps) {
     )
 }
 
-export function NavBarMd({ items, className }: NavBarProps) {
+export function NavBarLg({ items, className }: NavBarProps) {
     const pathname = usePathname()
     const [hidden, setHidden] = useState(false)
 
@@ -147,10 +147,10 @@ export function NavBarMd({ items, className }: NavBarProps) {
     const [isOpen, setIsOpen] = useState(false)
 
     const menuItems = [
-        { name: 'Leaderboard', url: '/leaderboard' },
         { name: 'Projects', url: '/projects' },
         { name: 'Blogs', url: '/blogs' },
         { name: 'Digest', url: '/digest' },
+        { name: 'Leaderboard', url: '/leaderboard' },
     ]
 
     return (
@@ -249,22 +249,26 @@ export function NavBarMd({ items, className }: NavBarProps) {
                     {/* Dropdown */}
                     {isOpen && (
                         <div className="absolute top-full left-1/2 w-40 -translate-x-1/2 pt-2">
-                            <motion.ul
+                            <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.3 }}
-                                className="rounded-xl bg-black shadow-lg ring-1 ring-white/10"
+                                className="flex flex-col justify-center gap-2 rounded-xl bg-black shadow-lg ring-1 ring-white/10"
                             >
-                                {menuItems.map((item, i) => (
-                                    <motion.li
-                                        key={item.name}
-                                        className="text-foreground/80 hover:text-primary cursor-pointer rounded-lg px-4 py-2 font-semibold"
-                                    >
-                                        <a href={item.url}>{item.name}</a>
-                                    </motion.li>
-                                ))}
-                            </motion.ul>
+                                {menuItems.map((item, i) => {
+                                    const isDrop = isPathActive(item.url)
+                                    return (
+                                        <Link
+                                            href={item.url}
+                                            key={item.name}
+                                            className={`text-foreground/80 hover:text-primary cursor-pointer rounded-lg px-4 py-2 font-semibold ${isDrop && 'text-primary bg-muted'}`}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    )
+                                })}
+                            </motion.div>
                         </div>
                     )}
                 </div>

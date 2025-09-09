@@ -376,7 +376,7 @@ export default function Page() {
     ]
 
     return (
-        <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
+        <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
             <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
                 The Faces Behind ASPDC
             </TextScramble>
@@ -447,7 +447,7 @@ export default function Page() {
                                         </div>
 
                                         {/* Hover icons */}
-                                        <div className="mt-2 flex gap-2 lg:hidden">
+                                        <div className="mt-2 flex gap-2 xl:hidden">
                                             {member.instagram && (
                                                 <Link
                                                     href={member.instagram}
@@ -497,7 +497,7 @@ export default function Page() {
                                                     transition={{
                                                         duration: 0.3,
                                                     }}
-                                                    className="mt-2 hidden gap-2 lg:flex"
+                                                    className="mt-2 hidden gap-2 xl:flex"
                                                 >
                                                     {member.instagram && (
                                                         <Link

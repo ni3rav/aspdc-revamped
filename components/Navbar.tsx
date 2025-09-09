@@ -1,8 +1,8 @@
 import MobileNavbar from './MobileNavbar'
-import { NavBarLg, NavBarMd } from './ui/tubelight-navbar'
+import { NavBarLg, NavBarXl } from './ui/tubelight-navbar'
 
 const Navbar = () => {
-    const lgNavItems = [
+    const xlNavItems = [
         { name: 'Home', url: '/' },
         { name: 'Team', url: '/team' },
         { name: 'Upcoming', url: '/upcoming' },
@@ -14,7 +14,7 @@ const Navbar = () => {
         { name: 'Leaderboard', url: '/leaderboard' },
     ]
 
-    const mdNavItems = [
+    const lgNavItems = [
         { name: 'Home', url: '/' },
         { name: 'Team', url: '/team' },
         { name: 'Upcoming', url: '/upcoming' },
@@ -25,12 +25,12 @@ const Navbar = () => {
     return (
         <div>
             {/* desktop navbar */}
-            <div className="hidden lg:block">
-                <NavBarLg items={lgNavItems} className="text-white" />
+            <div className="hidden xl:block">
+                <NavBarXl items={xlNavItems} className="text-white" />
             </div>
 
-            <div className="hidden md:block lg:hidden">
-                <NavBarMd items={mdNavItems} className="text-white" />
+            <div className="hidden lg:block xl:hidden">
+                <NavBarLg items={lgNavItems} className="text-white" />
             </div>
 
             {/* mobile navbar*/}

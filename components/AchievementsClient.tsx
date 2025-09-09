@@ -42,6 +42,7 @@ export default function AchievementsMasonry({ ach }: { ach: Achievement[] }) {
                     />
 
                     {/* Content */}
+                    {/* Large Devices */}
                     <motion.div
                         initial={false}
                         animate={
@@ -50,13 +51,32 @@ export default function AchievementsMasonry({ ach }: { ach: Achievement[] }) {
                                 : { opacity: 0, y: 10 }
                         }
                         transition={{ duration: 0.3, ease: 'easeOut' }}
-                        className="absolute bottom-0 left-0 w-full rounded-lg bg-black/60 p-5 text-white"
+                        className="absolute bottom-0 left-0 hidden w-full rounded-lg bg-black/60 p-5 text-white xl:block"
                     >
                         <h3 className="text-primary text-xl font-bold">
                             {item.title}
                         </h3>
                         <div className="mt-1 flex items-center gap-2 text-sm text-gray-200">
                             <Calendar className="h-4 w-4" />
+                            <span>
+                                {new Date(item.date).toLocaleDateString(
+                                    'en-US',
+                                    {
+                                        month: 'short',
+                                        year: 'numeric',
+                                    }
+                                )}
+                            </span>
+                        </div>
+                    </motion.div>
+
+                    {/* Small Devices */}
+                    <motion.div className="absolute bottom-0 left-0 w-full rounded-lg bg-black/60 p-5 text-white xl:hidden">
+                        <h3 className="text-primary text-lg font-bold">
+                            {item.title}
+                        </h3>
+                        <div className="mt-1 flex items-center gap-2 text-sm text-gray-200">
+                            <Calendar className="h-3 w-3" />
                             <span>
                                 {new Date(item.date).toLocaleDateString(
                                     'en-US',
