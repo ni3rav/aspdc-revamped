@@ -12,35 +12,6 @@ const Hero = () => {
     const [isTrigger, setIsTrigger] = useState(true)
     return (
         <main className="flex h-screen flex-col overflow-hidden text-white">
-            {/* Navbar */}
-            <motion.div className="z-10 hidden items-center justify-between px-15 py-6 lg:flex">
-                <motion.div
-                    initial={{ x: -80, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, ease: 'easeOut' }}
-                >
-                    <Link href="/" className="bg-black">
-                        <Image
-                            height={40}
-                            width={130}
-                            src="/aspdc.png"
-                            alt="ASPDC logo"
-                        />
-                    </Link>
-                </motion.div>
-
-                <motion.div
-                    initial={{ x: 80, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, ease: 'easeOut' }}
-                >
-                    <WrapButton href="#contact">
-                        <Phone size={15} />
-                        <span className="text-white">Contact Us</span>
-                    </WrapButton>
-                </motion.div>
-            </motion.div>
-
             {/* Main hero content */}
             <div className="flex flex-1 flex-col items-center justify-center text-center">
                 <motion.div
