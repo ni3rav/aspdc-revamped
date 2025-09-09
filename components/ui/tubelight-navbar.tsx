@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { ChevronDown } from 'lucide-react'
 
 interface NavItem {
     name: string
@@ -223,8 +224,7 @@ export function NavBarMd({ items, className }: NavBarProps) {
                 })}
                 <div
                     className="relative inline-block"
-                    onMouseEnter={() => setIsOpen(true)}
-                    onMouseLeave={() => setIsOpen(false)}
+                    onClick={() => setIsOpen(!isOpen)}
                 >
                     {/* Trigger Button */}
                     <motion.div
@@ -236,7 +236,14 @@ export function NavBarMd({ items, className }: NavBarProps) {
                             'text-foreground/80 hover:text-primary'
                         )}
                     >
-                        d<span className="inline">Others</span>
+                        <div
+                            className={`flex items-center justify-center gap-2 ${isOpen && 'text-primary'}`}
+                        >
+                            <span className="inline">Others</span>
+                            <ChevronDown
+                                className={`transition-all duration-300 ${isOpen ? 'rotate-180' : 'rotate-360'}`}
+                            />
+                        </div>
                     </motion.div>
 
                     {/* Dropdown */}
