@@ -29,7 +29,7 @@ const Navbar = () => {
                 <NavBarXl items={xlNavItems} className="text-white" />
             </div>
 
-            <div className="hidden lg:block xl:hidden">
+            <div className="hidden md:block xl:hidden">
                 <NavBarLg items={lgNavItems} className="text-white" />
             </div>
 
