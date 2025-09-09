@@ -47,7 +47,7 @@ export default function FAQContactPage() {
     return (
         <div
             id="contact"
-            className="relative min-h-screen px-4 py-16 text-white sm:px-8 lg:px-16"
+            className="relative px-4 py-16 text-white sm:px-8 lg:px-16"
         >
             {/* Title */}
             <motion.h1
