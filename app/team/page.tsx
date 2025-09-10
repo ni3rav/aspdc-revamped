@@ -435,7 +435,7 @@ export default function Page() {
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
                                     {/* Description */}
-                                    <div className="absolute bottom-2 left-3 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3">
+                                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3 xl:left-3 xl:translate-x-0">
                                         {/* Name + role */}
                                         <div className="">
                                             <p className="font-semibold">
