@@ -44,6 +44,9 @@ export default function Footer() {
         margin: '0px 100px -100px 0px',
         once: false,
     })
+    const triggerConfetti = () => {
+        ;({ particleCount: 150, spread: 50, origin: { y: 0.4 } })
+    }
 
     return (
         <footer className="bg-background relative min-h-[45vh] overflow-hidden border-t-2 border-dashed">
@@ -86,7 +89,10 @@ export default function Footer() {
                             link="https://www.youtube.com/@clubaspd"
                             name="YouTube"
                         />
-                        <div className="cursor-target">
+                        <div
+                            className="cursor-target"
+                            onClick={triggerConfetti}
+                        >
                             <EmojiConfetti />
                         </div>
                     </div>
