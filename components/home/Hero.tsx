@@ -70,7 +70,7 @@ const Hero = () => {
                 <TextEffect
                     per="word"
                     preset="blur"
-                    className="mt-6 max-w-3xl px-5 text-lg leading-relaxed text-gray-400 sm:text-xl"
+                    className="mt-6 max-w-3xl px-5 text-lg leading-relaxed text-gray-400 sm:text-xl md:px-0"
                 >
                     Adani Students Programming and Developement Club (ASPDC) is
                     a welcoming space to learn, grow, and innovate across web

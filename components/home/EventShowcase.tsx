@@ -50,7 +50,7 @@ const EventShowcase = async () => {
                 per="char"
                 preset="blur"
                 speedReveal={2}
-                className="mt-6 max-w-2xl px-5 text-xl text-gray-400 md:text-2xl"
+                className="mt-6 max-w-2xl px-5 text-xl text-gray-400 md:px-0 md:text-2xl"
             >
                 A glimpse into our past events — moments of learning,
                 collaboration, and fun.
