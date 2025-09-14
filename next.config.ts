@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'images.zenblog.com',
             },
+            {
+                protocol: 'https',
+                hostname: 'files.catbox.moe',
+            },
         ],
     },
 }

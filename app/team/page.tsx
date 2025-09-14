@@ -6,6 +6,7 @@ import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Github, Instagram, Linkedin, Twitter } from 'lucide-react'
+import EmptyStateCard from '@/components/EmptyStateCard'
 
 // Framer Motion variants
 const containerVariants = {
@@ -19,7 +20,6 @@ const containerVariants = {
 
 export default function Page() {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-
     const everything = [
         {
             domainName: 'Faculty Mentor',
@@ -375,8 +375,20 @@ export default function Page() {
         },
     ]
 
+    if (!everything || everything.length === 0) {
+        return (
+            <main className="mx-auto flex min-h-screen max-w-5xl items-center justify-center px-8 py-12 md:py-32 lg:px-0">
+                <EmptyStateCard
+                    emoji="👥"
+                    heading="No Team Members"
+                    subtext="Our team will be revealed soon. Stay tuned!"
+                />
+            </main>
+        )
+    }
+
     return (
-        <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
+        <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
             <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
                 The Faces Behind ASPDC
             </TextScramble>
@@ -435,7 +447,7 @@ export default function Page() {
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
                                     {/* Description */}
-                                    <div className="absolute bottom-2 left-3 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3">
+                                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3 xl:left-3 xl:translate-x-0">
                                         {/* Name + role */}
                                         <div className="">
                                             <p className="font-semibold">
@@ -447,7 +459,7 @@ export default function Page() {
                                         </div>
 
                                         {/* Hover icons */}
-                                        <div className="mt-2 flex gap-2 lg:hidden">
+                                        <div className="mt-2 flex gap-2 xl:hidden">
                                             {member.instagram && (
                                                 <Link
                                                     href={member.instagram}
@@ -497,7 +509,7 @@ export default function Page() {
                                                     transition={{
                                                         duration: 0.3,
                                                     }}
-                                                    className="mt-2 hidden gap-2 lg:flex"
+                                                    className="mt-2 hidden gap-2 xl:flex"
                                                 >
                                                     {member.instagram && (
                                                         <Link

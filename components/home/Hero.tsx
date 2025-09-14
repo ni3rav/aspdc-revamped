@@ -1,46 +1,14 @@
 'use client'
-import Link from 'next/link'
 import { useState } from 'react'
-import WrapButton from '../ui/wrap-button'
-import { ChevronDown, Phone } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { TextScramble } from '../motion-primitives/text-scramble'
 import { TextEffect } from '../motion-primitives/text-effect'
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 
 const Hero = () => {
     const [isTrigger, setIsTrigger] = useState(true)
     return (
         <main className="flex h-screen flex-col overflow-hidden text-white">
-            {/* Navbar */}
-            <motion.div className="z-10 hidden items-center justify-between px-15 py-6 lg:flex">
-                <motion.div
-                    initial={{ x: -80, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, ease: 'easeOut' }}
-                >
-                    <Link href="/" className="bg-black">
-                        <Image
-                            height={40}
-                            width={130}
-                            src="/aspdc.png"
-                            alt="ASPDC logo"
-                        />
-                    </Link>
-                </motion.div>
-
-                <motion.div
-                    initial={{ x: 80, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, ease: 'easeOut' }}
-                >
-                    <WrapButton href="#contact">
-                        <Phone size={15} />
-                        <span className="text-white">Contact Us</span>
-                    </WrapButton>
-                </motion.div>
-            </motion.div>
-
             {/* Main hero content */}
             <div className="flex flex-1 flex-col items-center justify-center text-center">
                 <motion.div
@@ -70,6 +38,7 @@ const Hero = () => {
                 <TextEffect
                     per="word"
                     preset="blur"
+                    speedReveal={2}
                     className="mt-6 max-w-3xl px-5 text-lg leading-relaxed text-gray-400 sm:text-xl md:px-0"
                 >
                     Adani Students Programming and Developement Club (ASPDC) is

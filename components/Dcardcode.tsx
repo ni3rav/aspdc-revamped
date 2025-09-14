@@ -60,7 +60,7 @@ export function Dcardcode({
                         href={github_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="sm:text-md hover:text-primary text-primary flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium sm:px-4 lg:text-white"
+                        className="sm:text-md hover:text-primary text-primary flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium sm:px-4 xl:text-white"
                     >
                         <Github size={18} />
                         Source Code
@@ -73,7 +73,7 @@ export function Dcardcode({
                             href={liveUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="sm:text-md hover:text-primary text-primary rounded-xl bg-gradient-to-r from-white to-gray-200 px-3 py-2 text-sm font-semibold shadow-md sm:px-4 lg:text-black"
+                            className="sm:text-md hover:text-primary text-primary rounded-xl bg-gradient-to-r from-white to-gray-200 px-3 py-2 text-sm font-semibold shadow-md sm:px-4 xl:text-black"
                         >
                             Live Demo →
                         </CardItem>
