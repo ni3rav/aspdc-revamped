@@ -9,7 +9,7 @@ async function AllDigest() {
 
     if (!posts || posts.length === 0) {
         return (
-            <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
+            <main className="mx-auto min-h-screen max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
                 <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
                     DIGEST
                 </TextScramble>
@@ -28,7 +28,7 @@ async function AllDigest() {
     const latestPost = posts.splice(0, 1)[0]
 
     return (
-        <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-0">
+        <main className="mx-auto min-h-screen max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
             <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
                 DIGEST
             </TextScramble>
@@ -36,7 +36,7 @@ async function AllDigest() {
             {/* Featured Post */}
             <Link
                 href={`/digest/${latestPost.slug}`}
-                className="group hover:bg-primary/6 mb-16 grid items-center gap-8 rounded-lg bg-white/3 backdrop-blur-sm md:grid-cols-2"
+                className="group hover:bg-primary/6 bg-primary/6 mb-16 grid items-center gap-8 rounded-lg backdrop-blur-sm md:grid-cols-2 xl:bg-white/3"
             >
                 {/* Left - Image */}
                 <div className="relative overflow-hidden rounded-xl shadow-md">
@@ -90,7 +90,7 @@ async function AllDigest() {
                 </div>
             </Link>
 
-            <div className="bg-primary/40 my-10 h-1 w-full rounded-full md:hidden" />
+            <div className="bg-primary/70 my-10 h-1 w-full rounded-full xl:hidden" />
 
             <OtherPosts latestPost={latestPost} posts={posts} />
         </main>
