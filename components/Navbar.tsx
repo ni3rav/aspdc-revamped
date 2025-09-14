@@ -10,8 +10,8 @@ const Navbar = () => {
         { name: 'Achievments', url: '/achievements' },
         { name: 'Projects', url: '/projects' },
         { name: 'Blogs', url: '/blogs' },
-        { name: 'Digest', url: '/digest' },
-        { name: 'Leaderboard', url: '/leaderboard' },
+        // { name: 'Digest', url: '/digest' },
+        // { name: 'Leaderboard', url: '/leaderboard' },
     ]
 
     const lgNavItems = [

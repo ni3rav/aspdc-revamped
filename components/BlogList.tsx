@@ -16,6 +16,20 @@ function formatDate(input: string | Date) {
 }
 
 export function BlogList({ posts }: { posts: Blog[] }) {
+    if (!posts || posts.length === 0)
+        return (
+            <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
+                <span className="animate-bounce text-7xl">✍️</span>
+                <h2 className="mt-6 text-3xl font-bold text-neutral-100">
+                    No Blogs Yet
+                </h2>
+                <p className="mt-2 text-neutral-400">
+                    Stories are in the making — your blogs will appear here
+                    soon!
+                </p>
+            </div>
+        )
+
     const handleShare = async ({ post }: { post: Blog }) => {
         if (navigator.share) {
             try {

@@ -149,8 +149,8 @@ export function NavBarLg({ items, className }: NavBarProps) {
     const menuItems = [
         { name: 'Projects', url: '/projects' },
         { name: 'Blogs', url: '/blogs' },
-        { name: 'Digest', url: '/digest' },
-        { name: 'Leaderboard', url: '/leaderboard' },
+        // { name: 'Digest', url: '/digest' },
+        // { name: 'Leaderboard', url: '/leaderboard' },
     ]
 
     return (
