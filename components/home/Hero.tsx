@@ -1,12 +1,9 @@
 'use client'
-import Link from 'next/link'
 import { useState } from 'react'
-import WrapButton from '../ui/wrap-button'
-import { ChevronDown, Phone } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { TextScramble } from '../motion-primitives/text-scramble'
 import { TextEffect } from '../motion-primitives/text-effect'
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 
 const Hero = () => {
     const [isTrigger, setIsTrigger] = useState(true)
@@ -42,7 +39,7 @@ const Hero = () => {
                     per="word"
                     preset="blur"
                     speedReveal={2}
-                    className="mt-6 max-w-3xl text-lg leading-relaxed text-gray-400 sm:text-xl"
+                    className="mt-6 max-w-3xl px-5 text-lg leading-relaxed text-gray-400 sm:text-xl md:px-0"
                 >
                     Adani Students Programming and Developement Club (ASPDC) is
                     a welcoming space to learn, grow, and innovate across web

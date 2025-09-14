@@ -14,7 +14,7 @@ interface Particle {
 
 const EmojiConfetti: React.FC = () => {
     const [isExploding, setIsExploding] = useState(false)
-    const buttonRef = useRef<HTMLButtonElement>(null)
+    const buttonRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const particles = useRef<Particle[]>([])
 
@@ -99,20 +99,22 @@ const EmojiConfetti: React.FC = () => {
     }, [isExploding, emojis])
 
     const handleClick = () => {
-        setIsExploding(true)
         particles.current = []
+        setIsExploding(true)
     }
 
     return (
-        <div className="group flex size-10 cursor-pointer items-center justify-center rounded-lg border border-stone-700 transition-colors hover:border-stone-100 sm:size-12 md:size-14">
-            <motion.button
-                ref={buttonRef}
+        <div
+            onClick={handleClick}
+            ref={buttonRef}
+            className="group flex size-10 cursor-pointer items-center justify-center rounded-lg border border-stone-700 transition-colors hover:border-stone-100 sm:size-12 md:size-14"
+        >
+            <motion.div
                 className="transform-gpu opacity-70 transition-opacity group-hover:opacity-100"
                 whileTap={{ scale: 0.95 }}
-                onClick={handleClick}
             >
                 <PartyPopper />
-            </motion.button>
+            </motion.div>
             {isExploding && (
                 <canvas
                     ref={canvasRef}
