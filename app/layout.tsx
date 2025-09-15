@@ -16,8 +16,8 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
     title: 'ASPDC',
     icons: {
-        icon: '/favicon_io/favicon.ico',
-        apple: '/favicon_io/apple-touch-icon.png',
+        icon: '/favicon.ico',
+        apple: '/apple-touch-icon.png',
     },
 }
 
