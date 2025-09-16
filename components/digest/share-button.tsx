@@ -37,11 +37,11 @@ export function ShareButton({
                     toast.error('Sharing was cancelled.')
                 }
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Sharing failed:', err)
 
             // Handle cancel case separately
-            if (err.name === 'AbortError') {
+            if (err instanceof DOMException && err.name === 'AbortError') {
                 toast.info('Sharing was cancelled.')
             } else {
                 toast.error('Failed to copy link automatically.')
