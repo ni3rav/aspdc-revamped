@@ -3,27 +3,34 @@ import { db } from '@/db/drizzle'
 import { certificates } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import crypto from 'crypto'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
-type Params = {
+type Params = Promise<{
     token: string
-}
+}>
 
-export default async function VerifyPage({
-    params,
-}: {
-    params: Promise<Params>
-}) {
-    const resolvedParams = await params
-    const { token } = resolvedParams
+export default async function VerifyPage({ params }: { params: Params }) {
+    const { token } = await params
 
     if (!token) {
         return (
-            <div className="mx-auto max-w-2xl p-6">
-                <h1 className="mb-2 text-2xl font-semibold">
-                    Certificate Verification
-                </h1>
-                <p className="text-red-600">Missing token.</p>
-            </div>
+            <main className="mx-auto min-h-screen max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
+                <Card className="border-border bg-card text-card-foreground min-h-48">
+                    <CardHeader>
+                        <CardTitle>Certificate Verification</CardTitle>
+                        <CardDescription className="text-destructive">
+                            Missing token. Please use a valid verification link.
+                        </CardDescription>
+                    </CardHeader>
+                </Card>
+            </main>
         )
     }
 
@@ -39,34 +46,67 @@ export default async function VerifyPage({
 
     if (!record) {
         return (
-            <div className="mx-auto max-w-2xl p-6">
-                <h1 className="mb-2 text-2xl font-semibold">
-                    Certificate Verification
-                </h1>
-                <p className="text-red-600">
-                    Invalid or forged certificate. No matching record was found.
-                </p>
-            </div>
+            <main className="mx-auto min-h-screen max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
+                <Card className="border-border bg-card text-card-foreground min-h-48">
+                    <CardHeader>
+                        <CardTitle>Certificate Verification</CardTitle>
+                        <CardDescription className="text-destructive">
+                            Invalid or forged certificate. No matching record
+                            was found.
+                        </CardDescription>
+                    </CardHeader>
+                </Card>
+            </main>
         )
     }
 
     return (
-        <div className="mx-auto max-w-2xl p-6">
-            <h1 className="mb-4 text-2xl font-semibold">
-                Certificate Verification
-            </h1>
-            <p className="text-lg">
-                This certificate was issued to participant{' '}
-                <span className="font-semibold">{record.participantName}</span>{' '}
-                for satisfactorily participating in event{' '}
-                <span className="font-semibold">{record.eventName}</span> that
-                took place on{' '}
-                <span className="font-semibold">
-                    {record.eventDate.toLocaleDateString()}
-                </span>
-                . In case of any discrepancy with the name on the certificate,
-                consider it forged.
-            </p>
-        </div>
+        <main className="mx-auto min-h-screen max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
+            <Card className="border-border bg-card text-card-foreground min-h-48">
+                <CardHeader className="flex flex-row items-center justify-between gap-2">
+                    <div>
+                        <CardTitle className="text-2xl">
+                            Certificate Verified
+                        </CardTitle>
+                        <CardDescription>
+                            The certificate details match a valid record in our
+                            system.
+                        </CardDescription>
+                    </div>
+                    <Badge variant="secondary" className="shrink-0 self-center">
+                        Valid
+                    </Badge>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                        <div className="text-muted-foreground text-sm sm:col-span-1">
+                            Participant
+                        </div>
+                        <div className="text-foreground text-sm font-medium sm:col-span-2">
+                            {record.participantName}
+                        </div>
+
+                        <div className="text-muted-foreground text-sm sm:col-span-1">
+                            Event
+                        </div>
+                        <div className="text-foreground text-sm font-medium sm:col-span-2">
+                            {record.eventName}
+                        </div>
+
+                        <div className="text-muted-foreground text-sm sm:col-span-1">
+                            Date
+                        </div>
+                        <div className="text-foreground text-sm font-medium sm:col-span-2">
+                            {record.eventDate.toLocaleDateString()}
+                        </div>
+                    </div>
+                    <p className="text-muted-foreground text-sm">
+                        If the name on the printed certificate does not exactly
+                        match the participant listed above, treat the document
+                        as forged.
+                    </p>
+                </CardContent>
+            </Card>
+        </main>
     )
 }
