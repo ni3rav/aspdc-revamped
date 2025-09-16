@@ -71,3 +71,13 @@ export const blogs = pgTable('blogs', {
     coverImage: text(),
     createdAt: timestamp().defaultNow().notNull(),
 })
+
+// Certificates table
+export const certificates = pgTable('certificates', {
+    id: uuid().defaultRandom().primaryKey(),
+    token: text().notNull(),
+    participantName: text().notNull(),
+    eventName: text().notNull(),
+    eventDate: timestamp().notNull(),
+    createdAt: timestamp().defaultNow().notNull(),
+})

@@ -56,6 +56,15 @@ export type UpcomingEvent = {
     eventImageUrl: string | null
 }
 
+export type Certificate = {
+    id: string
+    token: string
+    participantName: string
+    eventName: string
+    eventDate: Date
+    createdAt: Date
+}
+
 // New entity types
 export type NewAchievement = Omit<Achievement, 'id' | 'createdAt'>
 export type NewBlog = Omit<Blog, 'id' | 'createdAt'>
