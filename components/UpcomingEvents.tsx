@@ -10,6 +10,19 @@ export default function UpcomingEventsPage({
 }: {
     events: UpcomingEvent[]
 }) {
+    if (!events || events.length === 0)
+        return (
+            <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
+                <span className="animate-bounce text-7xl">👩‍💻</span>
+                <h2 className="mt-6 text-3xl font-bold text-neutral-100">
+                    No Upcoming Events
+                </h2>
+                <p className="mt-2 text-neutral-400">
+                    Stay tuned — something exciting is cooking at ASPDC!
+                </p>
+            </div>
+        )
+
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 
@@ -134,19 +147,6 @@ export default function UpcomingEventsPage({
                     </article>
                 )
             })}
-
-            {/* Empty State */}
-            {sortedEvents.length === 0 && (
-                <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
-                    <span className="animate-bounce text-7xl">👩‍💻</span>
-                    <h2 className="mt-6 text-3xl font-bold text-neutral-100">
-                        No Upcoming Events
-                    </h2>
-                    <p className="mt-2 text-neutral-400">
-                        Stay tuned — something exciting is cooking at ASPDC!
-                    </p>
-                </div>
-            )}
         </section>
     )
 }

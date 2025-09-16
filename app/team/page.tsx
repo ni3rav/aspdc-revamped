@@ -19,7 +19,6 @@ const containerVariants = {
 
 export default function Page() {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-
     const everything = [
         {
             domainName: 'Faculty Mentor',
@@ -375,6 +374,25 @@ export default function Page() {
         },
     ]
 
+    if (!everything || everything.length === 0) {
+        return (
+            <main className="mx-auto min-h-screen max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
+                <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
+                    Achievements
+                </TextScramble>
+                <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
+                    <span className="animate-bounce text-7xl">🤝</span>
+                    <h2 className="mt-6 text-3xl font-bold text-neutral-100">
+                        No Team Members Yet
+                    </h2>
+                    <p className="mt-2 text-neutral-400">
+                        Our team will be revealed soon. Stay tuned!
+                    </p>
+                </div>
+            </main>
+        )
+    }
+
     return (
         <main className="mx-auto max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
             <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
@@ -435,7 +453,7 @@ export default function Page() {
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
                                     {/* Description */}
-                                    <div className="absolute bottom-2 left-3 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3">
+                                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-lg bg-black/20 px-4 py-3 transition-all duration-300 group-hover:bottom-3 xl:left-3 xl:translate-x-0">
                                         {/* Name + role */}
                                         <div className="">
                                             <p className="font-semibold">

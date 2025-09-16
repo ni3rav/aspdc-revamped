@@ -7,6 +7,20 @@ import { useState } from 'react'
 
 export default function AchievementsMasonry({ ach }: { ach: Achievement[] }) {
     const [hoverState, setHoverState] = useState(-1)
+    if (ach.length === 0)
+        return (
+            <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
+                <span className="animate-bounce text-7xl">🏆</span>
+                <h2 className="mt-6 text-3xl font-bold text-neutral-100">
+                    No Achievements Yet
+                </h2>
+                <p className="mt-2 text-neutral-400">
+                    Great things take time — your achievements will appear here
+                    soon!
+                </p>
+            </div>
+        )
+
     return (
         <motion.div
             className="columns-1 gap-6 space-y-6 sm:columns-2 lg:columns-3"

@@ -15,7 +15,10 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
     title: 'ASPDC',
-    icons: '/Frame2.png',
+    icons: {
+        icon: '/favicon.ico',
+        apple: '/apple-touch-icon.png',
+    },
 }
 
 export default function RootLayout({
