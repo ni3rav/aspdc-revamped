@@ -261,7 +261,7 @@ export function NavBarLg({ items, className }: NavBarProps) {
                                     return (
                                         <Link
                                             href={item.url}
-                                            key={item.name}
+                                            key={`${item.name}-${i}`}
                                             className={`text-foreground/80 hover:text-primary cursor-pointer rounded-lg px-4 py-2 font-semibold ${isDrop && 'text-primary bg-muted'}`}
                                         >
                                             {item.name}
