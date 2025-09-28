@@ -10,7 +10,24 @@ export default function UpcomingEventsPage({
 }: {
     events: UpcomingEvent[]
 }) {
-    if (!events || events.length === 0)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    // Filter out past events
+    const upcomingEvents =
+        events?.filter((event) => {
+            const eventDate = new Date(event.date)
+            eventDate.setHours(0, 0, 0, 0)
+            return eventDate.getTime() >= today.getTime()
+        }) || []
+
+    // Sort by date
+    const sortedEvents = upcomingEvents.sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    )
+
+    // If no upcoming events after filtering, show fallback
+    if (!sortedEvents || sortedEvents.length === 0)
         return (
             <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
                 <span className="animate-bounce text-7xl">👩‍💻</span>
@@ -22,21 +39,6 @@ export default function UpcomingEventsPage({
                 </p>
             </div>
         )
-
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    // Filter out past events
-    const filteredEvents = events.filter((event) => {
-        const eventDate = new Date(event.date)
-        eventDate.setHours(0, 0, 0, 0)
-        return eventDate.getTime() >= today.getTime()
-    })
-
-    // Sort by date (today first, then upcoming soonest)
-    const sortedEvents = filteredEvents.sort((a, b) => {
-        return new Date(a.date).getTime() - new Date(b.date).getTime()
-    })
 
     return (
         <section className="mx-auto grid max-w-7xl gap-10 px-6 pb-24 text-neutral-200 md:grid-cols-2 lg:grid-cols-3">
@@ -133,6 +135,7 @@ export default function UpcomingEventsPage({
                                     <Link
                                         href={event.registrationLink}
                                         target="_blank"
+                                        rel="noopener noreferrer"
                                         className="bg-primary inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-black shadow transition hover:scale-105 active:scale-95"
                                     >
                                         Register <ExternalLink size={16} />
