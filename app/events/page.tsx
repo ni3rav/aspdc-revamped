@@ -4,7 +4,7 @@ import { fetchEvents } from '@/db/queries'
 import { Event } from '@/db/types'
 import React from 'react'
 
-const majorEvents = ['Hackspire', 'Tech Talk: Future of AI', 'Tech Fest']
+const majorEvents = ['Hackspire 2025', 'Tech Talk: Future of AI', 'Tech Fest']
 
 const Events = async () => {
     const items: Event[] = await fetchEvents()
@@ -40,9 +40,11 @@ const Events = async () => {
                         description={item.details}
                         background={item.imageUrls} // Pass the array directly
                         className={`transition-transform duration-200 ease-in-out hover:scale-[1.05] ${
-                            majorEvents.includes(item.name)
-                                ? 'md:col-span-2'
-                                : ''
+                            item.name === 'Hackspire 2025'
+                                ? 'md:col-span-2 lg:col-span-3'
+                                : majorEvents.includes(item.name)
+                                  ? 'md:col-span-2'
+                                  : ''
                         }`}
                     />
                 ))}
