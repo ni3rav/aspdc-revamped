@@ -1,3 +1,4 @@
+import Contributiors from '@/components/home/Contributiors'
 import EventShowcase from '@/components/home/EventShowcase'
 import FAQ from '@/components/home/FAQ'
 import Hero from '@/components/home/Hero'
@@ -17,6 +18,7 @@ const page = () => {
                     direction={1}
                 >{`Learn . Code . Innovate . `}</ScrollVelocityRow>
             </ScrollVelocityContainer>
+            <Contributiors />
             <FAQ />
         </div>
     )
