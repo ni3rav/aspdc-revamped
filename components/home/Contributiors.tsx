@@ -1,6 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
-
 import React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { TextScramble } from '../motion-primitives/text-scramble'
@@ -126,10 +125,13 @@ const Contributiors = async () => {
                                         'relative mx-auto h-16 w-16 overflow-hidden rounded-full border border-white/20 bg-black/40 shadow-lg transition-all duration-300 hover:scale-[1.05] md:h-20 md:w-20'
                                     )}
                                 >
-                                    <img
+                                    <Image
                                         alt={`${contributor.login} avatar`}
                                         src={contributor.avatar_url}
-                                        className="h-full w-full object-cover"
+                                        fill
+                                        className="object-cover"
+                                        unoptimized
+                                        sizes="(max-width: 768px) 64px, 80px"
                                     />
                                 </figure>
                                 <AvatarGroupTooltip className="mt-2 items-center gap-1 text-center">

@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { UpcomingEvent } from '@/db/types'
 import { Calendar, MapPin, ExternalLink } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function UpcomingEventsPage({
@@ -73,10 +73,12 @@ export default function UpcomingEventsPage({
                         {/* Event Image */}
                         {event.eventImageUrl && (
                             <div className="relative aspect-video w-full overflow-hidden">
-                                <img
+                                <Image
                                     src={event.eventImageUrl}
                                     alt={event.name}
-                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
