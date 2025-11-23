@@ -121,9 +121,10 @@ export async function updateAchievement(
     id: string,
     data: Partial<Achievement>
 ) {
+    const { date, ...rest } = data
     const adaptedData = {
-        ...data,
-        ...(data.date && { date: normalizeDateString(data.date) }),
+        ...rest,
+        ...(date && { date: normalizeDateString(date) }),
     }
 
     try {
