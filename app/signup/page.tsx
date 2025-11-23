@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { authClient } from '@/lib/auth-client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -16,36 +16,35 @@ import {
 import { toast } from 'sonner'
 import Link from 'next/link'
 
-function LoginForm() {
+function SignupForm() {
     const router = useRouter()
-    const searchParams = useSearchParams()
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-
-    const from = searchParams.get('from') || '/admin'
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
 
         try {
-            const result = await authClient.signIn.email({
+            const result = await authClient.signUp.email({
                 email,
                 password,
+                name,
             })
 
             if (result.error) {
-                toast.error(result.error.message || 'Login failed')
+                toast.error(result.error.message || 'Signup failed')
                 return
             }
 
-            toast.success('Logged in successfully')
-            router.push(from)
+            toast.success('Account created successfully')
+            router.push('/admin')
             router.refresh()
         } catch (error) {
-            toast.error('An error occurred during login')
-            console.error('Login error:', error)
+            toast.error('An error occurred during signup')
+            console.error('Signup error:', error)
         } finally {
             setIsLoading(false)
         }
@@ -55,13 +54,26 @@ function LoginForm() {
         <div className="bg-background flex min-h-screen items-center justify-center p-4">
             <Card className="w-full max-w-md">
                 <CardHeader>
-                    <CardTitle>Admin Login</CardTitle>
+                    <CardTitle>Create Account</CardTitle>
                     <CardDescription>
-                        Enter your credentials to access the admin panel
+                        Sign up to access the admin panel
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Name</Label>
+                            <Input
+                                id="name"
+                                type="text"
+                                placeholder="John Doe"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                                disabled={isLoading}
+                                autoComplete="name"
+                            />
+                        </div>
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -85,7 +97,8 @@ function LoginForm() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 disabled={isLoading}
-                                autoComplete="current-password"
+                                autoComplete="new-password"
+                                minLength={8}
                             />
                         </div>
                         <Button
@@ -93,15 +106,15 @@ function LoginForm() {
                             className="w-full"
                             disabled={isLoading}
                         >
-                            {isLoading ? 'Logging in...' : 'Login'}
+                            {isLoading ? 'Creating account...' : 'Sign Up'}
                         </Button>
                         <div className="text-muted-foreground text-center text-sm">
-                            Don't have an account?{' '}
+                            Already have an account?{' '}
                             <Link
-                                href="/signup"
+                                href="/login"
                                 className="text-primary underline-offset-4 hover:underline"
                             >
-                                Sign Up
+                                Login
                             </Link>
                         </div>
                     </form>
@@ -111,21 +124,21 @@ function LoginForm() {
     )
 }
 
-export default function LoginPage() {
+export default function SignupPage() {
     return (
         <Suspense
             fallback={
                 <div className="bg-background flex min-h-screen items-center justify-center p-4">
                     <Card className="w-full max-w-md">
                         <CardHeader>
-                            <CardTitle>Admin Login</CardTitle>
+                            <CardTitle>Create Account</CardTitle>
                             <CardDescription>Loading...</CardDescription>
                         </CardHeader>
                     </Card>
                 </div>
             }
         >
-            <LoginForm />
+            <SignupForm />
         </Suspense>
     )
 }

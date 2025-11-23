@@ -11,7 +11,7 @@ export const auth = betterAuth({
     }),
     emailAndPassword: {
         enabled: true,
-        disableSignUp: true, // Disable signup - only allow login with existing credentials
+        disableSignUp: false, // Disable signup - only allow login with existing credentials
     },
     plugins: [nextCookies()], // make sure this is the last plugin in the array
 })
