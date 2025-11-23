@@ -25,6 +25,16 @@ import type {
 } from '@/db/types'
 import { eq } from 'drizzle-orm'
 
+// ----------------- Date Helpers -----------------
+function normalizeDate(date: Date | string): Date {
+    return date instanceof Date ? date : new Date(date)
+}
+
+function normalizeDateString(date: Date | string): string {
+    const dateObj = normalizeDate(date)
+    return dateObj.toISOString().split('T')[0]
+}
+
 // ----------------- Insertions -----------------
 export async function addProject(project: NewProject) {
     try {
@@ -39,7 +49,7 @@ export async function addAchievement(achievement: NewAchievement) {
     try {
         await db.insert(achievements).values({
             ...achievement,
-            date: achievement.date.toISOString().split('T')[0], // convert Date → YYYY-MM-DD
+            date: normalizeDateString(achievement.date),
         })
     } catch (error) {
         console.error('Error in addAchievement:', error)
@@ -51,10 +61,7 @@ export async function addBlog(blog: NewBlog) {
     try {
         await db.insert(blogs).values({
             ...blog,
-            publishDate:
-                blog.publishDate instanceof Date
-                    ? blog.publishDate
-                    : new Date(blog.publishDate),
+            publishDate: normalizeDate(blog.publishDate),
         })
     } catch (error) {
         console.error('Error in addBlog:', error)
@@ -66,8 +73,7 @@ export async function addEvent(event: NewEvent) {
     try {
         await db.insert(events).values({
             ...event,
-            date:
-                event.date instanceof Date ? event.date : new Date(event.date),
+            date: normalizeDate(event.date),
             imageUrls: event.imageUrls ?? [],
         })
     } catch (error) {
@@ -89,8 +95,7 @@ export async function addUpcomingEvent(event: NewUpcomingEvent) {
     try {
         await db.insert(upcomingEvents).values({
             ...event,
-            date:
-                event.date instanceof Date ? event.date : new Date(event.date),
+            date: normalizeDate(event.date),
         })
     } catch (error) {
         console.error('Error in addUpcomingEvent:', error)
@@ -118,11 +123,7 @@ export async function updateAchievement(
 ) {
     const adaptedData = {
         ...data,
-        date: data.date
-            ? typeof data.date === 'string'
-                ? data.date
-                : (data.date as Date).toISOString().split('T')[0]
-            : undefined,
+        ...(data.date && { date: normalizeDateString(data.date) }),
     }
 
     try {
@@ -141,10 +142,7 @@ export async function updateBlog(id: string, updates: Partial<Blog>) {
         const adaptedData = {
             ...updates,
             ...(updates.publishDate && {
-                publishDate:
-                    updates.publishDate instanceof Date
-                        ? updates.publishDate
-                        : new Date(updates.publishDate),
+                publishDate: normalizeDate(updates.publishDate),
             }),
         }
         return await db
@@ -162,12 +160,7 @@ export async function updateEvent(id: string, updates: Partial<Event>) {
     try {
         const adaptedData = {
             ...updates,
-            ...(updates.date && {
-                date:
-                    updates.date instanceof Date
-                        ? updates.date
-                        : new Date(updates.date),
-            }),
+            ...(updates.date && { date: normalizeDate(updates.date) }),
             ...(updates.imageUrls !== undefined && {
                 imageUrls: updates.imageUrls ?? [],
             }),
@@ -206,12 +199,7 @@ export async function updateUpcomingEvent(
     try {
         const adaptedData = {
             ...updates,
-            ...(updates.date && {
-                date:
-                    updates.date instanceof Date
-                        ? updates.date
-                        : new Date(updates.date),
-            }),
+            ...(updates.date && { date: normalizeDate(updates.date) }),
         }
         return await db
             .update(upcomingEvents)
