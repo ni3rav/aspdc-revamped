@@ -2,6 +2,7 @@ import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import UpcomingEventsPage from '@/components/UpcomingEvents'
 import { fetchUpcomingEvents } from '@/db/queries'
 import { UpcomingEvent } from '@/db/types'
+import { Suspense } from 'react'
 
 export default async function UpcomingEvents() {
     const upcomingEvent: UpcomingEvent[] = await fetchUpcomingEvents()
@@ -10,7 +11,18 @@ export default async function UpcomingEvents() {
             <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
                 Mark Your Calenders
             </TextScramble>
-            <UpcomingEventsPage events={upcomingEvent} />
+            <Suspense
+                fallback={
+                    <div className="flex items-center justify-center py-12">
+                        <div className="text-muted-foreground text-center">
+                            <div className="border-primary mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
+                            <p>Loading events...</p>
+                        </div>
+                    </div>
+                }
+            >
+                <UpcomingEventsPage events={upcomingEvent} />
+            </Suspense>
         </main>
     )
 }

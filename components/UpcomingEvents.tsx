@@ -4,16 +4,140 @@ import { UpcomingEvent } from '@/db/types'
 import { Calendar, MapPin, ExternalLink } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
 export default function UpcomingEventsPage({
     events,
 }: {
     events: UpcomingEvent[]
 }) {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
+    const [today, setToday] = useState<Date | null>(null)
+    const [mounted, setMounted] = useState(false)
 
-    // Filter out past events
+    useEffect(() => {
+        // Only set the date on the client side after mount
+        setMounted(true)
+        const now = new Date()
+        now.setHours(0, 0, 0, 0)
+        setToday(now)
+    }, [])
+
+    // If not mounted yet (during SSR), show all events
+    // This will be filtered once the component mounts on the client
+    if (!mounted || !today) {
+        // Show all events during initial render, will be filtered on client
+        const sortedEvents = [...(events || [])].sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        )
+
+        if (!sortedEvents || sortedEvents.length === 0) {
+            return (
+                <div className="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
+                    <span className="animate-bounce text-7xl">👩‍💻</span>
+                    <h2 className="mt-6 text-3xl font-bold text-neutral-100">
+                        No Upcoming Events
+                    </h2>
+                    <p className="mt-2 text-neutral-400">
+                        Stay tuned — something exciting is cooking at ASPDC!
+                    </p>
+                </div>
+            )
+        }
+
+        return (
+            <section className="mx-auto grid max-w-7xl gap-10 px-6 pb-24 text-neutral-200 md:grid-cols-2 lg:grid-cols-3">
+                {sortedEvents.map((event) => {
+                    const eventDate = new Date(event.date)
+                    eventDate.setHours(0, 0, 0, 0)
+
+                    return (
+                        <article
+                            key={event.id}
+                            className="group hover:shadow-primary/30 hover:border-primary/40 relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-neutral-900/70 to-neutral-800/30 shadow-lg backdrop-blur-md"
+                        >
+                            {/* Event Image */}
+                            {event.eventImageUrl && (
+                                <div className="relative aspect-video w-full overflow-hidden">
+                                    <Image
+                                        src={event.eventImageUrl}
+                                        alt={event.name}
+                                        fill
+                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                                    <span className="bg-primary absolute top-3 left-3 rounded-full px-3 py-1 text-xs font-bold text-black shadow">
+                                        Upcoming
+                                    </span>
+                                </div>
+                            )}
+
+                            {/* Content */}
+                            <div className="relative flex flex-1 flex-col justify-between p-6">
+                                <div>
+                                    <h2 className="text-primary mb-2 text-xl leading-tight font-extrabold md:text-2xl">
+                                        {event.name}
+                                    </h2>
+                                    <p className="text-sm leading-relaxed text-neutral-400 md:text-base">
+                                        {event.description}
+                                    </p>
+                                </div>
+
+                                {/* Metadata */}
+                                <div className="mt-6 space-y-2 text-sm text-neutral-300">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar
+                                            size={16}
+                                            className="text-primary shrink-0"
+                                        />
+                                        <span>
+                                            {new Date(
+                                                event.date
+                                            ).toLocaleDateString('en-US', {
+                                                weekday: 'short',
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric',
+                                            })}
+                                        </span>
+                                    </div>
+                                    {event.location && (
+                                        <div className="flex items-center gap-2">
+                                            <MapPin
+                                                size={16}
+                                                className="text-primary shrink-0"
+                                            />
+                                            <span>{event.location}</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Actions */}
+                                <div className="mt-6 flex gap-3">
+                                    {event.registrationLink ? (
+                                        <Link
+                                            href={event.registrationLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="bg-primary inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-black shadow transition hover:scale-105 active:scale-95"
+                                        >
+                                            Register <ExternalLink size={16} />
+                                        </Link>
+                                    ) : (
+                                        <span className="rounded-lg border border-white/20 px-4 py-2 text-sm text-neutral-400">
+                                            Coming Soon 🚧
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </article>
+                    )
+                })}
+            </section>
+        )
+    }
+
+    // Filter out past events once today is set
     const upcomingEvents =
         events?.filter((event) => {
             const eventDate = new Date(event.date)

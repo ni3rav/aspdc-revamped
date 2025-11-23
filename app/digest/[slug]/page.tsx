@@ -2,11 +2,12 @@ import { ShareButton } from '@/components/digest/share-button'
 import { SafeHtmlContent } from '@/components/safe-html'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { fetchDigestBySlug } from '@/lib/cms'
+import { fetchDigestBySlug, fetchAllDigest } from '@/lib/cms'
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, ExternalLink, Twitter } from 'lucide-react'
 import Image from 'next/image'
+import { Suspense } from 'react'
 
 const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -16,14 +17,20 @@ const formatDate = (dateString: string) => {
     })
 }
 
-export default async function Digest({
-    params,
-}: {
-    params: Promise<{ slug: string }>
-}) {
-    const resolvedParams = await params
-    const { slug } = resolvedParams
+export async function generateStaticParams() {
+    try {
+        const response = await fetchAllDigest({ limit: 100 })
+        const posts = response?.data || []
+        return posts.map((post) => ({
+            slug: post.slug,
+        }))
+    } catch (error) {
+        console.error('Error generating static params:', error)
+        return []
+    }
+}
 
+async function DigestContent({ slug }: { slug: string }) {
     const post = await fetchDigestBySlug(slug).then((res) => res?.data)
 
     if (!post) {
@@ -205,5 +212,31 @@ export default async function Digest({
                 </article>
             </div>
         </main>
+    )
+}
+
+export default async function Digest({
+    params,
+}: {
+    params: Promise<{ slug: string }>
+}) {
+    const resolvedParams = await params
+    const { slug } = resolvedParams
+
+    return (
+        <Suspense
+            fallback={
+                <main className="mx-auto max-w-4xl px-6 py-16 md:py-24">
+                    <div className="flex items-center justify-center py-12">
+                        <div className="text-muted-foreground text-center">
+                            <div className="border-primary mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
+                            <p>Loading digest...</p>
+                        </div>
+                    </div>
+                </main>
+            }
+        >
+            <DigestContent slug={slug} />
+        </Suspense>
     )
 }
