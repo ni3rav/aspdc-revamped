@@ -8,7 +8,6 @@ export async function GET() {
             .select()
             .from(upcomingEvents)
             .orderBy(asc(upcomingEvents.name))
-
         return Response.json(data)
     } catch (error) {
         console.error('Error fetching upcoming events:', error)

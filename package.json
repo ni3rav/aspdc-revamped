@@ -15,7 +15,6 @@
         "*.{js,ts,tsx,css,md}": "pnpm dlx prettier --write ."
     },
     "dependencies": {
-        "@clerk/nextjs": "^6.31.4",
         "@gsap/react": "^2.1.2",
         "@neondatabase/serverless": "^1.0.1",
         "@radix-ui/react-avatar": "^1.1.10",
