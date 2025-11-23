@@ -13,7 +13,6 @@ Our site is built with:
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [shadcn/ui](https://ui.shadcn.com/)
-- [React Query](https://tanstack.com/query/latest) (for data fetching and hooks)
 - [Neon + Drizzle ORM](https://orm.drizzle.team/) (database)
 
 ---
