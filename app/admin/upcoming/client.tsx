@@ -31,6 +31,8 @@ import {
     deleteUpcomingEvent,
 } from '@/db/mutations'
 import { useRouter } from 'next/navigation'
+import { formatDate } from '@/lib/date-utils'
+import { useEffect } from 'react'
 
 interface UpcomingEventsAdminClientProps {
     initialData: UpcomingEvent[]
@@ -40,7 +42,12 @@ export default function UpcomingEventsAdminClient({
     initialData,
 }: UpcomingEventsAdminClientProps) {
     const router = useRouter()
-    const [upcomingEvents] = useState(initialData)
+    const [upcomingEvents, setUpcomingEvents] = useState(initialData)
+
+    // Update state when initialData changes (after router.refresh())
+    useEffect(() => {
+        setUpcomingEvents(initialData)
+    }, [initialData])
     const [isCreateOpen, setIsCreateOpen] = useState(false)
     const [editingId, setEditingId] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)

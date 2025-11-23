@@ -31,6 +31,8 @@ import {
     deleteAchievement,
 } from '@/db/mutations'
 import { useRouter } from 'next/navigation'
+import { formatDate } from '@/lib/date-utils'
+import { useEffect } from 'react'
 
 interface AchievementsAdminClientProps {
     initialData: Achievement[]
@@ -40,10 +42,15 @@ export default function AchievementsAdminClient({
     initialData,
 }: AchievementsAdminClientProps) {
     const router = useRouter()
-    const [achievements] = useState(initialData)
+    const [achievements, setAchievements] = useState(initialData)
     const [isCreateOpen, setIsCreateOpen] = useState(false)
     const [editingId, setEditingId] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+    // Update state when initialData changes (after router.refresh())
+    useEffect(() => {
+        setAchievements(initialData)
+    }, [initialData])
 
     const [formData, setFormData] = useState({
         title: '',
@@ -277,11 +284,7 @@ export default function AchievementsAdminClient({
                                         {achievement.description}
                                     </TableCell>
                                     <TableCell>
-                                        {achievement.date instanceof Date
-                                            ? achievement.date.toLocaleDateString()
-                                            : new Date(
-                                                  achievement.date
-                                              ).toLocaleDateString()}
+                                        {formatDate(achievement.date)}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">

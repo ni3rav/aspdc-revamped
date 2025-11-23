@@ -27,6 +27,8 @@ import { blogSchema } from '@/lib/admin-schemas'
 import type { Blog } from '@/db/types'
 import { addBlog, updateBlog, deleteBlog } from '@/db/mutations'
 import { useRouter } from 'next/navigation'
+import { formatDate } from '@/lib/date-utils'
+import { useEffect } from 'react'
 
 interface BlogsAdminClientProps {
     initialData: Blog[]
@@ -36,8 +38,13 @@ export default function BlogsAdminClient({
     initialData,
 }: BlogsAdminClientProps) {
     const router = useRouter()
-    const [blogs] = useState(initialData)
+    const [blogs, setBlogs] = useState(initialData)
     const [isCreateOpen, setIsCreateOpen] = useState(false)
+
+    // Update state when initialData changes (after router.refresh())
+    useEffect(() => {
+        setBlogs(initialData)
+    }, [initialData])
     const [editingId, setEditingId] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -291,11 +298,7 @@ export default function BlogsAdminClient({
                                     </TableCell>
                                     <TableCell>{blog.author}</TableCell>
                                     <TableCell>
-                                        {blog.publishDate instanceof Date
-                                            ? blog.publishDate.toLocaleDateString()
-                                            : new Date(
-                                                  blog.publishDate
-                                              ).toLocaleDateString()}
+                                        {formatDate(blog.publishDate)}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">

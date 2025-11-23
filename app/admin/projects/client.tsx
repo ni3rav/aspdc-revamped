@@ -27,6 +27,7 @@ import { projectSchema } from '@/lib/admin-schemas'
 import type { Project } from '@/db/types'
 import { addProject, updateProject, deleteProject } from '@/db/mutations'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 interface ProjectsAdminClientProps {
     initialData: Project[]
@@ -36,7 +37,12 @@ export default function ProjectsAdminClient({
     initialData,
 }: ProjectsAdminClientProps) {
     const router = useRouter()
-    const [projects] = useState(initialData)
+    const [projects, setProjects] = useState(initialData)
+
+    // Update state when initialData changes (after router.refresh())
+    useEffect(() => {
+        setProjects(initialData)
+    }, [initialData])
     const [isCreateOpen, setIsCreateOpen] = useState(false)
     const [editingId, setEditingId] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)

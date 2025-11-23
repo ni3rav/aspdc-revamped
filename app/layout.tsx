@@ -3,7 +3,7 @@ import { Space_Grotesk } from 'next/font/google'
 import { Suspense } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
-import Navbar from '@/components/Navbar'
+import ConditionalNavbar from '@/components/ConditionalNavbar'
 import DotGrid from '@/components/bits/DotGrid/DotGrid'
 import Footer from '@/components/Footer'
 
@@ -41,7 +41,7 @@ export default function RootLayout({
                         />
                     </div>
                     <Suspense fallback={null}>
-                        <Navbar />
+                        <ConditionalNavbar />
                     </Suspense>
                 </div>
                 <div className="mt-9 sm:mt-0">{children}</div>

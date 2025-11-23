@@ -27,6 +27,8 @@ import { eventSchema } from '@/lib/admin-schemas'
 import type { Event } from '@/db/types'
 import { addEvent, updateEvent, deleteEvent } from '@/db/mutations'
 import { useRouter } from 'next/navigation'
+import { formatDate } from '@/lib/date-utils'
+import { useEffect } from 'react'
 
 interface EventsAdminClientProps {
     initialData: Event[]
@@ -36,7 +38,12 @@ export default function EventsAdminClient({
     initialData,
 }: EventsAdminClientProps) {
     const router = useRouter()
-    const [events] = useState(initialData)
+    const [events, setEvents] = useState(initialData)
+
+    // Update state when initialData changes (after router.refresh())
+    useEffect(() => {
+        setEvents(initialData)
+    }, [initialData])
     const [isCreateOpen, setIsCreateOpen] = useState(false)
     const [editingId, setEditingId] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
