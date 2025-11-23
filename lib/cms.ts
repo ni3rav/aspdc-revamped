@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache'
 import { createZenblogClient } from 'zenblog'
 
 const zenblog = createZenblogClient({ blogId: process.env.ZENBLOG_BLOG_ID! })
@@ -14,6 +15,9 @@ export async function fetchAllDigest({
     offset = 0,
     category,
 }: fetchDigestParams = {}) {
+    'use cache'
+    cacheLife('hours')
+
     try {
         const digest = await zenblog.posts.list({
             limit,
@@ -28,6 +32,9 @@ export async function fetchAllDigest({
 }
 
 export async function fetchDigestBySlug(slug: string) {
+    'use cache'
+    cacheLife('hours')
+
     try {
         const post = await zenblog.posts.get({ slug })
         return post

@@ -79,6 +79,17 @@
                 "linkedin": "http://www.linkedin.com/in/dwij-gosai"
             },
             {
+                "id": 67,
+                "name": "Manan Patel",
+                "role": "Member",
+                "avatar": "/team/manan.jpg",
+                "blur": "/team/tiny/manan.jpg",
+                "github": "https://github.com/MANANPATEL7310",
+                "instagram": null,
+                "x": null,
+                "linkedin": "https://www.linkedin.com/in/manan-patel-753560348/"
+            },
+            {
                 "id": 7,
                 "name": "Tirth Choksi",
                 "role": "Member",

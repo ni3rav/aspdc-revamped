@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache'
 import { db } from '@/db/drizzle'
 import {
     achievements,
@@ -19,6 +20,9 @@ import { asc, desc } from 'drizzle-orm'
 
 // ----------------- Achievements -----------------
 export async function fetchAchievements(): Promise<Achievement[]> {
+    'use cache'
+    cacheLife('hours')
+
     try {
         const rows = await db
             .select()
@@ -37,6 +41,9 @@ export async function fetchAchievements(): Promise<Achievement[]> {
 
 // ----------------- Blogs -----------------
 export async function fetchBlogs(): Promise<Blog[]> {
+    'use cache'
+    cacheLife('hours')
+
     try {
         const rows = await db
             .select()
@@ -55,6 +62,9 @@ export async function fetchBlogs(): Promise<Blog[]> {
 
 // ----------------- Events -----------------
 export async function fetchEvents(): Promise<Event[]> {
+    'use cache'
+    cacheLife('hours')
+
     try {
         const rows = await db.select().from(events).orderBy(desc(events.date))
         return rows.map((row) => ({
@@ -88,6 +98,9 @@ export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
 
 // ----------------- Projects -----------------
 export async function fetchProjects(): Promise<Project[]> {
+    'use cache'
+    cacheLife('hours')
+
     try {
         const rows = await db
             .select()
@@ -105,6 +118,9 @@ export async function fetchProjects(): Promise<Project[]> {
 
 // ----------------- Upcoming Events -----------------
 export async function fetchUpcomingEvents(): Promise<UpcomingEvent[]> {
+    'use cache'
+    cacheLife({ stale: 1800, revalidate: 3600 }) // 30 min stale, 1 hour revalidate
+
     try {
         const rows = await db
             .select()

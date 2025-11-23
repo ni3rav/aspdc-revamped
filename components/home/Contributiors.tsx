@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache'
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -35,6 +36,9 @@ type Contributor = {
 }
 
 async function fetchContributors(): Promise<Contributor[]> {
+    'use cache'
+    cacheLife('hours')
+
     try {
         const response = await fetch(
             'https://api.github.com/repos/aspdc/aspdc-revamped/contributors'

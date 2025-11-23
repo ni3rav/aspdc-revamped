@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Space_Grotesk } from 'next/font/google'
+import { Suspense } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 import Navbar from '@/components/Navbar'
@@ -39,7 +40,9 @@ export default function RootLayout({
                             className="h-full w-full"
                         />
                     </div>
-                    <Navbar />
+                    <Suspense fallback={null}>
+                        <Navbar />
+                    </Suspense>
                 </div>
                 <div className="mt-9 sm:mt-0">{children}</div>
                 <Footer />
