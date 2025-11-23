@@ -49,7 +49,13 @@ export async function addAchievement(achievement: NewAchievement) {
 
 export async function addBlog(blog: NewBlog) {
     try {
-        await db.insert(blogs).values(blog)
+        await db.insert(blogs).values({
+            ...blog,
+            publishDate:
+                blog.publishDate instanceof Date
+                    ? blog.publishDate
+                    : new Date(blog.publishDate),
+        })
     } catch (error) {
         console.error('Error in addBlog:', error)
         throw error
@@ -58,7 +64,12 @@ export async function addBlog(blog: NewBlog) {
 
 export async function addEvent(event: NewEvent) {
     try {
-        await db.insert(events).values(event)
+        await db.insert(events).values({
+            ...event,
+            date:
+                event.date instanceof Date ? event.date : new Date(event.date),
+            imageUrls: event.imageUrls ?? [],
+        })
     } catch (error) {
         console.error('Error in addEvent:', error)
         throw error
@@ -76,7 +87,11 @@ export async function addLeaderboardEntry(entry: NewLeaderboardEntry) {
 
 export async function addUpcomingEvent(event: NewUpcomingEvent) {
     try {
-        await db.insert(upcomingEvents).values(event)
+        await db.insert(upcomingEvents).values({
+            ...event,
+            date:
+                event.date instanceof Date ? event.date : new Date(event.date),
+        })
     } catch (error) {
         console.error('Error in addUpcomingEvent:', error)
         throw error
@@ -123,9 +138,18 @@ export async function updateAchievement(
 
 export async function updateBlog(id: string, updates: Partial<Blog>) {
     try {
+        const adaptedData = {
+            ...updates,
+            ...(updates.publishDate && {
+                publishDate:
+                    updates.publishDate instanceof Date
+                        ? updates.publishDate
+                        : new Date(updates.publishDate),
+            }),
+        }
         return await db
             .update(blogs)
-            .set(updates)
+            .set(adaptedData)
             .where(eq(blogs.id, id))
             .returning()
     } catch (error) {
@@ -136,9 +160,21 @@ export async function updateBlog(id: string, updates: Partial<Blog>) {
 
 export async function updateEvent(id: string, updates: Partial<Event>) {
     try {
+        const adaptedData = {
+            ...updates,
+            ...(updates.date && {
+                date:
+                    updates.date instanceof Date
+                        ? updates.date
+                        : new Date(updates.date),
+            }),
+            ...(updates.imageUrls !== undefined && {
+                imageUrls: updates.imageUrls ?? [],
+            }),
+        }
         return await db
             .update(events)
-            .set(updates)
+            .set(adaptedData)
             .where(eq(events.id, id))
             .returning()
     } catch (error) {
@@ -168,9 +204,18 @@ export async function updateUpcomingEvent(
     updates: Partial<UpcomingEvent>
 ) {
     try {
+        const adaptedData = {
+            ...updates,
+            ...(updates.date && {
+                date:
+                    updates.date instanceof Date
+                        ? updates.date
+                        : new Date(updates.date),
+            }),
+        }
         return await db
             .update(upcomingEvents)
-            .set(updates)
+            .set(adaptedData)
             .where(eq(upcomingEvents.id, id))
             .returning()
     } catch (error) {
