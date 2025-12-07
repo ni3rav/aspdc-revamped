@@ -12,7 +12,7 @@ const Navbar = () => {
         { name: 'Achievments', url: '/achievements' },
         { name: 'Projects', url: '/projects' },
         { name: 'Blogs', url: '/blogs' },
-        ...(SHOW_AOC ? [{ name: 'AoC 2025', url: '/aoc' }] : []),
+        ...(SHOW_AOC ? [{ name: 'AoC', url: '/aoc' }] : []),
         // { name: 'Digest', url: '/digest' },
         // { name: 'Leaderboard', url: '/leaderboard' },
     ]
@@ -23,7 +23,7 @@ const Navbar = () => {
         { name: 'Upcoming', url: '/upcoming' },
         { name: 'Events', url: '/events' },
         { name: 'Achievments', url: '/achievements' },
-        ...(SHOW_AOC ? [{ name: 'AoC 2025', url: '/aoc' }] : []),
+        ...(SHOW_AOC ? [{ name: 'AoC', url: '/aoc' }] : []),
     ]
 
     return (
