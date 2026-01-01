@@ -1,5 +1,6 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { db } from '@/db/drizzle'
 import {
     achievements,
@@ -8,6 +9,7 @@ import {
     leaderboard,
     projects,
     upcomingEvents,
+    votes,
 } from '@/db/schema'
 import type {
     Achievement,
@@ -23,7 +25,7 @@ import type {
     Project,
     UpcomingEvent,
 } from '@/db/types'
-import { eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 
 // ----------------- Date Helpers -----------------
 function normalizeDate(date: Date | string): Date {
@@ -264,6 +266,79 @@ export async function deleteUpcomingEvent(id: string) {
         await db.delete(upcomingEvents).where(eq(upcomingEvents.id, id))
     } catch (error) {
         console.error('Error in deleteUpcomingEvent:', error)
+        throw error
+    }
+}
+
+// ----------------- Votes (Ship-It) -----------------
+function getClientIP(): string | null {
+    try {
+        const headersList = headers()
+        // Try various headers that might contain the IP
+        const forwarded = headersList.get('x-forwarded-for')
+        const realIP = headersList.get('x-real-ip')
+        const cfConnectingIP = headersList.get('cf-connecting-ip')
+
+        if (forwarded) {
+            return forwarded.split(',')[0].trim()
+        }
+        if (realIP) {
+            return realIP
+        }
+        if (cfConnectingIP) {
+            return cfConnectingIP
+        }
+        return null
+    } catch {
+        return null
+    }
+}
+
+function getUserAgent(): string | null {
+    try {
+        const headersList = headers()
+        return headersList.get('user-agent')
+    } catch {
+        return null
+    }
+}
+
+export async function addVote(projectId: string) {
+    try {
+        const ipAddress = getClientIP()
+        const userAgent = getUserAgent()
+
+        await db.insert(votes).values({
+            projectId,
+            ipAddress: ipAddress || null,
+            userAgent: userAgent || null,
+        })
+    } catch (error) {
+        // If duplicate vote (same IP + project), silently fail or handle gracefully
+        console.error('Error in addVote:', error)
+        throw error
+    }
+}
+
+export async function removeVote(projectId: string) {
+    try {
+        const ipAddress = getClientIP()
+
+        if (ipAddress) {
+            await db
+                .delete(votes)
+                .where(
+                    and(
+                        eq(votes.projectId, projectId),
+                        eq(votes.ipAddress, ipAddress)
+                    )
+                )
+        } else {
+            // If no IP, try to delete any vote for this project (less secure but works)
+            await db.delete(votes).where(eq(votes.projectId, projectId))
+        }
+    } catch (error) {
+        console.error('Error in removeVote:', error)
         throw error
     }
 }

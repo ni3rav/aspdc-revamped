@@ -1,0 +1,155 @@
+[
+    {
+        "name": "Jhanvi patel",
+        "projectName": "VisualBrief",
+        "shortProjectDescription": "turns long documents or text descriptions into concise summaries and interactive diagrams. currently uses classical NLP techniques for sentence scoring, entity extraction, and relationship parsing, going to improve as i learn newer concepts.",
+        "gitHubRepositoryUrl": "https://github.com/jhanvi857/VisualBrief",
+        "liveProjectUrl": "https://images2.imgbox.com/4a/2e/WJvoMsb6_o.png",
+        "projectImageUrl": null,
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Jhanvi patel",
+        "projectName": "Route optimizer",
+        "shortProjectDescription": "traffic aware multiple stops including path finding system using custom dijkstra. for traffic, as of now linear regression is used, improving with XGboost",
+        "gitHubRepositoryUrl": "https://github.com/jhanvi857/route-optimizer",
+        "liveProjectUrl": "https://route-optimizer-one.vercel.app/",
+        "projectImageUrl": "https://images2.imgbox.com/b7/be/QJFcpYRN_o.png",
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Jhanvi patel",
+        "projectName": "DSA visualizer",
+        "shortProjectDescription": "web app that visually demonstrates how data structures and algorithms work step-by-step Including animations for data structures , popular algorithms and some classical DSA problems.",
+        "gitHubRepositoryUrl": "https://github.com/jhanvi857/dsa-visualizer",
+        "liveProjectUrl": "https://dsa-visualizer-gilt.vercel.app/",
+        "projectImageUrl": "https://images2.imgbox.com/09/19/UpGNuexp_o.png",
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Vrajesh Sharma",
+        "projectName": "Shipit Or Skipit",
+        "shortProjectDescription": "ShipIt or SkipIt is an AI-powered GitHub project reviewer designed to simulate how a senior developer evaluates a project. It analyzes repository to provide honest feedback, constructive suggestions, and a final verdict - Ship It, Almost There, or Skip It.  Along with showcasing practical AI evaluation, the project intentionally demonstrates how bias can be introduced into AI systems. For specific known inputs, the system applies a controlled positive bias as an educational example, highlighting how real-world AI decisions can be influenced by design choices.  The project focuses on transparency, learning, and helping builders understand both technical quality and AI system behavior.",
+        "gitHubRepositoryUrl": "https://github.com/Vrajesh-Sharma/ShipOrSkip",
+        "liveProjectUrl": "https://shiporskip.onrender.com/",
+        "projectImageUrl": "https://images2.imgbox.com/bc/5f/J9xEKPz8_o.png",
+        "videoExplanationUrl": "https://drive.google.com/file/d/1_pRWj8w0xsmMFaeCsmqaKy-5t3RMvT53/view?usp=sharing"
+    },
+    {
+        "name": "Priyanshu Jajal",
+        "projectName": "FocusFlow",
+        "shortProjectDescription": "FocusFlow is a responsive Pomodoro‑style productivity app with focus, short, and long break modes. It tracks streaks, manages tasks, let users toggle features from settings & celebrates progress with confetti bursts & motivating messages.",
+        "gitHubRepositoryUrl": "https://github.com/PriyanshuJajal/FocusFlow",
+        "liveProjectUrl": "https://focus-flow-web-app.vercel.app/",
+        "projectImageUrl": "https://i.postimg.cc/V6kk9QhZ/Focus-Flow.png",
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Nirav Maheta",
+        "projectName": "Raven",
+        "shortProjectDescription": "A cli based fuzzy search memory engine",
+        "gitHubRepositoryUrl": "https://github.com/ni3rav/raven",
+        "liveProjectUrl": null,
+        "projectImageUrl": null,
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Smit Prajapati",
+        "projectName": "Twitter Posting AI Agent",
+        "shortProjectDescription": "An AI Agent powered by an MCP server  that interprets user commands and publishes posts on X (Twitter) autonomously. I use Grok API key in this project.",
+        "gitHubRepositoryUrl": "https://github.com/smitprajapati0301/Twitter-Posting-AI-Agent",
+        "liveProjectUrl": null,
+        "projectImageUrl": null,
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Jatin Kevlani",
+        "projectName": "InterviewGPT",
+        "shortProjectDescription": "InterviewGPT - AI Mock Interview Platform  An intelligent voice-based mock interview system built using Python, LiveKit, and Next.js. The platform simulates real interview scenarios by allowing users to select their role, experience level, and interview type (technical, HR, or behavioral).  It uses real-time speech recognition, AI-powered questioning, and dynamic follow-up logic to conduct realistic interviews, evaluate responses, and provide structured feedback on communication skills, technical understanding, and confidence.  Designed to help users practice interviews in a realistic environment and improve their performance through interactive, AI-driven conversations.",
+        "gitHubRepositoryUrl": "https://github.com/JatinKevlani/InterviewGPT",
+        "liveProjectUrl": "https://www.jatinkevlani.tech/projects/InterviewGPT https://jatinkevlani.dev/",
+        "projectImageUrl": "https://images2.imgbox.com/c1/76/bEda7zkQ_o.png",
+        "videoExplanationUrl": "https://drive.google.com/drive/folders/1HiJLL0jc5UFtPAwWUda53CMbWi3hY8oM?usp=sharing https://youtu.be/0QiWmSL7Iek"
+    },
+    {
+        "name": "Nikhil R Naraniya",
+        "projectName": "GearGuard",
+        "shortProjectDescription": "GearGuard is a simple maintenance management portal. (It's a group project)",
+        "gitHubRepositoryUrl": "https://github.com/NikzRN01/GearGuard_Nikhil_Rajkamal_Naraniya",
+        "liveProjectUrl": "https://gearguardodoo.vercel.app/login",
+        "projectImageUrl": null,
+        "videoExplanationUrl": "https://youtu.be/lY47Ak31uEo"
+    },
+    {
+        "name": "Hitarth Patel",
+        "projectName": "HackTeamMatcher Pro",
+        "shortProjectDescription": "HackteamMatcher is a website to find teammates for a hackathon team according to your choice or to join a hackathon team of your choice , it simplies finding teammates and removes multiple dms to different people",
+        "gitHubRepositoryUrl": "https://github.com/hitarthpatel2404/HackTeamMatcher",
+        "liveProjectUrl": null,
+        "projectImageUrl": null,
+        "videoExplanationUrl": "https://drive.google.com/file/d/1KQJeK1fo3CflYaa6uIDAt_z97gLthGs-/view?usp=drive_link"
+    },
+    {
+        "name": "Palak Maithia",
+        "projectName": "Retail Shop Billing and Inventory Management",
+        "shortProjectDescription": "This is a Retail shop billing and inventory management which is made using Apache NetBeans IDE with JAVA (backend) and connecting MySQL for the database.",
+        "gitHubRepositoryUrl": "https://github.com/palakmaithia09/Retail-Shop-Billing-and-Inventory-Management/tree/main",
+        "liveProjectUrl": null,
+        "projectImageUrl": null,
+        "videoExplanationUrl": "https://drive.google.com/file/d/1o_8kXI0Yz5nivY86d92kvSFE7A_Qv4Op/view?usp=drive_link"
+    },
+    {
+        "name": "Richa Gupta",
+        "projectName": "UniLibrary",
+        "shortProjectDescription": "UniLibrary is a modern, dual-interface application designed to streamline university library operations. It bridges the gap between administrators and students by providing a seamless dashboard for inventory management and a smart discovery portal for students. Key features include real-time availability checks, semester-based filtering, and a unique fallback system that suggests digital resources when physical books are out of stock.",
+        "gitHubRepositoryUrl": "https://github.com/Richa-2005/UniLibrary",
+        "liveProjectUrl": null,
+        "projectImageUrl": "https://images2.imgbox.com/b5/57/CuB6JmIt_o.png",
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Krina parmar",
+        "projectName": "NeuroNix",
+        "shortProjectDescription": "NeuroNix is a web-based dashboard that analyzes sleep, study, stress, and caffeine data to visualize focus, cognitive load, and productivity in real time.",
+        "gitHubRepositoryUrl": "https://github.com/krina2005/Neuronix",
+        "liveProjectUrl": "https://neuronix.onrender.com/",
+        "projectImageUrl": "https://images2.imgbox.com/4c/e3/tIzfexWS_o.png",
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Devansh Rajput",
+        "projectName": "Synapse",
+        "shortProjectDescription": "(PC- 3. Developer Tools & Utilities) : Synapse is an advanced AI-powered codebase visualization and analysis tool designed for developers. It allows users to visualize GitHub repositories as interactive file trees, chat with an AI assistant that has deep context of the codebase (using OpenRouter/NVIDIA models), and view file contents with rich syntax highlighting. Built with a modern React/Vite frontend and a serverless Cloudflare Workers backend, it features a glassmorphic UI, supports live website previews, and includes agentic tools for reading files, searching the web, and analyzing repository architecture in real-time.",
+        "gitHubRepositoryUrl": "https://github.com/Devansh-66/Shipit-3",
+        "liveProjectUrl": "https://shipit-3.pages.dev/",
+        "projectImageUrl": "https://images2.imgbox.com/5d/09/xM51TzPf_o.png",
+        "videoExplanationUrl": "https://drive.google.com/drive/folders/13q3HXDon1gHK4IEOMNIjsPvdfPK5ulRg?usp=sharing"
+    },
+    {
+        "name": "Tirth Jain",
+        "projectName": "Unistop",
+        "shortProjectDescription": "Unistop brings hackathon from multiple platforms to a single platform. It helps students to get information and direction on single platform.",
+        "gitHubRepositoryUrl": "https://github.com/Jain-Tirth/OpportuneX",
+        "liveProjectUrl": "https://unistop.vercel.app",
+        "projectImageUrl": "https://files.catbox.moe/gdl97g.png",
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Dwij Gosai",
+        "projectName": "CloudBrain",
+        "shortProjectDescription": "A fun small project .It is use to save links of ur favroute youtube vdos or tweets or docs or link in better visuallyu likable way with embeddings and u can also share ur brain.",
+        "gitHubRepositoryUrl": "https://github.com/Dwij45/CloudBrain",
+        "liveProjectUrl": null,
+        "projectImageUrl": "https://images2.imgbox.com/05/d3/9FR5QKtd_o.png",
+        "videoExplanationUrl": null
+    },
+    {
+        "name": "Shaurya Jadaun",
+        "projectName": "BookMyBook",
+        "shortProjectDescription": "BookMyBook is a comprehensive Flask-based web application designed to create a community-driven marketplace for book enthusiasts. The platform facilitates the circular economy of reading by allowing users to buy, borrow, or barter books with one another.  Core Functionality User Marketplace: Users can browse a dynamic gallery of books uploaded by the community, excluding their own listings to prioritize new discoveries.",
+        "gitHubRepositoryUrl": "https://github.com/ShauryaJadaun7/Book_My_Book",
+        "liveProjectUrl": null,
+        "projectImageUrl": "https://images2.imgbox.com/f6/66/sacvw0DY_o.png",
+        "videoExplanationUrl": "https://drive.google.com/file/d/1e2EVOZM62xwpiOMnb_jdgXLrAVVBkm6R/view?usp=drive_link"
+    }
+]

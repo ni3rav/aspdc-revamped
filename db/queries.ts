@@ -7,6 +7,7 @@ import {
     leaderboard,
     projects,
     upcomingEvents,
+    votes,
 } from '@/db/schema'
 import {
     Achievement,
@@ -16,7 +17,7 @@ import {
     Project,
     UpcomingEvent,
 } from '@/db/types'
-import { asc, desc } from 'drizzle-orm'
+import { asc, desc, eq, sql } from 'drizzle-orm'
 
 // ----------------- Achievements -----------------
 export async function fetchAchievements(): Promise<Achievement[]> {
@@ -134,5 +135,44 @@ export async function fetchUpcomingEvents(): Promise<UpcomingEvent[]> {
     } catch (error) {
         console.error('Error fetching upcoming events:', error)
         return []
+    }
+}
+
+// ----------------- Votes (Ship-It) -----------------
+export async function getVoteCounts(): Promise<Record<string, number>> {
+    'use cache'
+    cacheLife({ stale: 30, revalidate: 60 }) // 30 seconds stale, 1 minute revalidate
+
+    try {
+        const voteCounts = await db
+            .select({
+                projectId: votes.projectId,
+                count: sql<number>`count(*)::int`,
+            })
+            .from(votes)
+            .groupBy(votes.projectId)
+
+        const countsMap: Record<string, number> = {}
+        for (const row of voteCounts) {
+            countsMap[row.projectId] = row.count
+        }
+        return countsMap
+    } catch (error) {
+        console.error('Error fetching vote counts:', error)
+        return {}
+    }
+}
+
+export async function getVoteCount(projectId: string): Promise<number> {
+    try {
+        const result = await db
+            .select({ count: sql<number>`count(*)::int` })
+            .from(votes)
+            .where(eq(votes.projectId, projectId))
+
+        return result[0]?.count || 0
+    } catch (error) {
+        console.error('Error fetching vote count:', error)
+        return 0
     }
 }

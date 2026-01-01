@@ -9,6 +9,7 @@ import {
     date,
     boolean,
     index,
+    uniqueIndex,
 } from 'drizzle-orm/pg-core'
 
 // Events table
@@ -175,3 +176,24 @@ export const accountRelations = relations(account, ({ one }) => ({
         references: [user.id],
     }),
 }))
+
+// Votes table for Ship-It voting
+export const votes = pgTable(
+    'votes',
+    {
+        id: uuid().defaultRandom().primaryKey(),
+        projectId: text('project_id').notNull(), // Unique identifier from JSON (name + projectName)
+        ipAddress: text('ip_address'),
+        userAgent: text('user_agent'),
+        createdAt: timestamp('created_at').defaultNow().notNull(),
+    },
+    (table) => [
+        index('votes_projectId_idx').on(table.projectId),
+        index('votes_ipAddress_idx').on(table.ipAddress),
+        // Prevent duplicate votes from same IP for same project
+        uniqueIndex('votes_projectId_ipAddress_idx').on(
+            table.projectId,
+            table.ipAddress
+        ),
+    ]
+)
