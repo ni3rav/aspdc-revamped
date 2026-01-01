@@ -2,8 +2,6 @@ import MobileNavbar from './MobileNavbar'
 import { NavBarLg, NavBarXl } from './ui/tubelight-navbar'
 
 const Navbar = () => {
-    const SHOW_AOC = process.env.NEXT_PUBLIC_ENABLE_AOC === 'true'
-
     const xlNavItems = [
         { name: 'Home', url: '/' },
         { name: 'Team', url: '/team' },
@@ -12,7 +10,7 @@ const Navbar = () => {
         { name: 'Achievments', url: '/achievements' },
         { name: 'Projects', url: '/projects' },
         { name: 'Blogs', url: '/blogs' },
-        ...(SHOW_AOC ? [{ name: 'AoC', url: '/aoc' }] : []),
+        { name: 'ShipIt', url: '/ship-it' },
         // { name: 'Digest', url: '/digest' },
         // { name: 'Leaderboard', url: '/leaderboard' },
     ]
@@ -23,7 +21,7 @@ const Navbar = () => {
         { name: 'Upcoming', url: '/upcoming' },
         { name: 'Events', url: '/events' },
         { name: 'Achievments', url: '/achievements' },
-        ...(SHOW_AOC ? [{ name: 'AoC', url: '/aoc' }] : []),
+        { name: 'ShipIt', url: '/ship-it' },
     ]
 
     return (

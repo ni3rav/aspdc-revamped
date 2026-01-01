@@ -55,6 +55,13 @@ export function MrPeng({ messages, image }: MrPengProps) {
                 {/* Message Bubble */}
                 {showBubble && allMessages.length > 0 && (
                     <div className="absolute right-0 bottom-[4.5rem] z-50 mb-2 w-40 rounded-lg border-2 border-black bg-white px-3 py-2 shadow-lg md:bottom-22 md:w-56 md:px-4 md:py-3">
+                        <button
+                            onClick={() => setShowBubble(false)}
+                            className="absolute top-2 left-2 text-black transition-colors hover:text-gray-600"
+                            aria-label="Close message"
+                        >
+                            ✕
+                        </button>
                         <SafeHtmlContent
                             className="[&_a]:text-primary hover:[&_a]:text-primary/80 text-center font-mono text-xs leading-relaxed font-bold whitespace-pre-wrap text-black [&_a]:underline"
                             content={allMessages[currentMessageIndex]}
