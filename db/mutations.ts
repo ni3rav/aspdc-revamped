@@ -271,9 +271,9 @@ export async function deleteUpcomingEvent(id: string) {
 }
 
 // ----------------- Votes (Ship-It) -----------------
-function getClientIP(): string | null {
+async function getClientIP(): Promise<string | null> {
     try {
-        const headersList = headers()
+        const headersList = await headers()
         // Try various headers that might contain the IP
         const forwarded = headersList.get('x-forwarded-for')
         const realIP = headersList.get('x-real-ip')
@@ -294,9 +294,9 @@ function getClientIP(): string | null {
     }
 }
 
-function getUserAgent(): string | null {
+async function getUserAgent(): Promise<string | null> {
     try {
-        const headersList = headers()
+        const headersList = await headers()
         return headersList.get('user-agent')
     } catch {
         return null
@@ -305,8 +305,8 @@ function getUserAgent(): string | null {
 
 export async function addVote(projectId: string) {
     try {
-        const ipAddress = getClientIP()
-        const userAgent = getUserAgent()
+        const ipAddress = await getClientIP()
+        const userAgent = await getUserAgent()
 
         await db.insert(votes).values({
             projectId,
@@ -322,7 +322,7 @@ export async function addVote(projectId: string) {
 
 export async function removeVote(projectId: string) {
     try {
-        const ipAddress = getClientIP()
+        const ipAddress = await getClientIP()
 
         if (ipAddress) {
             await db
