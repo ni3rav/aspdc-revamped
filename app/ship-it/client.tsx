@@ -57,13 +57,57 @@ export default function ShipItClient({
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {projects.map((project) => {
+                {projects.map((project, index) => {
+                    // Determine rank (top 3)
+                    const rank =
+                        index === 0
+                            ? 1
+                            : index === 1
+                              ? 2
+                              : index === 2
+                                ? 3
+                                : null
+
+                    const getRankBadgeColor = (rankNum: number | null) => {
+                        switch (rankNum) {
+                            case 1:
+                                return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+                            case 2:
+                                return 'bg-gray-400/20 text-gray-300 border-gray-400/30'
+                            case 3:
+                                return 'bg-orange-500/20 text-orange-400 border-orange-500/30'
+                            default:
+                                return ''
+                        }
+                    }
+
+                    const getRankLabel = (rankNum: number | null) => {
+                        switch (rankNum) {
+                            case 1:
+                                return '🥇 1st Place'
+                            case 2:
+                                return '🥈 2nd Place'
+                            case 3:
+                                return '🥉 3rd Place'
+                            default:
+                                return ''
+                        }
+                    }
+
                     return (
                         <CardContainer
                             key={project.id}
                             className="inter-var w-full"
                         >
                             <CardBody className="group/card relative min-h-[32rem] w-full overflow-hidden rounded-xl border border-white/[0.2] bg-black p-4 hover:shadow-2xl hover:shadow-emerald-500/[0.1] sm:p-6">
+                                {rank && (
+                                    <CardItem
+                                        translateZ="80"
+                                        className={`absolute top-4 right-4 rounded-lg border px-3 py-1 text-xs font-bold ${getRankBadgeColor(rank)}`}
+                                    >
+                                        {getRankLabel(rank)}
+                                    </CardItem>
+                                )}
                                 <CardItem
                                     translateZ="70"
                                     className="text-lg font-bold text-white sm:text-xl"
