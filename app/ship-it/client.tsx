@@ -10,10 +10,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog'
-import { Github, Heart, ExternalLink, Play, Info } from 'lucide-react'
-import { addVote, removeVote } from '@/db/mutations'
+import { Github, ExternalLink, Play, Info, ThumbsUp } from 'lucide-react'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 
 const STORAGE_KEY = 'shipit-votes'
 const MAX_VOTES = 2
@@ -39,99 +37,7 @@ export default function ShipItClient({
     initialProjects,
     initialVoteCounts,
 }: ShipItClientProps) {
-    const router = useRouter()
     const [projects, setProjects] = useState(initialProjects)
-    const [votedProjects, setVotedProjects] = useState<Set<string>>(new Set())
-    const [isVoting, setIsVoting] = useState<string | null>(null)
-
-    // Load voted projects from localStorage on mount
-    useEffect(() => {
-        const stored = localStorage.getItem(STORAGE_KEY)
-        if (stored) {
-            try {
-                const votes = JSON.parse(stored) as string[]
-                setVotedProjects(new Set(votes))
-            } catch (error) {
-                console.error('Error parsing stored votes:', error)
-            }
-        }
-    }, [])
-
-    const handleVote = async (projectId: string) => {
-        if (isVoting) return
-
-        const isVoted = votedProjects.has(projectId)
-
-        if (isVoted) {
-            // Remove vote
-            setIsVoting(projectId)
-            try {
-                // Get IP address from headers (will be handled server-side)
-                await removeVote(projectId)
-
-                const newVotedProjects = new Set(votedProjects)
-                newVotedProjects.delete(projectId)
-                setVotedProjects(newVotedProjects)
-                localStorage.setItem(
-                    STORAGE_KEY,
-                    JSON.stringify(Array.from(newVotedProjects))
-                )
-
-                // Update vote count locally
-                setProjects((prev) =>
-                    prev.map((p) =>
-                        p.id === projectId
-                            ? { ...p, voteCount: Math.max(0, p.voteCount - 1) }
-                            : p
-                    )
-                )
-
-                toast.success('Vote removed')
-                router.refresh()
-            } catch (error) {
-                console.error('Error removing vote:', error)
-                toast.error('Failed to remove vote')
-            } finally {
-                setIsVoting(null)
-            }
-        } else {
-            // Add vote
-            if (votedProjects.size >= MAX_VOTES) {
-                toast.error(`You can only vote for ${MAX_VOTES} projects`)
-                return
-            }
-
-            setIsVoting(projectId)
-            try {
-                await addVote(projectId)
-
-                const newVotedProjects = new Set(votedProjects)
-                newVotedProjects.add(projectId)
-                setVotedProjects(newVotedProjects)
-                localStorage.setItem(
-                    STORAGE_KEY,
-                    JSON.stringify(Array.from(newVotedProjects))
-                )
-
-                // Update vote count locally
-                setProjects((prev) =>
-                    prev.map((p) =>
-                        p.id === projectId
-                            ? { ...p, voteCount: p.voteCount + 1 }
-                            : p
-                    )
-                )
-
-                toast.success('Vote added!')
-                router.refresh()
-            } catch (error) {
-                console.error('Error adding vote:', error)
-                toast.error('Failed to add vote')
-            } finally {
-                setIsVoting(null)
-            }
-        }
-    }
 
     const getImageUrl = (url: string | null): string | undefined => {
         if (!url || url === 'N/A') return undefined
@@ -148,36 +54,10 @@ export default function ShipItClient({
         return url
     }
 
-    const votesRemaining = MAX_VOTES - votedProjects.size
-
     return (
         <div className="space-y-6">
-            <div className="rounded-xl border border-white/10 bg-neutral-900/40 p-4">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h3 className="text-lg font-semibold text-white">
-                            Your Votes
-                        </h3>
-                        <p className="text-sm text-neutral-400">
-                            {votedProjects.size} of {MAX_VOTES} votes used
-                        </p>
-                    </div>
-                    <div className="text-right">
-                        <div className="text-2xl font-bold text-emerald-400">
-                            {votesRemaining}
-                        </div>
-                        <div className="text-xs text-neutral-400">
-                            {votesRemaining === 1 ? 'vote' : 'votes'} remaining
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projects.map((project) => {
-                    const isVoted = votedProjects.has(project.id)
-                    const canVote = votedProjects.size < MAX_VOTES || isVoted
-
                     return (
                         <CardContainer
                             key={project.id}
@@ -301,33 +181,17 @@ export default function ShipItClient({
                                     <div className="flex flex-wrap items-center gap-2">
                                         <CardItem
                                             translateZ="30"
-                                            as="button"
-                                            onClick={() =>
-                                                handleVote(project.id)
-                                            }
-                                            disabled={
-                                                !canVote ||
-                                                isVoting === project.id
-                                            }
-                                            className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors sm:px-4 ${
-                                                isVoted
-                                                    ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
-                                                    : canVote
-                                                      ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
-                                                      : 'cursor-not-allowed bg-neutral-800/50 text-neutral-500'
-                                            }`}
+                                            className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-600/20 px-3 py-2 text-sm font-medium whitespace-nowrap text-emerald-400 sm:px-4"
                                         >
-                                            <Heart
+                                            <ThumbsUp
                                                 size={18}
-                                                className={
-                                                    isVoted
-                                                        ? 'fill-current'
-                                                        : ''
-                                                }
+                                                className="shrink-0"
                                             />
                                             <span className="truncate">
-                                                {isVoted ? 'Unvote' : 'Vote'} (
-                                                {project.voteCount})
+                                                {project.voteCount}{' '}
+                                                {project.voteCount === 1
+                                                    ? 'vote'
+                                                    : 'votes'}
                                             </span>
                                         </CardItem>
 
