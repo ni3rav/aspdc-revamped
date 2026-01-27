@@ -65,6 +65,16 @@ export type Certificate = {
     createdAt: Date
 }
 
+export type CodeforcesUser = {
+    handle: string
+    firstName?: string
+    lastName?: string
+    rank?: string
+    maxRank?: string
+    maxRating?: number
+    rating?: number
+}
+
 // New entity types
 export type NewAchievement = Omit<Achievement, 'id' | 'createdAt'>
 export type NewBlog = Omit<Blog, 'id' | 'createdAt'>
@@ -72,3 +82,4 @@ export type NewEvent = Omit<Event, 'id' | 'createdAt'>
 export type NewLeaderboardEntry = Omit<LeaderboardEntry, 'id' | 'createdAt'>
 export type NewProject = Omit<Project, 'id' | 'createdAt'>
 export type NewUpcomingEvent = Omit<UpcomingEvent, 'id' | 'createdAt'>
+export type NewCodeforcesUser = Omit<CodeforcesUser, 'id' | 'createdAt'>
