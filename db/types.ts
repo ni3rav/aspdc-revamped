@@ -70,9 +70,9 @@ export type CodeforcesUser = {
     firstName?: string
     lastName?: string
     rank?: string
+    rating?: number
     maxRank?: string
     maxRating?: number
-    rating?: number
 }
 
 // New entity types

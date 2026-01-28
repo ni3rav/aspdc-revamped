@@ -22,7 +22,9 @@ export async function getCodeforcesUser(
             return null
         }
 
-        const data = (await response.json()) as CodeforcesAPIResponse<any[]>
+        const data = (await response.json()) as CodeforcesAPIResponse<
+            CodeforcesUser[]
+        >
 
         if (data.status !== 'OK' || !data.result || data.result.length === 0) {
             return null
@@ -30,15 +32,7 @@ export async function getCodeforcesUser(
 
         const user = data.result[0]
 
-        return {
-            handle: user.handle,
-            rating: user.rating ?? undefined,
-            maxRating: user.maxRating ?? undefined,
-            rank: user.rank ?? undefined,
-            firstName: user.firstName ?? undefined,
-            lastName: user.lastName ?? undefined,
-            maxRank: user.maxRank ?? undefined,
-        }
+        return user
     } catch (error) {
         console.error('Error fetching Codeforces user:', error)
         return null
