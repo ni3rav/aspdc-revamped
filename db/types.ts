@@ -66,13 +66,25 @@ export type Certificate = {
 }
 
 export type CodeforcesUser = {
-    handle: string
-    firstName?: string
     lastName?: string
-    rank?: string
+    country?: string
+    lastOnlineTimeSeconds: number
+    city?: string
     rating?: number
-    maxRank?: string
+    friendOfCount: number
+    titlePhoto: string
+    handle: string
+    avatar: string
+    firstName?: string
+    contribution: number
+    organization?: string
+    rank?: string
     maxRating?: number
+    registrationTimeSeconds: number
+    maxRank?: string
+    email?: string
+    vkId?: string
+    openId?: string
 }
 
 // New entity types
