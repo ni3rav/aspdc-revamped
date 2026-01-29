@@ -2,7 +2,6 @@
 
 import { UpcomingEvent } from '@/db/types'
 import { Calendar, MapPin, ExternalLink } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
@@ -58,12 +57,11 @@ export default function UpcomingEventsPage({
                             {/* Event Image */}
                             {event.eventImageUrl && (
                                 <div className="relative aspect-video w-full overflow-hidden">
-                                    <Image
+                                    <img
                                         src={event.eventImageUrl}
                                         alt={event.name}
-                                        fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        loading="lazy"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                                     <span className="bg-primary absolute top-3 left-3 rounded-full px-3 py-1 text-xs font-bold text-black shadow">
@@ -197,12 +195,11 @@ export default function UpcomingEventsPage({
                         {/* Event Image */}
                         {event.eventImageUrl && (
                             <div className="relative aspect-video w-full overflow-hidden">
-                                <Image
+                                <img
                                     src={event.eventImageUrl}
                                     alt={event.name}
-                                    fill
-                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    loading="lazy"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 

@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Github, Instagram, Linkedin, Twitter } from 'lucide-react'
 
@@ -89,13 +88,11 @@ export default function Page() {
                                     className="group relative h-[260px] w-full overflow-hidden rounded-2xl md:h-[320px]"
                                 >
                                     {/* Background image */}
-                                    <Image
+                                    <img
                                         className="h-full w-full object-cover"
-                                        blurDataURL={member.blur}
                                         src={member.avatar}
                                         alt={member.name}
-                                        fill // ensures it fills the card
-                                        sizes="(max-width: 768px) 100vw, 25vw"
+                                        loading="lazy"
                                     />
 
                                     {/* Gradient overlay */}

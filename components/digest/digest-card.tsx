@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
@@ -51,17 +50,15 @@ export function PostCard({ post, className, id }: PostCardProps) {
                     )}
                 >
                     {/* Media */}
-                    <div className="relative aspect-video w-full">
-                        <Image
+                    <div className="relative aspect-video w-full overflow-hidden">
+                        <img
                             src={
                                 post.cover_image ||
                                 '/placeholder.svg?height=360&width=640&query=post%20cover'
                             }
                             alt={post.title}
-                            fill
-                            sizes="(min-width: 1024px) 400px, 100vw"
-                            className="object-cover"
-                            priority={false}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
                         />
                     </div>
 

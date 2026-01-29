@@ -6,7 +6,6 @@ import { TextScramble } from '../motion-primitives/text-scramble'
 import { TextEffect } from '../motion-primitives/text-effect'
 import { InteractiveHoverButton } from '../magicui/interactive-hover-button'
 import Link from 'next/link'
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import {
     ScrollVelocityContainer,
@@ -20,12 +19,11 @@ const ImageCard = ({ img }: { img: string }) => {
                 'relative mr-3 h-48 w-48 overflow-hidden rounded-xl border sm:h-64 sm:w-64 md:mr-6 lg:h-72 lg:w-72'
             )}
         >
-            <Image
+            <img
                 alt="Event gallery image"
                 src={img}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 192px, (max-width: 768px) 256px, 288px"
+                className="h-full w-full object-cover"
+                loading="lazy"
             />
         </figure>
     )
