@@ -43,6 +43,15 @@ export const leaderboard = pgTable('leaderboard', {
     createdAt: timestamp().defaultNow().notNull(),
 })
 
+// Leaderboard Users table
+export const leaderboardUsers = pgTable('leaderboard_users', {
+    id: uuid().defaultRandom().primaryKey(),
+    fullName: text('full_name').notNull(),
+    codeforcesHandle: text('codeforces_handle').notNull().unique(),
+    leetcodeHandle: text('leetcode_handle'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
 // Achievements table
 export const achievements = pgTable('achievements', {
     id: uuid().defaultRandom().primaryKey(),
