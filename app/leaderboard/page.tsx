@@ -1,7 +1,8 @@
 import { fetchLeaderboardUsers } from '@/db/queries'
 import { getMultipleCodeforcesUsers } from '@/lib/codeforces'
 import { LeaderboardTable } from '@/components/LeaderboardTable'
-import { RegisterForm } from '@/components/RegisterForm'
+import { RegisterModal } from '@/components/RegisterModal'
+import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import type { LeaderboardUser } from '@/db/types'
 
 export default async function LeaderboardPage() {
@@ -31,20 +32,15 @@ export default async function LeaderboardPage() {
     leaderboardData.sort((a, b) => b.rating - a.rating)
 
     return (
-        <div className="container mx-auto space-y-12 py-10">
-            <div>
-                <h1 className="mb-6 text-3xl font-bold">
-                    Codeforces Leaderboard
-                </h1>
+        <main className="mx-auto min-h-screen max-w-5xl px-8 py-12 md:py-32 lg:px-4 xl:px-0">
+            <TextScramble className="text-primary mb-8 text-2xl font-bold uppercase md:mb-16 lg:text-4xl">
+                Codeforces Leaderboard
+            </TextScramble>
+
+            <div className="mb-8 space-y-8">
+                <RegisterModal />
                 <LeaderboardTable data={leaderboardData} />
             </div>
-
-            <div>
-                <h2 className="mb-6 text-2xl font-bold">
-                    Register for Leaderboard
-                </h2>
-                <RegisterForm />
-            </div>
-        </div>
+        </main>
     )
 }

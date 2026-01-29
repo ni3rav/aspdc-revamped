@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import {
     registerForLeaderboard,
     type RegisterState,
@@ -15,14 +15,24 @@ const initialState: RegisterState = {
     errors: undefined,
 }
 
-export function RegisterForm() {
+interface RegisterFormProps {
+    onSuccess?: () => void
+}
+
+export function RegisterForm({ onSuccess }: RegisterFormProps) {
     const [state, formAction, isPending] = useActionState(
         registerForLeaderboard,
         initialState
     )
 
+    useEffect(() => {
+        if (state?.success && onSuccess) {
+            onSuccess()
+        }
+    }, [state?.success, onSuccess])
+
     return (
-        <form action={formAction} className="max-w-md space-y-6">
+        <form action={formAction} className="space-y-4">
             <div className="space-y-2">
                 <Label htmlFor="fullName">Full Name</Label>
                 <Input
@@ -34,7 +44,7 @@ export function RegisterForm() {
                     required
                 />
                 {state?.errors?.fullName && (
-                    <p className="text-sm text-red-500">
+                    <p className="text-destructive text-sm">
                         {state.errors.fullName[0]}
                     </p>
                 )}
@@ -51,7 +61,7 @@ export function RegisterForm() {
                     required
                 />
                 {state?.errors?.codeforcesHandle && (
-                    <p className="text-sm text-red-500">
+                    <p className="text-destructive text-sm">
                         {state.errors.codeforcesHandle[0]}
                     </p>
                 )}
@@ -68,7 +78,7 @@ export function RegisterForm() {
                     required
                 />
                 {state?.errors?.leetcodeHandle && (
-                    <p className="text-sm text-red-500">
+                    <p className="text-destructive text-sm">
                         {state.errors.leetcodeHandle[0]}
                     </p>
                 )}
@@ -80,10 +90,10 @@ export function RegisterForm() {
 
             {state?.message && (
                 <div
-                    className={`rounded-md p-4 ${
+                    className={`rounded-md border p-3 text-sm ${
                         state.success
-                            ? 'border border-green-200 bg-green-50 text-green-800'
-                            : 'border border-red-200 bg-red-50 text-red-800'
+                            ? 'border-primary/20 bg-primary/10 text-primary'
+                            : 'border-destructive/20 bg-destructive/10 text-destructive'
                     }`}
                 >
                     {state.message}

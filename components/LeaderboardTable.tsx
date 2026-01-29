@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
 
 interface LeaderboardData {
     id: string
@@ -22,50 +23,92 @@ interface LeaderboardTableProps {
     data: LeaderboardData[]
 }
 
+function getRankBadgeVariant(
+    rank: string
+): 'default' | 'secondary' | 'destructive' | 'outline' {
+    const lowerRank = rank.toLowerCase()
+    if (lowerRank.includes('grandmaster') || lowerRank.includes('legendary'))
+        return 'destructive'
+    if (lowerRank.includes('master') || lowerRank.includes('candidate'))
+        return 'default'
+    return 'secondary'
+}
+
 export function LeaderboardTable({ data }: LeaderboardTableProps) {
     return (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead className="w-[100px]">Rank</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Codeforces Handle</TableHead>
-                    <TableHead>Rating</TableHead>
-                    <TableHead>Max Rating</TableHead>
-                    <TableHead>CF Rank</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {data.length === 0 ? (
+        <div className="overflow-hidden rounded-lg border">
+            <Table>
+                <TableHeader>
                     <TableRow>
-                        <TableCell colSpan={6} className="text-center">
-                            No users registered yet
-                        </TableCell>
+                        <TableHead className="w-[80px] text-center">
+                            Rank
+                        </TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Codeforces Handle</TableHead>
+                        <TableHead className="text-center">Rating</TableHead>
+                        <TableHead className="text-center">
+                            Max Rating
+                        </TableHead>
+                        <TableHead>CF Rank</TableHead>
                     </TableRow>
-                ) : (
-                    data.map((user, index) => (
-                        <TableRow key={user.id}>
-                            <TableCell className="font-medium">
-                                {index + 1}
+                </TableHeader>
+                <TableBody>
+                    {data.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                colSpan={6}
+                                className="text-muted-foreground h-32 text-center"
+                            >
+                                No users registered yet. Be the first to join!
                             </TableCell>
-                            <TableCell>{user.fullName}</TableCell>
-                            <TableCell>
-                                <a
-                                    href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline"
-                                >
-                                    {user.codeforcesHandle}
-                                </a>
-                            </TableCell>
-                            <TableCell>{user.rating || 'Unrated'}</TableCell>
-                            <TableCell>{user.maxRating || 'N/A'}</TableCell>
-                            <TableCell>{user.rank}</TableCell>
                         </TableRow>
-                    ))
-                )}
-            </TableBody>
-        </Table>
+                    ) : (
+                        data.map((user, index) => (
+                            <TableRow
+                                key={user.id}
+                                className="hover:bg-muted/50 transition-colors"
+                            >
+                                <TableCell className="text-center font-bold">
+                                    {index === 0 && '🥇'}
+                                    {index === 1 && '🥈'}
+                                    {index === 2 && '🥉'}
+                                    {index > 2 && index + 1}
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                    {user.fullName}
+                                </TableCell>
+                                <TableCell>
+                                    <a
+                                        href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        {user.codeforcesHandle}
+                                    </a>
+                                </TableCell>
+                                <TableCell className="text-center font-semibold">
+                                    {user.rating || (
+                                        <span className="text-muted-foreground">
+                                            Unrated
+                                        </span>
+                                    )}
+                                </TableCell>
+                                <TableCell className="text-muted-foreground text-center">
+                                    {user.maxRating || 'N/A'}
+                                </TableCell>
+                                <TableCell>
+                                    <Badge
+                                        variant={getRankBadgeVariant(user.rank)}
+                                    >
+                                        {user.rank}
+                                    </Badge>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
+                </TableBody>
+            </Table>
+        </div>
     )
 }
