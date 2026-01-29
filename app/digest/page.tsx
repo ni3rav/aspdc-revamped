@@ -1,7 +1,6 @@
 import OtherPosts from '@/components/digest/OtherPosts'
 import { TextScramble } from '@/components/motion-primitives/text-scramble'
 import { fetchAllDigest } from '@/lib/cms'
-import Image from 'next/image'
 import Link from 'next/link'
 
 async function AllDigest() {
@@ -40,12 +39,11 @@ async function AllDigest() {
             >
                 {/* Left - Image */}
                 <div className="relative overflow-hidden rounded-xl shadow-md">
-                    <Image
+                    <img
                         src={latestPost.cover_image || '/placeholder.svg'}
                         alt={latestPost.title}
-                        width={600}
-                        height={400}
                         className="h-[300px] w-full object-cover transition-all duration-300 group-hover:scale-105"
+                        loading="lazy"
                     />
                 </div>
 
@@ -66,12 +64,11 @@ async function AllDigest() {
                     </p>
 
                     <div className="mt-2 flex items-center gap-3 text-sm text-gray-300">
-                        <Image
+                        <img
                             src={latestPost.authors[0].image_url}
                             alt={latestPost.authors[0].name}
-                            width={40}
-                            height={40}
-                            className="rounded-full"
+                            className="h-10 w-10 rounded-full object-cover"
+                            loading="lazy"
                         />
                         <span className="font-medium">
                             {latestPost.authors[0].name}
