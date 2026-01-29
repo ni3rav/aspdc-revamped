@@ -34,7 +34,9 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     return (
         <form action={formAction} className="space-y-4">
             <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
+                <Label htmlFor="fullName">
+                    Full Name <span className="text-destructive">*</span>
+                </Label>
                 <Input
                     id="fullName"
                     name="fullName"
@@ -58,7 +60,6 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                     type="text"
                     placeholder="tourist"
                     disabled={isPending}
-                    required
                 />
                 {state?.errors?.codeforcesHandle && (
                     <p className="text-destructive text-sm">
@@ -75,7 +76,6 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                     type="text"
                     placeholder="leetcode_user"
                     disabled={isPending}
-                    required
                 />
                 {state?.errors?.leetcodeHandle && (
                     <p className="text-destructive text-sm">
@@ -83,6 +83,11 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                     </p>
                 )}
             </div>
+
+            <p className="text-muted-foreground text-xs">
+                <span className="text-destructive">*</span> Required field. At
+                least one handle (Codeforces or LeetCode) must be provided.
+            </p>
 
             <Button type="submit" disabled={isPending} className="w-full">
                 {isPending ? 'Registering...' : 'Register'}

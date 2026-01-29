@@ -47,7 +47,7 @@ export const leaderboard = pgTable('leaderboard', {
 export const leaderboardUsers = pgTable('leaderboard_users', {
     id: uuid().defaultRandom().primaryKey(),
     fullName: text('full_name').notNull(),
-    codeforcesHandle: text('codeforces_handle').notNull().unique(),
+    codeforcesHandle: text('codeforces_handle'),
     leetcodeHandle: text('leetcode_handle'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
 })
