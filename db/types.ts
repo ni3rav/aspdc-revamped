@@ -65,6 +65,14 @@ export type Certificate = {
     createdAt: Date
 }
 
+export type LeaderboardUser = {
+    id: string
+    fullName: string
+    codeforcesHandle: string
+    leetcodeHandle: string | null
+    createdAt: Date
+}
+
 export type CodeforcesUser = {
     lastName?: string
     country?: string
@@ -94,4 +102,5 @@ export type NewEvent = Omit<Event, 'id' | 'createdAt'>
 export type NewLeaderboardEntry = Omit<LeaderboardEntry, 'id' | 'createdAt'>
 export type NewProject = Omit<Project, 'id' | 'createdAt'>
 export type NewUpcomingEvent = Omit<UpcomingEvent, 'id' | 'createdAt'>
+export type NewLeaderboardUser = Omit<LeaderboardUser, 'id' | 'createdAt'>
 export type NewCodeforcesUser = Omit<CodeforcesUser, 'id' | 'createdAt'>

@@ -5,6 +5,7 @@ import {
     blogs,
     events,
     leaderboard,
+    leaderboardUsers,
     projects,
     upcomingEvents,
     votes,
@@ -14,6 +15,7 @@ import {
     Blog,
     Event,
     LeaderboardEntry,
+    LeaderboardUser,
     Project,
     UpcomingEvent,
 } from '@/db/types'
@@ -174,5 +176,21 @@ export async function getVoteCount(projectId: string): Promise<number> {
     } catch (error) {
         console.error('Error fetching vote count:', error)
         return 0
+    }
+}
+
+// ----------------- Leaderboard Users -----------------
+export async function fetchLeaderboardUsers(): Promise<LeaderboardUser[]> {
+    'use cache'
+    cacheLife('minutes')
+
+    try {
+        return await db
+            .select()
+            .from(leaderboardUsers)
+            .orderBy(asc(leaderboardUsers.createdAt))
+    } catch (error) {
+        console.error('Error fetching leaderboard users:', error)
+        return []
     }
 }

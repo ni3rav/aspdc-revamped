@@ -38,3 +38,34 @@ export async function getCodeforcesUser(
         return null
     }
 }
+
+export async function getMultipleCodeforcesUsers(
+    handles: string
+): Promise<CodeforcesUser[]> {
+    try {
+        const response = await fetch(
+            `https://codeforces.com/api/user.info?handles=${handles}`,
+            { next: { revalidate: 60 } }
+        )
+
+        if (!response.ok) {
+            console.error(
+                `Codeforces API error: ${response.status} ${response.statusText}`
+            )
+            return []
+        }
+
+        const data = (await response.json()) as CodeforcesAPIResponse<
+            CodeforcesUser[]
+        >
+
+        if (data.status !== 'OK' || !data.result) {
+            return []
+        }
+
+        return data.result
+    } catch (error) {
+        console.error('Error fetching Codeforces users:', error)
+        return []
+    }
+}

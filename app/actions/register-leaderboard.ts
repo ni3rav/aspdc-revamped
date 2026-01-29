@@ -3,6 +3,9 @@
 import { z } from 'zod'
 import { type CodeforcesUser } from '@/db/types'
 import { getCodeforcesUser } from '@/lib/codeforces'
+import { db } from '@/db/drizzle'
+import { leaderboardUsers } from '@/db/schema'
+import { revalidatePath } from 'next/cache'
 
 const registrationSchema = z.object({
     fullName: z.string().min(2, 'Full name must be at least 2 characters'),
@@ -39,7 +42,7 @@ export async function registerForLeaderboard(
         }
     }
 
-    const { codeforcesHandle, fullName } = validatedFields.data
+    const { codeforcesHandle, fullName, leetcodeHandle } = validatedFields.data
 
     try {
         const cfUser = await getCodeforcesUser(codeforcesHandle)
@@ -51,11 +54,18 @@ export async function registerForLeaderboard(
             }
         }
 
+        // Save to database
+        await db.insert(leaderboardUsers).values({
+            fullName,
+            codeforcesHandle,
+            leetcodeHandle,
+        })
+
+        revalidatePath('/leaderboard')
+
         return {
             success: true,
-            message: `Verified! Name: ${fullName}, CF Rating: ${
-                cfUser.rating ?? 'Unrated'
-            }`,
+            message: `Successfully registered! Name: ${fullName}, CF Rating: ${cfUser.rating ?? 'Unrated'}`,
             cfData: cfUser,
         }
     } catch (error) {
