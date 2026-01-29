@@ -10,9 +10,8 @@ const Navbar = () => {
         { name: 'Achievments', url: '/achievements' },
         { name: 'Projects', url: '/projects' },
         { name: 'Blogs', url: '/blogs' },
-        { name: 'ShipIt', url: '/ship-it' },
         // { name: 'Digest', url: '/digest' },
-        // { name: 'Leaderboard', url: '/leaderboard' },
+        { name: 'Leaderboard', url: '/leaderboard' },
     ]
 
     const lgNavItems = [
@@ -21,7 +20,7 @@ const Navbar = () => {
         { name: 'Upcoming', url: '/upcoming' },
         { name: 'Events', url: '/events' },
         { name: 'Achievments', url: '/achievements' },
-        { name: 'ShipIt', url: '/ship-it' },
+        { name: 'Leaderboard', url: '/leaderboard' },
     ]
 
     return (

@@ -68,7 +68,7 @@ export type Certificate = {
 export type LeaderboardUser = {
     id: string
     fullName: string
-    codeforcesHandle: string | null
+    codeforcesHandle: string
     leetcodeHandle: string | null
     createdAt: Date
 }

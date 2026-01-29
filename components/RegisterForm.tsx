@@ -53,13 +53,17 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="codeforcesHandle">Codeforces Handle</Label>
+                <Label htmlFor="codeforcesHandle">
+                    Codeforces Handle{' '}
+                    <span className="text-destructive">*</span>
+                </Label>
                 <Input
                     id="codeforcesHandle"
                     name="codeforcesHandle"
                     type="text"
                     placeholder="tourist"
                     disabled={isPending}
+                    required
                 />
                 {state?.errors?.codeforcesHandle && (
                     <p className="text-destructive text-sm">
@@ -95,8 +99,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             </div>
 
             <p className="text-muted-foreground text-xs">
-                <span className="text-destructive">*</span> Required field. At
-                least one handle (Codeforces or LeetCode) must be provided.
+                <span className="text-destructive">*</span> Required fields
             </p>
 
             <Button type="submit" disabled={isPending} className="w-full">

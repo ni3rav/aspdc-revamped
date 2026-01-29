@@ -166,20 +166,14 @@ export function LeaderboardTable({ data }: LeaderboardTableProps) {
                                     {user.fullName}
                                 </TableCell>
                                 <TableCell>
-                                    {user.codeforcesHandle ? (
-                                        <a
-                                            href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-primary hover:underline"
-                                        >
-                                            {user.codeforcesHandle}
-                                        </a>
-                                    ) : (
-                                        <span className="text-muted-foreground">
-                                            N/A
-                                        </span>
-                                    )}
+                                    <a
+                                        href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline"
+                                    >
+                                        {user.codeforcesHandle}
+                                    </a>
                                 </TableCell>
                                 <TableCell className="text-center font-semibold">
                                     {user.rating || (
