@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useMemo } from 'react'
 import {
     Table,
     TableBody,
@@ -9,11 +10,13 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface LeaderboardData {
     id: string
     fullName: string
-    codeforcesHandle: string
+    codeforcesHandle: string | null
     rating: number
     rank: string
     maxRating?: number
@@ -22,6 +25,9 @@ interface LeaderboardData {
 interface LeaderboardTableProps {
     data: LeaderboardData[]
 }
+
+type SortField = 'rating' | 'maxRating' | 'name'
+type SortOrder = 'asc' | 'desc'
 
 function getRankBadgeVariant(
     rank: string
@@ -35,6 +41,63 @@ function getRankBadgeVariant(
 }
 
 export function LeaderboardTable({ data }: LeaderboardTableProps) {
+    const [sortField, setSortField] = useState<SortField>('rating')
+    const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
+
+    const sortedData = useMemo(() => {
+        const sorted = [...data].sort((a, b) => {
+            let aVal: number | string
+            let bVal: number | string
+
+            switch (sortField) {
+                case 'rating':
+                    aVal = a.rating || 0
+                    bVal = b.rating || 0
+                    break
+                case 'maxRating':
+                    aVal = a.maxRating || 0
+                    bVal = b.maxRating || 0
+                    break
+                case 'name':
+                    aVal = a.fullName.toLowerCase()
+                    bVal = b.fullName.toLowerCase()
+                    break
+                default:
+                    return 0
+            }
+
+            if (typeof aVal === 'string' && typeof bVal === 'string') {
+                return sortOrder === 'asc'
+                    ? aVal.localeCompare(bVal)
+                    : bVal.localeCompare(aVal)
+            }
+
+            return sortOrder === 'asc'
+                ? (aVal as number) - (bVal as number)
+                : (bVal as number) - (aVal as number)
+        })
+
+        return sorted
+    }, [data, sortField, sortOrder])
+
+    const toggleSort = (field: SortField) => {
+        if (sortField === field) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+        } else {
+            setSortField(field)
+            setSortOrder('desc')
+        }
+    }
+
+    const SortIcon = ({ field }: { field: SortField }) => {
+        if (sortField !== field) return <ArrowUpDown className="ml-2 h-4 w-4" />
+        return sortOrder === 'asc' ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+        ) : (
+            <ArrowDown className="ml-2 h-4 w-4" />
+        )
+    }
+
     return (
         <div className="overflow-hidden rounded-lg border">
             <Table>
@@ -43,17 +106,45 @@ export function LeaderboardTable({ data }: LeaderboardTableProps) {
                         <TableHead className="w-[80px] text-center">
                             Rank
                         </TableHead>
-                        <TableHead>Name</TableHead>
+                        <TableHead>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="-ml-3 h-8 hover:bg-transparent"
+                                onClick={() => toggleSort('name')}
+                            >
+                                Name
+                                <SortIcon field="name" />
+                            </Button>
+                        </TableHead>
                         <TableHead>Codeforces Handle</TableHead>
-                        <TableHead className="text-center">Rating</TableHead>
                         <TableHead className="text-center">
-                            Max Rating
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="-ml-3 h-8 hover:bg-transparent"
+                                onClick={() => toggleSort('rating')}
+                            >
+                                Rating
+                                <SortIcon field="rating" />
+                            </Button>
+                        </TableHead>
+                        <TableHead className="text-center">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="-ml-3 h-8 hover:bg-transparent"
+                                onClick={() => toggleSort('maxRating')}
+                            >
+                                Max Rating
+                                <SortIcon field="maxRating" />
+                            </Button>
                         </TableHead>
                         <TableHead>CF Rank</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.length === 0 ? (
+                    {sortedData.length === 0 ? (
                         <TableRow>
                             <TableCell
                                 colSpan={6}
@@ -63,29 +154,32 @@ export function LeaderboardTable({ data }: LeaderboardTableProps) {
                             </TableCell>
                         </TableRow>
                     ) : (
-                        data.map((user, index) => (
+                        sortedData.map((user, index) => (
                             <TableRow
                                 key={user.id}
                                 className="hover:bg-muted/50 transition-colors"
                             >
                                 <TableCell className="text-center font-bold">
-                                    {index === 0 && '🥇'}
-                                    {index === 1 && '🥈'}
-                                    {index === 2 && '🥉'}
-                                    {index > 2 && index + 1}
+                                    {index + 1}
                                 </TableCell>
                                 <TableCell className="font-medium">
                                     {user.fullName}
                                 </TableCell>
                                 <TableCell>
-                                    <a
-                                        href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary hover:underline"
-                                    >
-                                        {user.codeforcesHandle}
-                                    </a>
+                                    {user.codeforcesHandle ? (
+                                        <a
+                                            href={`https://codeforces.com/profile/${user.codeforcesHandle}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-primary hover:underline"
+                                        >
+                                            {user.codeforcesHandle}
+                                        </a>
+                                    ) : (
+                                        <span className="text-muted-foreground">
+                                            N/A
+                                        </span>
+                                    )}
                                 </TableCell>
                                 <TableCell className="text-center font-semibold">
                                     {user.rating || (

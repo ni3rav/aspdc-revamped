@@ -40,7 +40,10 @@ export function RegisterModal() {
                 <DialogHeader>
                     <DialogTitle>Register for Leaderboard</DialogTitle>
                     <DialogDescription>
-                        Enter your details to join the Codeforces leaderboard
+                        Enter your Codeforces handle to join the leaderboard.
+                        LeetCode username is optional (we currently collect it
+                        for future use as there's no official API but if in case
+                        we find any workaround).
                     </DialogDescription>
                 </DialogHeader>
                 <RegisterForm onSuccess={() => setOpen(false)} />

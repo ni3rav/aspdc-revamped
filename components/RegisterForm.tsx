@@ -69,7 +69,12 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="leetcodeHandle">LeetCode Handle</Label>
+                <Label htmlFor="leetcodeHandle">
+                    LeetCode Handle{' '}
+                    <span className="text-muted-foreground text-xs font-normal">
+                        (Optional)
+                    </span>
+                </Label>
                 <Input
                     id="leetcodeHandle"
                     name="leetcodeHandle"
@@ -77,6 +82,11 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                     placeholder="leetcode_user"
                     disabled={isPending}
                 />
+                <p className="text-muted-foreground text-xs">
+                    Note: Currently, there is no official API to obtain LeetCode
+                    statistics. We're collecting usernames for future use if we
+                    find any workaround.
+                </p>
                 {state?.errors?.leetcodeHandle && (
                     <p className="text-destructive text-sm">
                         {state.errors.leetcodeHandle[0]}
