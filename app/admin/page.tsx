@@ -14,6 +14,7 @@ import {
     fetchAchievements,
     fetchBlogs,
     fetchEvents,
+    fetchLeaderboardUsers,
     fetchProjects,
     fetchUpcomingEvents,
 } from '@/db/queries'
@@ -29,14 +30,21 @@ async function DashboardContent() {
     }
 
     // Fetch counts for dashboard
-    const [achievements, blogs, events, projects, upcomingEvents] =
-        await Promise.all([
-            fetchAchievements(),
-            fetchBlogs(),
-            fetchEvents(),
-            fetchProjects(),
-            fetchUpcomingEvents(),
-        ])
+    const [
+        achievements,
+        blogs,
+        events,
+        projects,
+        upcomingEvents,
+        leaderboardUsers,
+    ] = await Promise.all([
+        fetchAchievements(),
+        fetchBlogs(),
+        fetchEvents(),
+        fetchProjects(),
+        fetchUpcomingEvents(),
+        fetchLeaderboardUsers(),
+    ])
 
     const stats = [
         {
@@ -51,6 +59,11 @@ async function DashboardContent() {
             label: 'Upcoming Events',
             count: upcomingEvents.length,
             href: '/admin/upcoming',
+        },
+        {
+            label: 'Leaderboard Users',
+            count: leaderboardUsers.length,
+            href: '/admin/leaderboard',
         },
     ]
 

@@ -63,3 +63,12 @@ export const leaderboardSchema = z.object({
 })
 
 export const leaderboardUpdateSchema = leaderboardSchema.partial()
+
+// Leaderboard User schemas
+export const leaderboardUserSchema = z.object({
+    fullName: z.string().min(1, 'Full name is required'),
+    codeforcesHandle: z.string().min(1, 'Codeforces handle is required'),
+    leetcodeHandle: z.string().optional().or(z.literal('')),
+})
+
+export const leaderboardUserUpdateSchema = leaderboardUserSchema.partial()

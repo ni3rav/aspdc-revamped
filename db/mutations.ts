@@ -7,6 +7,7 @@ import {
     blogs,
     events,
     leaderboard,
+    leaderboardUsers,
     projects,
     upcomingEvents,
     votes,
@@ -16,10 +17,12 @@ import type {
     Blog,
     Event,
     LeaderboardEntry,
+    LeaderboardUser,
     NewAchievement,
     NewBlog,
     NewEvent,
     NewLeaderboardEntry,
+    NewLeaderboardUser,
     NewProject,
     NewUpcomingEvent,
     Project,
@@ -101,6 +104,15 @@ export async function addUpcomingEvent(event: NewUpcomingEvent) {
         })
     } catch (error) {
         console.error('Error in addUpcomingEvent:', error)
+        throw error
+    }
+}
+
+export async function addLeaderboardUser(user: NewLeaderboardUser) {
+    try {
+        await db.insert(leaderboardUsers).values(user)
+    } catch (error) {
+        console.error('Error in addLeaderboardUser:', error)
         throw error
     }
 }
@@ -215,6 +227,22 @@ export async function updateUpcomingEvent(
     }
 }
 
+export async function updateLeaderboardUser(
+    id: string,
+    updates: Partial<LeaderboardUser>
+) {
+    try {
+        return await db
+            .update(leaderboardUsers)
+            .set(updates)
+            .where(eq(leaderboardUsers.id, id))
+            .returning()
+    } catch (error) {
+        console.error('Error in updateLeaderboardUser:', error)
+        throw error
+    }
+}
+
 // ----------------- Deletions -----------------
 export async function deleteProject(id: string) {
     try {
@@ -266,6 +294,15 @@ export async function deleteUpcomingEvent(id: string) {
         await db.delete(upcomingEvents).where(eq(upcomingEvents.id, id))
     } catch (error) {
         console.error('Error in deleteUpcomingEvent:', error)
+        throw error
+    }
+}
+
+export async function deleteLeaderboardUser(id: string) {
+    try {
+        await db.delete(leaderboardUsers).where(eq(leaderboardUsers.id, id))
+    } catch (error) {
+        console.error('Error in deleteLeaderboardUser:', error)
         throw error
     }
 }
