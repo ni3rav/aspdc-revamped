@@ -24,7 +24,6 @@ Created by <a href="https://instagram.com/prea.yanshie" target="_blank" noreferr
     `This website was built with 'Maximum Effort'. And by that, I mean prompting Co-Pilot. Don't tell anyone.`,
     `I'd break the fourth wall, but the CSS <code>overflow: hidden</code> is holding me back.`,
     `Join the club! We have cookies. Virtual cookies. They're stored in your browser. Accept them admins! `,
-    `The Digest page is still under construction. It's emptier than your DMs on random tuesday.`,
     `Check out the <a href="/projects">Projects</a>. Some are actually finished! Unlike my animations.`,
     `Looking for <a href="/events">Events</a>? We promise they're more organized than the timeline in X-Men movies.`,
     `Meet the <a href="/team">Team</a>. A ragtag group of misfits. Basically X-Force, but with more keyboards and less spandex.`,
