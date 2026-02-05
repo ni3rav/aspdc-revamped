@@ -29,14 +29,13 @@ export async function PostsGrid({ searchParams }: PostsGridProps) {
 
     if (postsRes.data.length === 0) {
         return (
-            <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-neutral-900/40 p-16 text-center">
-                <span className="animate-bounce text-7xl">✍️</span>
-                <h2 className="mt-6 text-3xl font-bold text-neutral-100">
-                    No Posts Found
+            <div className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed border-neutral-700 bg-neutral-900 p-16 text-center">
+                <span className="text-6xl">✍️</span>
+                <h2 className="mt-5 text-2xl font-semibold text-neutral-200">
+                    No posts found
                 </h2>
-                <p className="mt-2 text-neutral-400">
-                    Try adjusting your filters to find what you&apos;re looking
-                    for.
+                <p className="mt-2 text-base text-neutral-500">
+                    Try adjusting your filters.
                 </p>
             </div>
         )
@@ -86,26 +85,26 @@ function Pagination({
     }
 
     return (
-        <div className="mt-12 flex items-center justify-center gap-4">
+        <div className="mt-12 flex items-center justify-center gap-3">
             {currentPage > 1 && (
                 <a
                     href={buildHref(currentPage - 1)}
-                    className="rounded-lg border border-white/20 px-4 py-2 text-sm font-medium text-neutral-300 transition hover:border-white/40 hover:text-white"
+                    className="rounded-lg border border-neutral-700 px-4 py-2 text-base text-neutral-400 transition hover:border-neutral-600 hover:text-white"
                 >
-                    Previous
+                    Prev
                 </a>
             )}
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (pageNum) => (
                         <a
                             key={pageNum}
                             href={buildHref(pageNum)}
-                            className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-medium transition ${
+                            className={`flex h-10 w-10 items-center justify-center rounded-lg text-base transition ${
                                 pageNum === currentPage
-                                    ? 'bg-primary text-black'
-                                    : 'border border-white/20 text-neutral-300 hover:border-white/40 hover:text-white'
+                                    ? 'bg-primary font-medium text-black'
+                                    : 'text-neutral-400 hover:bg-neutral-800 hover:text-white'
                             }`}
                         >
                             {pageNum}
@@ -117,7 +116,7 @@ function Pagination({
             {currentPage < totalPages && (
                 <a
                     href={buildHref(currentPage + 1)}
-                    className="rounded-lg border border-white/20 px-4 py-2 text-sm font-medium text-neutral-300 transition hover:border-white/40 hover:text-white"
+                    className="rounded-lg border border-neutral-700 px-4 py-2 text-base text-neutral-400 transition hover:border-neutral-600 hover:text-white"
                 >
                     Next
                 </a>

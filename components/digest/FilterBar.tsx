@@ -2,7 +2,7 @@
 
 import { Category, Tag, Author } from '@/lib/hive'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { X, Filter } from 'lucide-react'
+import { X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -51,67 +51,72 @@ export function FilterBar({
     const hasActiveFilters = activeCategory || activeTags || activeAuthor
 
     return (
-        <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-2 text-neutral-400">
-                    <Filter size={16} />
-                    <span className="text-sm font-medium">Filters:</span>
+        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap items-center gap-4">
+                    <Select
+                        value={activeCategory || 'all'}
+                        onValueChange={(value) =>
+                            updateFilter(
+                                'category',
+                                value === 'all' ? null : value
+                            )
+                        }
+                    >
+                        <SelectTrigger className="h-11 w-[180px] border-neutral-700 bg-neutral-800 text-base">
+                            <SelectValue placeholder="Category" />
+                        </SelectTrigger>
+                        <SelectContent className="border-neutral-700 bg-neutral-900">
+                            <SelectItem value="all">All Categories</SelectItem>
+                            {categories.map((cat) => (
+                                <SelectItem key={cat.slug} value={cat.slug}>
+                                    {cat.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    <Select
+                        value={activeAuthor || 'all'}
+                        onValueChange={(value) =>
+                            updateFilter(
+                                'author',
+                                value === 'all' ? null : value
+                            )
+                        }
+                    >
+                        <SelectTrigger className="h-11 w-[180px] border-neutral-700 bg-neutral-800 text-base">
+                            <SelectValue placeholder="Author" />
+                        </SelectTrigger>
+                        <SelectContent className="border-neutral-700 bg-neutral-900">
+                            <SelectItem value="all">All Authors</SelectItem>
+                            {authors.map((author) => (
+                                <SelectItem key={author.id} value={author.id}>
+                                    {author.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
-
-                <Select
-                    value={activeCategory || 'all'}
-                    onValueChange={(value) =>
-                        updateFilter('category', value === 'all' ? null : value)
-                    }
-                >
-                    <SelectTrigger className="w-[160px] border-white/20 bg-neutral-900/50 text-sm">
-                        <SelectValue placeholder="Category" />
-                    </SelectTrigger>
-                    <SelectContent className="border-white/20 bg-neutral-900">
-                        <SelectItem value="all">All Categories</SelectItem>
-                        {categories.map((cat) => (
-                            <SelectItem key={cat.slug} value={cat.slug}>
-                                {cat.name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-
-                <Select
-                    value={activeAuthor || 'all'}
-                    onValueChange={(value) =>
-                        updateFilter('author', value === 'all' ? null : value)
-                    }
-                >
-                    <SelectTrigger className="w-[160px] border-white/20 bg-neutral-900/50 text-sm">
-                        <SelectValue placeholder="Author" />
-                    </SelectTrigger>
-                    <SelectContent className="border-white/20 bg-neutral-900">
-                        <SelectItem value="all">All Authors</SelectItem>
-                        {authors.map((author) => (
-                            <SelectItem key={author.id} value={author.id}>
-                                {author.name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
 
                 {hasActiveFilters && (
                     <Button
                         variant="ghost"
-                        size="sm"
+                        size="default"
                         onClick={clearFilters}
-                        className="text-neutral-400 hover:text-white"
+                        className="gap-2 text-sm text-neutral-400 hover:text-white"
                     >
-                        <X size={14} className="mr-1" />
-                        Clear
+                        <X size={16} />
+                        Clear filters
                     </Button>
                 )}
             </div>
 
             {activeTags && (
-                <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm text-neutral-500">Tags:</span>
+                <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-neutral-800 pt-4">
+                    <span className="text-sm font-medium text-neutral-500">
+                        Active:
+                    </span>
                     {activeTags.split(',').map((tagSlug) => {
                         const tag = tags.find((t) => t.slug === tagSlug)
                         if (!tag) return null
@@ -119,7 +124,7 @@ export function FilterBar({
                             <Badge
                                 key={tagSlug}
                                 variant="outline"
-                                className="border-primary/30 text-primary hover:bg-primary/10 cursor-pointer gap-1"
+                                className="border-primary text-primary hover:bg-primary/10 h-8 cursor-pointer gap-2 px-3 text-sm"
                                 onClick={() => {
                                     const newTags = activeTags
                                         .split(',')
@@ -129,36 +134,53 @@ export function FilterBar({
                                 }}
                             >
                                 {tag.name}
-                                <X size={12} />
+                                <X size={14} />
                             </Badge>
                         )
                     })}
                 </div>
             )}
 
-            {tags.length > 0 && !activeTags && (
-                <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm text-neutral-500">Popular:</span>
-                    {tags.slice(0, 8).map((tag) => (
-                        <Badge
-                            key={tag.slug}
-                            variant="outline"
-                            className="cursor-pointer border-white/20 text-xs text-neutral-400 transition hover:border-white/40 hover:text-white"
-                            onClick={() => {
-                                const currentTags = activeTags
-                                    ? activeTags.split(',')
-                                    : []
-                                if (!currentTags.includes(tag.slug)) {
-                                    updateFilter(
-                                        'tags',
-                                        [...currentTags, tag.slug].join(',')
-                                    )
-                                }
-                            }}
-                        >
-                            {tag.name}
-                        </Badge>
-                    ))}
+            {tags.length > 0 && (
+                <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-neutral-800 pt-4">
+                    <span className="mr-2 text-sm font-medium text-neutral-500">
+                        Tags:
+                    </span>
+                    {tags.slice(0, 6).map((tag) => {
+                        const isActive = activeTags
+                            ?.split(',')
+                            .includes(tag.slug)
+                        return (
+                            <Badge
+                                key={tag.slug}
+                                variant="outline"
+                                className={`h-8 cursor-pointer px-3 text-sm transition ${
+                                    isActive
+                                        ? 'border-primary text-primary'
+                                        : 'border-neutral-700 text-neutral-400 hover:border-neutral-600 hover:text-neutral-200'
+                                }`}
+                                onClick={() => {
+                                    if (isActive) {
+                                        const newTags = activeTags
+                                            ?.split(',')
+                                            .filter((t) => t !== tag.slug)
+                                            .join(',')
+                                        updateFilter('tags', newTags || null)
+                                    } else {
+                                        const currentTags = activeTags
+                                            ? activeTags.split(',')
+                                            : []
+                                        updateFilter(
+                                            'tags',
+                                            [...currentTags, tag.slug].join(',')
+                                        )
+                                    }
+                                }}
+                            >
+                                {tag.name}
+                            </Badge>
+                        )
+                    })}
                 </div>
             )}
         </div>

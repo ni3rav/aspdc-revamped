@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Calendar, User, Tag } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import sanitizeHtml from 'sanitize-html'
+import { sanitizePostHtml } from '@/lib/sanitize'
 
 interface PostContentProps {
     params: Promise<{
@@ -21,22 +21,7 @@ export async function PostContent({ params }: PostContentProps) {
         notFound()
     }
 
-    const sanitizedContent = sanitizeHtml(post.htmlContent, {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-            'img',
-            'h1',
-            'h2',
-            'h3',
-            'code',
-            'pre',
-        ]),
-        allowedAttributes: {
-            ...sanitizeHtml.defaults.allowedAttributes,
-            img: ['src', 'alt', 'title'],
-            code: ['class'],
-            pre: ['class'],
-        },
-    })
+    const sanitizedContent = sanitizePostHtml(post.htmlContent)
 
     const date = post.publishedAt
         ? new Date(post.publishedAt).toLocaleDateString('en-US', {
@@ -47,38 +32,41 @@ export async function PostContent({ params }: PostContentProps) {
         : null
 
     return (
-        <article className="rounded-2xl border border-white/20 bg-neutral-900/40 backdrop-blur-sm">
-            <div className="border-b border-white/10 p-6 sm:p-8 lg:p-10">
+        <article>
+            <header className="mb-10">
                 {post.category && (
                     <Badge
                         variant="outline"
-                        className="border-primary/30 text-primary mb-4"
+                        className="border-primary text-primary mb-5 h-8 px-3 text-sm font-medium tracking-wide uppercase"
                     >
                         {post.category.name}
                     </Badge>
                 )}
 
-                <h1 className="mb-6 text-3xl leading-tight font-bold text-white sm:text-4xl lg:text-5xl">
+                <h1 className="mb-5 text-4xl leading-tight font-bold tracking-tight text-white sm:text-5xl">
                     {post.title}
                 </h1>
 
-                <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-400">
+                <div className="flex flex-wrap items-center gap-4 text-base text-neutral-400">
                     {post.author && (
                         <span className="flex items-center gap-2">
-                            <User size={16} />
+                            <User size={18} />
                             {post.author.name}
                         </span>
                     )}
                     {date && (
-                        <span className="flex items-center gap-2">
-                            <Calendar size={16} />
-                            {date}
-                        </span>
+                        <>
+                            <span className="text-neutral-600">·</span>
+                            <span className="flex items-center gap-2">
+                                <Calendar size={18} />
+                                {date}
+                            </span>
+                        </>
                     )}
                 </div>
 
                 {post.tags.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
+                    <div className="mt-5 flex flex-wrap gap-2">
                         {post.tags.map((tag) => (
                             <Link
                                 key={tag.slug}
@@ -86,19 +74,22 @@ export async function PostContent({ params }: PostContentProps) {
                             >
                                 <Badge
                                     variant="outline"
-                                    className="border-white/20 text-neutral-400 hover:border-white/40 hover:text-white"
+                                    className="h-8 border-neutral-700 px-3 text-sm text-neutral-400 transition hover:border-neutral-600 hover:text-neutral-200"
                                 >
-                                    <Tag size={12} className="mr-1" />
+                                    <Tag size={14} className="mr-1.5" />
                                     {tag.name}
                                 </Badge>
                             </Link>
                         ))}
                     </div>
                 )}
-            </div>
+            </header>
 
-            <div className="prose prose-invert max-w-none p-6 sm:p-8 lg:p-10">
-                <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+            <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-8 sm:p-10">
+                <div
+                    className="prose prose-lg prose-invert prose-neutral prose-headings:font-semibold prose-headings:tracking-tight prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-code:text-base prose-pre:bg-neutral-800 max-w-none"
+                    dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+                />
             </div>
         </article>
     )

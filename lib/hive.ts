@@ -123,6 +123,9 @@ export interface ListPostsParams {
     author?: string
 }
 
+// Cache duration: 1 hour (in seconds)
+const CACHE_REVALIDATE = 3600
+
 // Client class
 export class HiveClient {
     private apiKey: string
@@ -156,6 +159,7 @@ export class HiveClient {
             headers: {
                 Accept: 'application/json',
             },
+            next: { revalidate: CACHE_REVALIDATE },
         })
 
         if (!response.ok) {

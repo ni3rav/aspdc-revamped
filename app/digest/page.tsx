@@ -14,16 +14,15 @@ interface DigestPageProps {
 
 export default function DigestPage({ searchParams }: DigestPageProps) {
     return (
-        <main className="mx-auto min-h-screen max-w-7xl px-4 py-24 sm:px-6 lg:px-8 lg:py-16">
-            <div className="mb-8 md:mb-12">
-                <TextScramble className="text-primary mb-4 text-3xl font-bold uppercase md:text-4xl lg:text-5xl">
+        <main className="mx-auto min-h-screen max-w-7xl px-6 py-24 sm:px-8 lg:px-12">
+            <header className="mb-12">
+                <TextScramble className="text-primary text-4xl font-bold tracking-tight uppercase md:text-5xl">
                     Digest
                 </TextScramble>
-                <p className="max-w-2xl text-neutral-400">
-                    Explore our latest articles, insights, and stories from the
-                    community.
+                <p className="mt-3 text-base text-neutral-400 sm:text-lg">
+                    Articles, insights, and stories from the community.
                 </p>
-            </div>
+            </header>
 
             <Suspense fallback={<FilterBarSkeleton />}>
                 <FilterBarWrapper searchParams={searchParams} />
@@ -38,7 +37,7 @@ export default function DigestPage({ searchParams }: DigestPageProps) {
 
 function FilterBarSkeleton() {
     return (
-        <div className="mb-6 h-24 animate-pulse rounded-xl bg-neutral-800/50" />
+        <div className="mb-8 h-28 animate-pulse rounded-2xl bg-neutral-900" />
     )
 }
 
@@ -48,7 +47,7 @@ function PostsGridSkeleton() {
             {Array.from({ length: 6 }).map((_, i) => (
                 <div
                     key={i}
-                    className="h-64 animate-pulse rounded-2xl bg-neutral-800/50"
+                    className="h-72 animate-pulse rounded-2xl bg-neutral-900"
                 />
             ))}
         </div>
