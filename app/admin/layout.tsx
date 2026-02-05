@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { logoutAction } from './actions'
+import { Analytics } from '@vercel/analytics/next'
 import { Suspense } from 'react'
 
 async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
@@ -53,7 +54,10 @@ async function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                     </div>
                 </div>
             </nav>
-            <main className="container mx-auto px-4 py-8">{children}</main>
+            <main className="container mx-auto px-4 py-8">
+                <Analytics />
+                {children}
+            </main>
         </div>
     )
 }
