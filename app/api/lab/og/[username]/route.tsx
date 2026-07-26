@@ -1,5 +1,8 @@
 import { ImageResponse } from 'next/og'
-import { fetchLabProfileByGithubUsername } from '@/db/queries'
+import {
+    fetchLabProfileByGithubUsername,
+    fetchLabProfileScoreByProfileId,
+} from '@/db/queries'
 import { getProfileDisplayData } from '@/lib/lab/profile'
 
 async function loadSpaceGroteskFont(): Promise<ArrayBuffer | null> {
@@ -32,9 +35,10 @@ export async function GET(
     }
 
     const displayData = getProfileDisplayData(profile)
+    const rankingScore = await fetchLabProfileScoreByProfileId(profile.id)
     const primaryCharacter = displayData.primaryCharacter
     const characterSimilarity = displayData.primarySimilarity
-    const developerScore = displayData.developerScore
+    const developerScore = rankingScore?.developerScore
 
     const fontData = await loadSpaceGroteskFont()
 
@@ -193,9 +197,9 @@ export async function GET(
                     >
                         Developer Score:{' '}
                         <span style={{ color: '#22c55e' }}>
-                            {developerScore}
+                            {developerScore ?? 'Not ranked'}
                         </span>
-                        /100
+                        {developerScore === undefined ? '' : '/100'}
                     </div>
                 </div>
             </div>

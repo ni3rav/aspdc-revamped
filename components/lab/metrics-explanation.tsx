@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TRAIT_IDS, type TraitId } from '@/lib/lab/types'
 import { getTraitLabel, getTraitDescription } from '@/lib/lab/traits'
@@ -15,12 +15,15 @@ function AccordionItem({
     children: React.ReactNode
 }) {
     const [open, setOpen] = useState(false)
+    const contentId = useId()
 
     return (
         <div className="border-border overflow-hidden rounded-lg border">
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-controls={contentId}
                 className="hover:bg-muted/40 flex w-full items-center justify-between px-4 py-3.5 text-left transition-colors"
             >
                 <span className="text-foreground text-base font-semibold">
@@ -33,6 +36,7 @@ function AccordionItem({
             <AnimatePresence initial={false}>
                 {open && (
                     <motion.div
+                        id={contentId}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -58,6 +62,7 @@ function TraitAccordionItem({
     rank: number
 }) {
     const [open, setOpen] = useState(false)
+    const contentId = useId()
     const label = getTraitLabel(traitId)
     const description = getTraitDescription(traitId)
 
@@ -66,6 +71,8 @@ function TraitAccordionItem({
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-controls={contentId}
                 className="hover:bg-muted/40 flex w-full items-center justify-between px-4 py-3 text-left transition-colors"
             >
                 <div className="flex items-center gap-3">
@@ -83,6 +90,7 @@ function TraitAccordionItem({
             <AnimatePresence initial={false}>
                 {open && (
                     <motion.div
+                        id={contentId}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -118,9 +126,9 @@ export function MetricsExplanation() {
                         How Your Profile is Built
                     </h2>
                     <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-base leading-relaxed">
-                        Everything here is computed from public GitHub data — no
-                        opinions, no manual scoring. Expand any section below to
-                        read exactly what we measure and how.
+                        The competitive score uses recent public evidence. The
+                        character match uses a separate persona model and is not
+                        used to rank developers.
                     </p>
                 </div>
 
@@ -129,28 +137,63 @@ export function MetricsExplanation() {
                     <h3 className="text-foreground mb-3 text-lg font-bold">
                         Developer Score (0 – 100)
                     </h3>
-                    <div className="space-y-2">
-                        <AccordionItem title="Engineering Fundamentals — Volume & Quality">
+                    <div className="flex flex-col gap-2">
+                        <AccordionItem title="Sustained activity — 30%">
                             <p className="text-muted-foreground">
-                                Measures commit volume across original
-                                repositories, repository presentation
-                                (descriptions, topic tags, languages), and
-                                active contribution frequency.
+                                Credits active days and weeks across a rolling
+                                90-day public window. Active weeks reach full
+                                credit at 13 and active days at 36; the pillar
+                                combines them 65/35. Fifty contributions on one
+                                day still count as one active day.
                             </p>
                         </AccordionItem>
-                        <AccordionItem title="Technical Range & Exploration">
+                        <AccordionItem title="Building — 30%">
                             <p className="text-muted-foreground">
-                                Evaluates multi-language mastery and breadth of
-                                project domains. Working across diverse stacks
-                                raises your Scientist and Curiosity scores.
+                                Credits capped commit activity and work across
+                                active original repositories. At most five
+                                commits per UTC day count, with diminishing
+                                returns reaching full commit credit at 90.
+                                Active original repositories reach full credit
+                                at five. The pillar combines commits and
+                                repositories 70/30.
                             </p>
                         </AccordionItem>
-                        <AccordionItem title="Consistency & Discipline">
+                        <AccordionItem title="External collaboration — 25%">
                             <p className="text-muted-foreground">
-                                Analyzes regularity of commit patterns over
-                                time. Steady, sustained coding activity across
-                                the 90-day window scores higher than erratic
-                                single-day bursts.
+                                Credits public pull requests, reviews, and
+                                issues in repositories you do not own. Pull
+                                requests reach full credit at 12 points, reviews
+                                at 24, and issues at 10, all with diminishing
+                                returns. Merged pull requests earn one point,
+                                open pull requests earn half, and closed
+                                unmerged pull requests earn none. Per-day and
+                                per-repository caps limit repetition.
+                            </p>
+                        </AccordionItem>
+                        <AccordionItem title="Repository stewardship — 15%">
+                            <p className="text-muted-foreground">
+                                Up to the five most active original repositories
+                                are scored for README (40%), description (25%),
+                                topics (15%), license (10%), and at least one
+                                release or tag (10%).
+                            </p>
+                        </AccordionItem>
+                        <AccordionItem title="What carries zero ranking weight">
+                            <p className="text-muted-foreground">
+                                Stars, forks received, follower counts, private
+                                or restricted activity, language popularity, and
+                                merely creating a fork do not change the score.
+                                Work from a fork counts only when it becomes a
+                                qualifying public upstream pull request or
+                                review.
+                            </p>
+                        </AccordionItem>
+                        <AccordionItem title="What the score cannot prove">
+                            <p className="text-muted-foreground">
+                                The score summarizes visible GitHub evidence; it
+                                does not measure code quality, difficulty,
+                                learning progress, teamwork outside GitHub, or a
+                                developer&apos;s overall ability.
                             </p>
                         </AccordionItem>
                     </div>
@@ -161,7 +204,7 @@ export function MetricsExplanation() {
                     <h3 className="text-foreground mb-3 text-lg font-bold">
                         Archetype Match %
                     </h3>
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-2">
                         <AccordionItem title="How matching works">
                             <p className="text-muted-foreground">
                                 Your 15 trait scores form a 15-dimensional
@@ -174,7 +217,7 @@ export function MetricsExplanation() {
                             </p>
                         </AccordionItem>
                         <AccordionItem title="What the percentages mean">
-                            <ul className="text-muted-foreground space-y-2">
+                            <ul className="text-muted-foreground flex flex-col gap-2">
                                 <li>
                                     <strong className="text-foreground">
                                         90–100%
@@ -217,7 +260,7 @@ export function MetricsExplanation() {
                         Each of the 15 traits is scored 0–100. Click any trait
                         to read what it measures and what a high score means.
                     </p>
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-2">
                         {TRAIT_IDS.map((traitId, idx) => (
                             <TraitAccordionItem
                                 key={traitId}

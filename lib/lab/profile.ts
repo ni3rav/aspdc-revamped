@@ -1,5 +1,9 @@
 import type { LabProfile } from '@/db/types'
-import { ACHIEVEMENTS, type Achievement } from './achievements'
+import {
+    ACHIEVEMENTS,
+    unlockDynamicRankingAchievements,
+    type Achievement,
+} from './achievements'
 import { readPersistedGitHubSnapshot, runAnalysisPipeline } from './analyze'
 import {
     CHARACTER_PROFILES,
@@ -21,7 +25,8 @@ export type ProfileDisplayData = {
 
 export function getProfileDisplayData(
     profile: LabProfile,
-    dbAchievementIds?: string[]
+    dbAchievementIds?: string[],
+    options: { rank?: number } = {}
 ): ProfileDisplayData {
     const cached = readPersistedGitHubSnapshot(profile.githubSnapshot)
 
@@ -56,20 +61,27 @@ export function getProfileDisplayData(
         primarySimilarity =
             topMatches[0]?.similarity ?? profile.characterSimilarity
 
-        if (dbAchievementIds && dbAchievementIds.length > 0) {
-            const idSet = new Set(dbAchievementIds)
-            achievements = ACHIEVEMENTS.filter((a) => idSet.has(a.id)).map(
-                ({ id, name, description, icon }) => ({
-                    id,
-                    name,
-                    description,
-                    icon,
-                })
-            )
-        } else {
-            achievements = []
+        achievements = []
+    }
+
+    const achievementIds = new Set(
+        dbAchievementIds ?? achievements.map((achievement) => achievement.id)
+    )
+    if (options.rank !== undefined) {
+        for (const achievement of unlockDynamicRankingAchievements(
+            options.rank
+        )) {
+            achievementIds.add(achievement.id)
         }
     }
+    achievements = ACHIEVEMENTS.filter((achievement) =>
+        achievementIds.has(achievement.id)
+    ).map(({ id, name, description, icon }) => ({
+        id,
+        name,
+        description,
+        icon,
+    }))
 
     const topMatch = topMatches[0]
     let primaryCharacter: CharacterProfile | undefined

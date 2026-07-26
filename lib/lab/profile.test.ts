@@ -110,4 +110,14 @@ describe('getProfileDisplayData', () => {
         expect(data.primaryCharacter).toBeDefined()
         expect(data.topMatches).toHaveLength(3)
     })
+
+    it('combines persisted durable and current dynamic rank achievements', () => {
+        const data = getProfileDisplayData(mockProfile, ['no-half-measures'], {
+            rank: 10,
+        })
+
+        expect(data.achievements.map((achievement) => achievement.id)).toEqual(
+            expect.arrayContaining(['no-half-measures', 'say-my-name'])
+        )
+    })
 })

@@ -25,7 +25,7 @@ export function LabLeaderboard({
     isSignedIn = false,
 }: LabLeaderboardProps) {
     return (
-        <div className="w-full max-w-4xl space-y-4 font-sans">
+        <div className="flex w-full max-w-4xl flex-col gap-4 font-sans">
             {entries.length === 0 ? (
                 <EmptyState />
             ) : (
@@ -63,11 +63,11 @@ function EmptyState() {
     return (
         <div className="border-border bg-card flex flex-col items-center justify-center rounded-xl border p-8 text-center shadow-md">
             <h3 className="text-foreground mb-1 text-base font-extrabold">
-                No GitHub Profiles Analyzed Yet
+                No Version 2 Profiles Analyzed Yet
             </h3>
             <p className="text-muted-foreground mb-5 max-w-sm text-xs">
-                Be the first developer on the leaderboard! Analyze your GitHub
-                profile to calculate your Developer Score and claim rank #1.
+                Analyze your recent public GitHub activity to calculate a
+                version 2 score and join the ranked cohort.
             </p>
             <Link
                 href="/lab/analyze"
@@ -105,7 +105,7 @@ function LeaderboardRow({
                         className="border-border relative shrink-0 overflow-hidden rounded-full border"
                     >
                         {imgError ? (
-                            <div className="bg-muted text-primary flex h-8 w-8 items-center justify-center rounded-full font-mono text-xs font-bold">
+                            <div className="bg-muted text-primary flex size-8 items-center justify-center rounded-full font-mono text-xs font-bold">
                                 {entry.githubUsername.slice(0, 2).toUpperCase()}
                             </div>
                         ) : (
@@ -114,7 +114,7 @@ function LeaderboardRow({
                                 alt={entry.githubUsername}
                                 width={32}
                                 height={32}
-                                className="h-8 w-8 rounded-full object-cover"
+                                className="size-8 rounded-full object-cover"
                                 onError={() => setImgError(true)}
                                 unoptimized
                             />

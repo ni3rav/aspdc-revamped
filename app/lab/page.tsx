@@ -8,7 +8,7 @@ import { HeroAnalyzeCta } from './hero-analyze-cta'
 export const metadata = {
     title: 'Leaderboard | Breaking Devs',
     description:
-        'Public ranked index of analyzed GitHub developer profiles, ordered by developer score.',
+        'Public ranked index of version 2 GitHub developer analyses, ordered by recent public engineering activity and stewardship.',
 }
 
 async function LeaderboardContent() {
@@ -24,9 +24,10 @@ async function LeaderboardContent() {
                         <BreakingDevsLogo animate={false} />
                         <div className="bg-border mx-auto h-px w-48" />
                         <p className="text-muted-foreground mx-auto max-w-sm text-sm leading-relaxed">
-                            Analyze your GitHub activity to calculate your
-                            developer score, coding traits, and matching
-                            Breaking Bad character.
+                            Analyze recent public GitHub activity for a version
+                            2 competitive score. Your coding traits and Breaking
+                            Bad character match remain a separate persona
+                            analysis.
                         </p>
                         <HeroAnalyzeCta />
                     </div>
@@ -45,7 +46,7 @@ export default function LabLeaderboardPage() {
             fallback={
                 <div className="bg-background flex min-h-screen items-center justify-center">
                     <div className="text-muted-foreground flex flex-col items-center gap-3 font-mono text-xs">
-                        <div className="border-primary h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />
+                        <div className="border-primary size-8 animate-spin rounded-full border-2 border-t-transparent" />
                         <p>LOADING DEVELOPER LEADERBOARD...</p>
                     </div>
                 </div>
