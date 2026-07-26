@@ -4,12 +4,7 @@ import {
     fetchGitHubRankingSnapshot,
 } from './github'
 
-type GraphQLResponse = {
-    data?: unknown
-    errors?: Array<{ message: string }>
-}
-
-function jsonResponse(body: GraphQLResponse) {
+function jsonResponse(body: unknown) {
     return {
         ok: true,
         status: 200,
@@ -22,6 +17,13 @@ function restResponse(status: number) {
         ok: status >= 200 && status < 300,
         status,
     }
+}
+
+function authenticatedUserResponse() {
+    return jsonResponse({
+        login: 'student',
+        type: 'User',
+    })
 }
 
 function repository(
@@ -87,6 +89,26 @@ afterEach(() => {
 })
 
 describe('fetchGitHubRankingSnapshot', () => {
+    it('rejects bot accounts before collecting ranking contributions', async () => {
+        const fetchMock = vi.fn().mockResolvedValueOnce(
+            jsonResponse({
+                login: 'course-helper[bot]',
+                type: 'Bot',
+            })
+        )
+        vi.stubGlobal('fetch', fetchMock)
+
+        await expect(
+            fetchGitHubRankingSnapshot(
+                'github-token',
+                new Date('2026-07-26T12:00:00.000Z')
+            )
+        ).rejects.toThrow(/authenticated GitHub user account/)
+
+        expect(fetchMock).toHaveBeenCalledTimes(1)
+        expect(fetchMock.mock.calls[0]![0]).toBe('https://api.github.com/user')
+    })
+
     it('collects a complete public 90-day snapshot across contribution pages', async () => {
         const ownRepo = repository('coursework')
         const externalRepo = repository('club-site', 'aspdc')
@@ -95,6 +117,7 @@ describe('fetchGitHubRankingSnapshot', () => {
         })
         const fetchMock = vi
             .fn()
+            .mockResolvedValueOnce(authenticatedUserResponse())
             .mockResolvedValueOnce(
                 jsonResponse({
                     data: responseData({
@@ -195,8 +218,9 @@ describe('fetchGitHubRankingSnapshot', () => {
             new Date('2026-07-26T12:00:00.000Z')
         )
 
-        expect(fetchMock).toHaveBeenCalledTimes(3)
-        const [url, init] = fetchMock.mock.calls[0]!
+        expect(fetchMock).toHaveBeenCalledTimes(4)
+        expect(fetchMock.mock.calls[0]![0]).toBe('https://api.github.com/user')
+        const [url, init] = fetchMock.mock.calls[1]!
         expect(url).toBe('https://api.github.com/graphql')
         expect(init.headers).toMatchObject({
             Authorization: 'Bearer github-token',
@@ -210,10 +234,10 @@ describe('fetchGitHubRankingSnapshot', () => {
             issueCursor: null,
         })
         const secondRequest = JSON.parse(
-            String(fetchMock.mock.calls[1]![1].body)
+            String(fetchMock.mock.calls[2]![1].body)
         )
         expect(secondRequest.variables.pullRequestCursor).toBe('pr-cursor')
-        expect(fetchMock.mock.calls[2]![0]).toBe(
+        expect(fetchMock.mock.calls[3]![0]).toBe(
             'https://api.github.com/repos/student/coursework/readme'
         )
 
@@ -252,6 +276,7 @@ describe('fetchGitHubRankingSnapshot', () => {
     it('uses GitHub canonical README resolution and accepts a missing README', async () => {
         const fetchMock = vi
             .fn()
+            .mockResolvedValueOnce(authenticatedUserResponse())
             .mockResolvedValueOnce(
                 jsonResponse({
                     data: responseData({
@@ -279,7 +304,7 @@ describe('fetchGitHubRankingSnapshot', () => {
         )
 
         expect(snapshot.repositories[0]?.hasReadme).toBe(false)
-        expect(fetchMock.mock.calls[1]![0]).toMatch(
+        expect(fetchMock.mock.calls[2]![0]).toMatch(
             /\/repos\/student\/coursework\/readme$/
         )
     })
@@ -287,18 +312,21 @@ describe('fetchGitHubRankingSnapshot', () => {
     it('rejects an incomplete nested commit connection', async () => {
         vi.stubGlobal(
             'fetch',
-            vi.fn().mockResolvedValue(
-                jsonResponse({
-                    data: responseData({
-                        commits: [
-                            {
-                                repository: repository('coursework'),
-                                contributions: connection([], true, 'more'),
-                            },
-                        ],
-                    }),
-                })
-            )
+            vi
+                .fn()
+                .mockResolvedValueOnce(authenticatedUserResponse())
+                .mockResolvedValue(
+                    jsonResponse({
+                        data: responseData({
+                            commits: [
+                                {
+                                    repository: repository('coursework'),
+                                    contributions: connection([], true, 'more'),
+                                },
+                            ],
+                        }),
+                    })
+                )
         )
 
         await expect(
@@ -312,11 +340,14 @@ describe('fetchGitHubRankingSnapshot', () => {
     it('rejects unsupported account types and GraphQL errors', async () => {
         vi.stubGlobal(
             'fetch',
-            vi.fn().mockResolvedValueOnce(
-                jsonResponse({
-                    data: responseData({ typename: 'Organization' }),
-                })
-            )
+            vi
+                .fn()
+                .mockResolvedValueOnce(authenticatedUserResponse())
+                .mockResolvedValueOnce(
+                    jsonResponse({
+                        data: responseData({ typename: 'Organization' }),
+                    })
+                )
         )
         await expect(
             fetchGitHubRankingSnapshot(
@@ -327,11 +358,14 @@ describe('fetchGitHubRankingSnapshot', () => {
 
         vi.stubGlobal(
             'fetch',
-            vi.fn().mockResolvedValueOnce(
-                jsonResponse({
-                    data: responseData({ typename: 'Bot' }),
-                })
-            )
+            vi
+                .fn()
+                .mockResolvedValueOnce(authenticatedUserResponse())
+                .mockResolvedValueOnce(
+                    jsonResponse({
+                        data: responseData({ typename: 'Bot' }),
+                    })
+                )
         )
         await expect(
             fetchGitHubRankingSnapshot(
@@ -342,11 +376,14 @@ describe('fetchGitHubRankingSnapshot', () => {
 
         vi.stubGlobal(
             'fetch',
-            vi.fn().mockResolvedValueOnce(
-                jsonResponse({
-                    errors: [{ message: 'Something failed' }],
-                })
-            )
+            vi
+                .fn()
+                .mockResolvedValueOnce(authenticatedUserResponse())
+                .mockResolvedValueOnce(
+                    jsonResponse({
+                        errors: [{ message: 'Something failed' }],
+                    })
+                )
         )
         await expect(
             fetchGitHubRankingSnapshot(
@@ -357,7 +394,13 @@ describe('fetchGitHubRankingSnapshot', () => {
     })
 
     it('rejects rate-limited GitHub responses without producing a snapshot', async () => {
-        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(restResponse(429)))
+        vi.stubGlobal(
+            'fetch',
+            vi
+                .fn()
+                .mockResolvedValueOnce(authenticatedUserResponse())
+                .mockResolvedValue(restResponse(429))
+        )
 
         await expect(
             fetchGitHubRankingSnapshot(

@@ -92,6 +92,38 @@ type RankingGraphQLResponse = {
     errors?: Array<{ message: string }>
 }
 
+type GitHubAuthenticatedAccount = {
+    login: string
+    type: string
+}
+
+async function requestAuthenticatedAccount(
+    accessToken: string
+): Promise<GitHubAuthenticatedAccount> {
+    const response = await fetch(`${GITHUB_REST_URL}/user`, {
+        headers: {
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${accessToken}`,
+            'X-GitHub-Api-Version': '2022-11-28',
+        },
+        cache: 'no-store',
+    })
+
+    if (!response.ok) {
+        throw new Error(
+            `GitHub authenticated-user request failed (${response.status}) while validating ranking eligibility.`
+        )
+    }
+
+    const account = (await response.json()) as GitHubAuthenticatedAccount
+    if (account.type !== 'User') {
+        throw new Error(
+            'Ranking analysis requires an authenticated GitHub user account.'
+        )
+    }
+    return account
+}
+
 const RANKING_QUERY = `
 query RankingContributions(
     $from: DateTime!
@@ -370,6 +402,8 @@ export async function fetchGitHubRankingSnapshot(
     accessToken: string,
     capturedAt: Date = new Date()
 ): Promise<RankingSnapshotV2> {
+    await requestAuthenticatedAccount(accessToken)
+
     const windowEnd = capturedAt.toISOString()
     const windowStart = new Date(
         capturedAt.getTime() - RANKING_WINDOW_DAYS * 24 * 60 * 60 * 1000
