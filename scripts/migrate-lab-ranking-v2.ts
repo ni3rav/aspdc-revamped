@@ -15,7 +15,7 @@ async function main() {
             scoreRankingSnapshotV2,
         },
         { RANKING_SCORE_VERSION },
-        { unlockDurableRankingAchievements },
+        { DURABLE_RANKING_ACHIEVEMENT_IDS, unlockDurableRankingAchievements },
         { persistLabAnalysisV2 },
     ] = await Promise.all([
         import('@/db/drizzle'),
@@ -56,6 +56,7 @@ async function main() {
     let failed = 0
     const candidates: Array<{
         profile: (typeof profiles)[number]['profile']
+        rankingSnapshot: Awaited<ReturnType<typeof fetchGitHubRankingSnapshot>>
         ranking: ReturnType<typeof scoreRankingSnapshotV2>
         persistedSnapshot: ReturnType<typeof createPersistedRankingSnapshotV2>
         capturedAt: Date
@@ -90,6 +91,7 @@ async function main() {
 
             candidates.push({
                 profile,
+                rankingSnapshot,
                 ranking,
                 persistedSnapshot,
                 capturedAt,
@@ -103,7 +105,7 @@ async function main() {
         }
     }
 
-    const oldScores = profiles.map(({ profile }) => profile.developerScore)
+    const oldScores = candidates.map(({ profile }) => profile.developerScore)
     const newScores = candidates.map(({ ranking }) => ranking.developerScore)
     const competitionRank = (score: number, cohort: number[]) =>
         1 + cohort.filter((candidateScore) => candidateScore > score).length
@@ -111,6 +113,7 @@ async function main() {
     for (const candidate of candidates) {
         const {
             profile,
+            rankingSnapshot,
             ranking,
             persistedSnapshot,
             capturedAt,
@@ -126,6 +129,7 @@ async function main() {
                 `V2 ${ranking.developerScore} (#${newRank}, ${movement >= 0 ? '+' : ''}${movement})`,
                 getDeveloperScoreBand(ranking.developerScore),
                 `pillars ${JSON.stringify(ranking.pillars)}`,
+                `caps commits ${rankingSnapshot.commits.reduce((sum, contribution) => sum + contribution.commitCount, 0)}→${ranking.credited.creditedCommits}; PR records ${rankingSnapshot.pullRequests.length}→${ranking.credited.creditedPullRequestPoints} points; reviews ${rankingSnapshot.reviews.length}→${ranking.credited.creditedReviews}; issues ${rankingSnapshot.issues.length}→${ranking.credited.creditedIssues}`,
                 `character ${profile.characterId} unchanged`,
             ].join(' | ')
         )
@@ -152,6 +156,7 @@ async function main() {
                     capturedAt,
                 },
                 achievements,
+                replaceAchievementIds: [...DURABLE_RANKING_ACHIEVEMENT_IDS],
             })
             written += 1
         } catch (error) {

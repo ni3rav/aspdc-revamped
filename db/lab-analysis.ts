@@ -13,6 +13,8 @@ export type PersistLabAnalysisV2Input = {
     profile: NewLabProfile
     score: Omit<NewLabProfileScore, 'profileId'>
     achievements: NewLabAchievement[]
+    /** One-time migration cleanup for achievement IDs whose V1 meaning changed. */
+    replaceAchievementIds?: string[]
 }
 
 type PersistedProfileRow = {
@@ -35,6 +37,25 @@ type PersistedProfileRow = {
 export async function persistLabAnalysisV2(
     input: PersistLabAnalysisV2Input
 ): Promise<LabProfile> {
+    const replaceAchievementIds = input.replaceAchievementIds ?? []
+    const cleanupCte =
+        replaceAchievementIds.length === 0
+            ? sql.empty()
+            : sql`,
+deleted_achievements AS (
+    DELETE FROM lab_achievements
+    WHERE
+        profile_id = (SELECT id FROM upserted_profile)
+        AND achievement_id IN (${sql.join(
+            replaceAchievementIds.map((id) => sql`${id}`),
+            sql`, `
+        )})
+    RETURNING id
+)`
+    const cleanupDependency =
+        replaceAchievementIds.length === 0
+            ? sql.empty()
+            : sql`CROSS JOIN (SELECT count(*) FROM deleted_achievements) AS cleanup`
     const achievementCte =
         input.achievements.length === 0
             ? sql.empty()
@@ -50,6 +71,7 @@ inserted_achievements AS (
         pending.achievement_id,
         pending.unlocked_at
     FROM upserted_profile
+    ${cleanupDependency}
     CROSS JOIN (
         VALUES ${sql.join(
             input.achievements.map(
@@ -62,7 +84,7 @@ inserted_achievements AS (
         )}
     ) AS pending(achievement_id, unlocked_at)
     ON CONFLICT (profile_id, achievement_id)
-    DO UPDATE SET unlocked_at = EXCLUDED.unlocked_at
+    DO NOTHING
     RETURNING id
 )`
 
@@ -125,6 +147,7 @@ upserted_score AS (
         updated_at = now()
     RETURNING id
 )
+${cleanupCte}
 ${achievementCte}
 SELECT
     id,

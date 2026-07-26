@@ -32,7 +32,7 @@ function snapshot(
         scoreVersion: RANKING_SCORE_VERSION,
         login: 'student',
         userType: 'User',
-        windowStart: '2026-04-28T00:00:00.000Z',
+        windowStart: '2026-04-27T12:00:00.000Z',
         windowEnd: '2026-07-26T12:00:00.000Z',
         capturedAt: '2026-07-26T12:00:00.000Z',
         repositories: [],
@@ -243,6 +243,107 @@ describe('scoreRankingSnapshotV2', () => {
         expect(manyCommits.developerScore).toBeGreaterThanOrEqual(
             oneCommit.developerScore
         )
+    })
+
+    it('does not turn ineligible collaboration into active days', () => {
+        const external = repository('external', {
+            ownerLogin: 'community',
+            nameWithOwner: 'community/external',
+        })
+        const result = scoreRankingSnapshotV2(
+            snapshot({
+                repositories: [external],
+                pullRequests: [
+                    {
+                        occurredAt: '2026-07-01T12:00:00.000Z',
+                        repositoryId: external.id,
+                        isRestricted: false,
+                        pullRequestId: 'closed-pr',
+                        state: 'CLOSED',
+                    },
+                ],
+                reviews: [
+                    {
+                        occurredAt: '2026-07-02T12:00:00.000Z',
+                        repositoryId: external.id,
+                        isRestricted: false,
+                        pullRequestId: 'self-authored-pr',
+                        pullRequestAuthorLogin: 'student',
+                    },
+                ],
+            })
+        )
+
+        expect(result.developerScore).toBe(0)
+        expect(result.credited.activeDays).toBe(0)
+        expect(result.credited.activeWeeks).toBe(0)
+    })
+
+    it('cannot lose stewardship points when more qualifying work is added', () => {
+        const documented = Array.from({ length: 5 }, (_, index) =>
+            repository(`documented-${index}`, {
+                hasReadme: true,
+                hasDescription: true,
+                hasTopics: true,
+                hasLicense: true,
+                hasReleaseOrTag: true,
+            })
+        )
+        const undocumented = repository('undocumented')
+        const commits = documented.map((repo, index) => ({
+            occurredAt: new Date(Date.UTC(2026, 6, index + 1)).toISOString(),
+            repositoryId: repo.id,
+            isRestricted: false,
+            commitCount: 1,
+        }))
+        const before = scoreRankingSnapshotV2(
+            snapshot({ repositories: documented, commits })
+        )
+        const after = scoreRankingSnapshotV2(
+            snapshot({
+                repositories: [...documented, undocumented],
+                commits: [
+                    ...commits,
+                    {
+                        occurredAt: '2026-07-10T12:00:00.000Z',
+                        repositoryId: undocumented.id,
+                        isRestricted: false,
+                        commitCount: 5,
+                    },
+                ],
+            })
+        )
+
+        expect(after.pillars.stewardship).toBeGreaterThanOrEqual(
+            before.pillars.stewardship
+        )
+        expect(after.developerScore).toBeGreaterThanOrEqual(
+            before.developerScore
+        )
+    })
+
+    it('rejects malformed snapshots instead of silently scoring them', () => {
+        expect(() =>
+            scoreRankingSnapshotV2(
+                snapshot({
+                    capturedAt: 'not-a-date',
+                })
+            )
+        ).toThrow(/capturedAt/)
+        expect(() =>
+            scoreRankingSnapshotV2(
+                snapshot({
+                    commits: [
+                        {
+                            occurredAt: '2026-07-01T12:00:00.000Z',
+                            repositoryId: 'missing',
+                            isRestricted: false,
+                            commitCount: 1,
+                        },
+                    ],
+                })
+            )
+        ).toThrow(/unknown repository/)
     })
 })
 

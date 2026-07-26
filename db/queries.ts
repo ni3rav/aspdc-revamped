@@ -345,9 +345,9 @@ export async function fetchLabProfileScoreByProfileId(
     }
 }
 
-export async function fetchLabScoreDistribution(): Promise<
-    Array<{ developerScore: number }>
-> {
+export async function fetchLabScoreDistribution(): Promise<Array<{
+    developerScore: number
+}> | null> {
     'use cache'
     cacheLife('minutes')
 
@@ -359,7 +359,7 @@ export async function fetchLabScoreDistribution(): Promise<
             .orderBy(desc(labProfileScores.developerScore))
     } catch (error) {
         console.error('Error fetching lab score distribution:', error)
-        return []
+        return null
     }
 }
 

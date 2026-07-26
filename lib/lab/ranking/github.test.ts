@@ -33,9 +33,13 @@ function repository(
         licenseInfo: { key: 'mit' },
         releases: { totalCount: 1 },
         refs: { totalCount: 0 },
-        readmeMarkdown: { id: `readme-${id}` },
-        readmePlain: null,
-        readmeLowercase: null,
+        defaultBranchRef: {
+            target: {
+                tree: {
+                    entries: [{ name: 'README.md', type: 'blob' }],
+                },
+            },
+        },
         ...overrides,
     }
 }
@@ -77,7 +81,15 @@ afterEach(() => {
 
 describe('fetchGitHubRankingSnapshot', () => {
     it('collects a complete public 90-day snapshot across contribution pages', async () => {
-        const ownRepo = repository('coursework')
+        const ownRepo = repository('coursework', 'student', {
+            defaultBranchRef: {
+                target: {
+                    tree: {
+                        entries: [{ name: 'README.rst', type: 'blob' }],
+                    },
+                },
+            },
+        })
         const externalRepo = repository('club-site', 'aspdc')
         const privateRepo = repository('private-lab', 'student', {
             isPrivate: true,
@@ -220,6 +232,10 @@ describe('fetchGitHubRankingSnapshot', () => {
                 commitCount: 3,
             },
         ])
+        expect(
+            snapshot.repositories.find(({ id }) => id === 'coursework')
+                ?.hasReadme
+        ).toBe(true)
         expect(snapshot.pullRequests.map((item) => item.state)).toEqual([
             'OPEN',
             'MERGED',

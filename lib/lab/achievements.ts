@@ -22,6 +22,22 @@ export type AchievementContext = {
     rank?: number
 }
 
+export const DURABLE_RANKING_ACHIEVEMENT_IDS = [
+    'no-half-measures',
+    'the-one-who-builds',
+    'associate-network',
+    'open-the-lab',
+] as const
+
+export const RANKING_ACHIEVEMENT_IDS = [
+    'say-my-name',
+    ...DURABLE_RANKING_ACHIEVEMENT_IDS,
+] as const
+
+export function isRankingAchievement(id: string): boolean {
+    return (RANKING_ACHIEVEMENT_IDS as readonly string[]).includes(id)
+}
+
 function uniqueLanguageCount(snapshot: GitHubSnapshot): number {
     return new Set(
         snapshot.repos
@@ -43,7 +59,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
         id: 'say-my-name',
         name: 'Say My Name',
         description:
-            'Ranked in the global top 10 on the developer leaderboard.',
+            'Ranked in the top 10 of the analyzed version-2 developer cohort.',
         icon: 'crown',
         unlock: ({ rank }) => rank !== undefined && rank <= 10,
     },

@@ -119,5 +119,23 @@ describe('getProfileDisplayData', () => {
         expect(data.achievements.map((achievement) => achievement.id)).toEqual(
             expect.arrayContaining(['no-half-measures', 'say-my-name'])
         )
+        expect(
+            data.rankingAchievements.map((achievement) => achievement.id)
+        ).toEqual(expect.arrayContaining(['no-half-measures', 'say-my-name']))
+        expect(
+            data.personaAchievements.some((achievement) =>
+                ['no-half-measures', 'say-my-name'].includes(achievement.id)
+            )
+        ).toBe(false)
+    })
+
+    it('does not reinterpret legacy ranking badges without a V2 score', () => {
+        const data = getProfileDisplayData(mockProfile, [
+            'the-blue-sky',
+            'no-half-measures',
+        ])
+
+        expect(data.achievements.map(({ id }) => id)).toEqual(['the-blue-sky'])
+        expect(data.rankingAchievements).toEqual([])
     })
 })

@@ -16,6 +16,12 @@ describe('getCompetitionRank', () => {
 })
 
 describe('calculateRankingStats', () => {
+    it('refuses to invent a cohort when no distribution was loaded', () => {
+        expect(() => calculateRankingStats(91, [])).toThrow(
+            /non-empty participant cohort/
+        )
+    })
+
     it('uses competition rank and strict score comparisons for ties', () => {
         const scores = [91, 91, 84, 70, 70]
 

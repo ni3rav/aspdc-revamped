@@ -166,16 +166,22 @@ export function MetricsExplanation() {
                                 at 24, and issues at 10, all with diminishing
                                 returns. Merged pull requests earn one point,
                                 open pull requests earn half, and closed
-                                unmerged pull requests earn none. Per-day and
-                                per-repository caps limit repetition.
+                                unmerged pull requests earn none. Pull-request
+                                credit is capped at 2 points per day and 4 per
+                                repository; reviews at 4 per day and 10 per
+                                repository; issues at 2 per day and 4 per
+                                repository.
                             </p>
                         </AccordionItem>
                         <AccordionItem title="Repository stewardship — 15%">
                             <p className="text-muted-foreground">
-                                Up to the five most active original repositories
-                                are scored for README (40%), description (25%),
-                                topics (15%), license (10%), and at least one
-                                release or tag (10%).
+                                The five strongest hygiene scores among active
+                                original repositories contribute to a fixed
+                                five-repository maximum, so adding qualifying
+                                work cannot lower the pillar. Each is scored for
+                                README (40%), description (25%), topics (15%),
+                                license (10%), and at least one release or tag
+                                (10%).
                             </p>
                         </AccordionItem>
                         <AccordionItem title="What carries zero ranking weight">

@@ -13,7 +13,7 @@ import type { RankingStats } from '@/lib/lab/ranking/rank'
 
 type RankingOverviewProps = {
     score: LabProfileScore
-    stats: RankingStats
+    stats?: RankingStats
 }
 
 const PILLARS = [
@@ -35,8 +35,20 @@ export function RankingOverview({ score, stats }: RankingOverviewProps) {
     const credited = score.rankingSnapshot.credited
     const capturedLabel = new Intl.DateTimeFormat('en-GB', {
         dateStyle: 'medium',
+        timeStyle: 'medium',
         timeZone: 'UTC',
     }).format(score.capturedAt)
+    const windowFormatter = new Intl.DateTimeFormat('en-GB', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone: 'UTC',
+    })
+    const windowStartLabel = windowFormatter.format(
+        new Date(score.rankingSnapshot.windowStart)
+    )
+    const windowEndLabel = windowFormatter.format(
+        new Date(score.rankingSnapshot.windowEnd)
+    )
 
     return (
         <section
@@ -136,13 +148,20 @@ export function RankingOverview({ score, stats }: RankingOverviewProps) {
                             />
                             <Aggregate
                                 label="Analyzed rank"
-                                value={`${stats.rank} of ${stats.participantCount}`}
+                                value={
+                                    stats
+                                        ? `${stats.rank} of ${stats.participantCount}`
+                                        : 'Unavailable'
+                                }
                             />
                         </dl>
                     </div>
                 </CardContent>
 
-                <CardFooter className="text-muted-foreground flex flex-wrap justify-between gap-3 border-t text-sm">
+                <CardFooter className="text-muted-foreground flex flex-col items-start gap-2 border-t text-sm">
+                    <span>
+                        Window {windowStartLabel} → {windowEndLabel} UTC
+                    </span>
                     <span>Captured {capturedLabel} UTC · Score version 2</span>
                     <span>
                         Stars, forks received, followers, and fork creation

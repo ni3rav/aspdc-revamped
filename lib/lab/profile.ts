@@ -1,6 +1,7 @@
 import type { LabProfile } from '@/db/types'
 import {
     ACHIEVEMENTS,
+    isRankingAchievement,
     unlockDynamicRankingAchievements,
     type Achievement,
 } from './achievements'
@@ -20,13 +21,15 @@ export type ProfileDisplayData = {
     developerScore: number
     topMatches: CharacterMatch[]
     achievements: Achievement[]
+    personaAchievements: Achievement[]
+    rankingAchievements: Achievement[]
     traits: TraitVector
 }
 
 export function getProfileDisplayData(
     profile: LabProfile,
     dbAchievementIds?: string[],
-    options: { rank?: number } = {}
+    options: { rank?: number; includeRankingAchievements?: boolean } = {}
 ): ProfileDisplayData {
     const cached = readPersistedGitHubSnapshot(profile.githubSnapshot)
 
@@ -67,21 +70,32 @@ export function getProfileDisplayData(
     const achievementIds = new Set(
         dbAchievementIds ?? achievements.map((achievement) => achievement.id)
     )
-    if (options.rank !== undefined) {
+    const includeRankingAchievements =
+        options.includeRankingAchievements ?? options.rank !== undefined
+    if (includeRankingAchievements && options.rank !== undefined) {
         for (const achievement of unlockDynamicRankingAchievements(
             options.rank
         )) {
             achievementIds.add(achievement.id)
         }
     }
-    achievements = ACHIEVEMENTS.filter((achievement) =>
-        achievementIds.has(achievement.id)
+    achievements = ACHIEVEMENTS.filter(
+        (achievement) =>
+            achievementIds.has(achievement.id) &&
+            (includeRankingAchievements ||
+                !isRankingAchievement(achievement.id))
     ).map(({ id, name, description, icon }) => ({
         id,
         name,
         description,
         icon,
     }))
+    const personaAchievements = achievements.filter(
+        (achievement) => !isRankingAchievement(achievement.id)
+    )
+    const rankingAchievements = achievements.filter((achievement) =>
+        isRankingAchievement(achievement.id)
+    )
 
     const topMatch = topMatches[0]
     let primaryCharacter: CharacterProfile | undefined
@@ -97,12 +111,7 @@ export function getProfileDisplayData(
     }
 
     if (!primaryCharacter) {
-        primaryCharacter = {
-            id: (profile.characterId as any) || 'walter-white',
-            name: profile.characterId || 'Classified Subject',
-            summary: 'A subject undergoing laboratory analysis.',
-            traits: emptyTraitVector(50),
-        }
+        primaryCharacter = CHARACTER_PROFILES[0]!
     }
 
     // Ensure primarySimilarity is strictly synchronized with topMatches[0]
@@ -116,6 +125,8 @@ export function getProfileDisplayData(
         developerScore,
         topMatches,
         achievements,
+        personaAchievements,
+        rankingAchievements,
         traits,
     }
 }

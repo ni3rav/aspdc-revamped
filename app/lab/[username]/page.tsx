@@ -84,14 +84,18 @@ async function ProfileContent({
             fetchLabScoreDistribution(),
         ])
 
-    const participantScores = distributionRows.map(
-        ({ developerScore }) => developerScore
-    )
-    const rankingStats = rankingScore
-        ? calculateRankingStats(rankingScore.developerScore, participantScores)
-        : null
+    const participantScores =
+        distributionRows?.map(({ developerScore }) => developerScore) ?? []
+    const rankingStats =
+        rankingScore && participantScores.length > 0
+            ? calculateRankingStats(
+                  rankingScore.developerScore,
+                  participantScores
+              )
+            : null
     const displayData = getProfileDisplayData(profile, dbAchievementIds, {
         rank: rankingStats?.rank,
+        includeRankingAchievements: Boolean(rankingScore),
     })
 
     const primaryExplanation =
@@ -117,29 +121,65 @@ async function ProfileContent({
             <TraitRadarChart traits={displayData.traits} />
 
             {/* Section 4: Versioned competitive ranking */}
-            {rankingScore && rankingStats ? (
+            {rankingScore ? (
                 <>
                     <RankingOverview
                         score={rankingScore}
-                        stats={rankingStats}
+                        stats={rankingStats ?? undefined}
                     />
-                    <RankingDistribution
-                        userScore={rankingScore.developerScore}
-                        username={profile.githubUsername}
-                        stats={rankingStats}
-                        histogram={createScoreHistogram(participantScores)}
-                    />
+                    {rankingStats ? (
+                        <RankingDistribution
+                            userScore={rankingScore.developerScore}
+                            username={profile.githubUsername}
+                            stats={rankingStats}
+                            histogram={createScoreHistogram(participantScores)}
+                        />
+                    ) : (
+                        <RankingUnavailable />
+                    )}
                 </>
             ) : (
                 <UnrankedProfile username={profile.githubUsername} />
             )}
 
-            {/* Section 5: Achievements & Badges */}
-            <AchievementsGrid achievements={displayData.achievements} />
+            {/* Section 5: Persona and ranking achievements */}
+            <AchievementsGrid
+                achievements={displayData.personaAchievements}
+                totalAvailable={8}
+                eyebrow="Persona milestones"
+                title="Character & trait achievements"
+                description={`${displayData.personaAchievements.length} of 8 persona milestones unlocked by the separate character-analysis pipeline.`}
+                emptyDescription="No persona milestones are unlocked for this dossier yet."
+            />
+            <AchievementsGrid
+                achievements={displayData.rankingAchievements}
+                totalAvailable={5}
+                eyebrow="Competitive milestones"
+                title="Version 2 ranking achievements"
+                description={`${displayData.rankingAchievements.length} of 5 ranking milestones unlocked from version 2 public evidence and current cohort rank.`}
+                emptyDescription="No version 2 ranking milestones are unlocked yet."
+            />
 
             {/* Section 6: Methodology & Metrics Explanation */}
             <MetricsExplanation />
         </div>
+    )
+}
+
+function RankingUnavailable() {
+    return (
+        <section className="bg-background px-4 py-12">
+            <Card className="mx-auto w-full max-w-4xl">
+                <CardHeader>
+                    <CardTitle>Current rank temporarily unavailable</CardTitle>
+                </CardHeader>
+                <CardContent className="text-muted-foreground leading-relaxed">
+                    The version 2 score is preserved, but the analyzed cohort
+                    could not be loaded. No rank or rank-dependent achievement
+                    is shown until the cohort is available.
+                </CardContent>
+            </Card>
+        </section>
     )
 }
 

@@ -30,15 +30,25 @@ export function getCompetitionRank(
     )
 }
 
+export function assignCompetitionRanks(participantScores: number[]): number[] {
+    const displayedScores = participantScores.map(displayedScore)
+    const sortedScores = [...displayedScores].sort((a, b) => b - a)
+    const rankByScore = new Map<number, number>()
+    sortedScores.forEach((score, index) => {
+        if (!rankByScore.has(score)) rankByScore.set(score, index + 1)
+    })
+    return displayedScores.map((score) => rankByScore.get(score)!)
+}
+
 export function calculateRankingStats(
     userScore: number,
     participantScores: number[]
 ): RankingStats {
     const score = displayedScore(userScore)
-    const scores =
-        participantScores.length === 0
-            ? [score]
-            : participantScores.map(displayedScore)
+    if (participantScores.length === 0) {
+        throw new Error('Ranking requires a non-empty participant cohort.')
+    }
+    const scores = participantScores.map(displayedScore)
     const participantCount = scores.length
     const usersAbove = scores.filter(
         (participantScore) => participantScore > score

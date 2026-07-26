@@ -6,11 +6,19 @@ import type { Achievement } from '@/lib/lab/achievements'
 type AchievementsGridProps = {
     achievements: Achievement[]
     totalAvailable?: number
+    eyebrow?: string
+    title?: string
+    description?: string
+    emptyDescription?: string
 }
 
 export function AchievementsGrid({
     achievements,
     totalAvailable = 13,
+    eyebrow = 'Recognition & Milestones',
+    title = 'Developer Milestones',
+    description,
+    emptyDescription = 'Keep contributing and maintaining repositories to earn milestone badges.',
 }: AchievementsGridProps) {
     return (
         <section className="bg-background text-foreground relative w-full px-4 py-12 font-sans">
@@ -18,14 +26,14 @@ export function AchievementsGrid({
                 {/* Section Header */}
                 <div className="mb-2 text-center">
                     <span className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-                        Recognition & Milestones
+                        {eyebrow}
                     </span>
                     <h2 className="text-foreground mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">
-                        Developer Milestones
+                        {title}
                     </h2>
                     <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-base">
-                        {achievements.length} of {totalAvailable} milestones
-                        unlocked from your GitHub repository history.
+                        {description ??
+                            `${achievements.length} of ${totalAvailable} milestones unlocked.`}
                     </p>
                 </div>
 
@@ -35,8 +43,7 @@ export function AchievementsGrid({
                             No developer milestones unlocked yet.
                         </p>
                         <p className="text-muted-foreground mt-2 text-sm">
-                            Keep pushing commits, opening pull requests, and
-                            maintaining repositories to earn milestone badges.
+                            {emptyDescription}
                         </p>
                     </div>
                 ) : (
@@ -49,7 +56,7 @@ export function AchievementsGrid({
                                 transition={{ duration: 0.4 }}
                                 className="border-border bg-card flex flex-col justify-between rounded-xl border p-5 shadow-sm"
                             >
-                                <div className="space-y-2">
+                                <div className="flex flex-col gap-2">
                                     <div className="text-primary font-mono text-xs tracking-widest uppercase">
                                         Unlocked
                                     </div>

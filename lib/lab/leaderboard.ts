@@ -1,6 +1,6 @@
 import type { LabProfile } from '@/db/types'
 import { CHARACTER_PROFILES } from './characters'
-import { getCompetitionRank } from './ranking/rank'
+import { assignCompetitionRanks } from './ranking/rank'
 
 export type LabLeaderboardEntry = {
     id: string
@@ -38,11 +38,12 @@ export function formatLeaderboardEntries(
     })
 
     const scores = sorted.map((profile) => profile.developerScore)
+    const ranks = assignCompetitionRanks(scores)
 
-    return sorted.map((profile) => {
+    return sorted.map((profile, index) => {
         return {
             id: profile.id,
-            rank: getCompetitionRank(profile.developerScore, scores),
+            rank: ranks[index]!,
             githubUsername: profile.githubUsername,
             avatarUrl: getGitHubAvatarUrl(profile.githubUsername),
             characterId: profile.characterId,

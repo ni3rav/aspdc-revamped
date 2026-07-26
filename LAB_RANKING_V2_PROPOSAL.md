@@ -1,6 +1,6 @@
 # Lab Ranking V2 Proposal
 
-**Status:** Proposed for maintainer approval  
+**Status:** Updated after maintainer feedback; implementation ready for review
 **Scope:** `/lab` GitHub analysis, competitive developer score, leaderboard, ranking statistics, and rank-dependent achievements  
 **Out of scope:** Changes to Breaking Bad character assignment, scheduled background refreshes, private GitHub activity, and subjective code-quality assessment
 
@@ -336,7 +336,10 @@ The numerical caps are calibration candidates. The activity definitions and excl
 
 Purpose: reward basic public project hygiene without claiming to judge architecture or documentation quality.
 
-Inspect up to the five most active qualifying original repositories, ordered by credited commits in the window with a deterministic tie-break.
+Score every active qualifying original repository, then select the five highest
+hygiene scores with credited commits and repository name as deterministic
+tie-breaks. This selection rule is monotonic: adding more qualifying work cannot
+displace a stronger hygiene score and lower the pillar.
 
 Each repository receives:
 
@@ -349,10 +352,13 @@ Each repository receives:
 | At least one release or version tag exists |     10 |
 
 ```text
-stewardship = average(repositoryHygieneScores)
+stewardship = sum(topFiveRepositoryHygieneScores) / 5
 ```
 
-If there is no qualifying active original repository, stewardship is 0.
+Missing slots contribute zero. If there is no qualifying active original
+repository, stewardship is 0. The fixed five-repository denominator rewards
+maintaining several healthy projects without letting an additional weaker
+project reduce an existing score.
 
 ### Final score
 

@@ -5,6 +5,7 @@ import {
     type RankingScoreV2,
     type RankingSnapshotV2,
 } from './types'
+import { validateRankingSnapshotV2 } from './validate'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
@@ -305,22 +306,47 @@ function collectActiveDates(
     const activeDays = new Set<string>()
     const activeWeeks = new Set<string>()
 
-    const contributionGroups = [
-        snapshot.commits,
-        snapshot.pullRequests,
-        snapshot.reviews,
-        snapshot.issues,
-    ] as const
+    const baseEligible = (contribution: {
+        isRestricted: boolean
+        occurredAt: string
+        repositoryId: string
+    }) =>
+        !contribution.isRestricted &&
+        withinWindow(contribution.occurredAt, snapshot) &&
+        repositories.has(contribution.repositoryId)
+    const isExternal = (repositoryId: string) =>
+        repositories.get(repositoryId)?.ownerLogin.toLowerCase() !==
+        snapshot.login.toLowerCase()
 
-    for (const contributions of contributionGroups) {
-        for (const contribution of contributions) {
-            if (
-                contribution.isRestricted ||
-                !withinWindow(contribution.occurredAt, snapshot) ||
-                !repositories.has(contribution.repositoryId)
-            ) {
-                continue
-            }
+    for (const contribution of snapshot.commits) {
+        if (baseEligible(contribution) && contribution.commitCount > 0) {
+            addActivityDate(contribution.occurredAt, activeDays, activeWeeks)
+        }
+    }
+    for (const contribution of snapshot.pullRequests) {
+        if (
+            baseEligible(contribution) &&
+            isExternal(contribution.repositoryId) &&
+            (contribution.state === 'OPEN' || contribution.state === 'MERGED')
+        ) {
+            addActivityDate(contribution.occurredAt, activeDays, activeWeeks)
+        }
+    }
+    for (const contribution of snapshot.reviews) {
+        if (
+            baseEligible(contribution) &&
+            isExternal(contribution.repositoryId) &&
+            contribution.pullRequestAuthorLogin.toLowerCase() !==
+                snapshot.login.toLowerCase()
+        ) {
+            addActivityDate(contribution.occurredAt, activeDays, activeWeeks)
+        }
+    }
+    for (const contribution of snapshot.issues) {
+        if (
+            baseEligible(contribution) &&
+            isExternal(contribution.repositoryId)
+        ) {
             addActivityDate(contribution.occurredAt, activeDays, activeWeeks)
         }
     }
@@ -331,9 +357,31 @@ function collectActiveDates(
     }
 }
 
+function selectStewardshipRepositories(
+    activeOriginalRepositoryIds: string[],
+    repositories: Map<string, RankingRepositoryV2>,
+    creditedCommitsByRepository: Map<string, number>
+) {
+    return activeOriginalRepositoryIds
+        .map((repositoryId) => ({
+            repository: repositories.get(repositoryId)!,
+            creditedCommits: creditedCommitsByRepository.get(repositoryId) ?? 0,
+        }))
+        .sort(
+            (a, b) =>
+                hygieneScore(b.repository) - hygieneScore(a.repository) ||
+                b.creditedCommits - a.creditedCommits ||
+                a.repository.nameWithOwner.localeCompare(
+                    b.repository.nameWithOwner
+                )
+        )
+        .slice(0, 5)
+}
+
 export function scoreRankingSnapshotV2(
     snapshot: RankingSnapshotV2
 ): RankingScoreV2 {
+    validateRankingSnapshotV2(snapshot)
     const repositories = publicOriginalRepositories(snapshot)
     const activity = collectActiveDates(snapshot, repositories)
     const commits = creditCommits(snapshot, repositories)
@@ -363,26 +411,16 @@ export function scoreRankingSnapshotV2(
         0.35 * diminishing(creditedReviews, 24) +
         0.2 * diminishing(creditedIssues, 10)
 
-    const stewardshipRepositories = activeOriginalRepositories
-        .map((repositoryId) => ({
-            repository: repositories.get(repositoryId)!,
-            creditedCommits: commits.byRepository.get(repositoryId) ?? 0,
-        }))
-        .sort(
-            (a, b) =>
-                b.creditedCommits - a.creditedCommits ||
-                a.repository.nameWithOwner.localeCompare(
-                    b.repository.nameWithOwner
-                )
-        )
-        .slice(0, 5)
+    const stewardshipRepositories = selectStewardshipRepositories(
+        activeOriginalRepositories,
+        repositories,
+        commits.byRepository
+    )
     const stewardship =
-        stewardshipRepositories.length === 0
-            ? 0
-            : stewardshipRepositories.reduce(
-                  (sum, entry) => sum + hygieneScore(entry.repository),
-                  0
-              ) / stewardshipRepositories.length
+        stewardshipRepositories.reduce(
+            (sum, entry) => sum + hygieneScore(entry.repository),
+            0
+        ) / 5
 
     const developerScore = Math.round(
         0.3 * sustainedActivity +
@@ -417,27 +455,20 @@ export function createPersistedRankingSnapshotV2(
     snapshot: RankingSnapshotV2,
     score: RankingScoreV2 = scoreRankingSnapshotV2(snapshot)
 ): PersistedRankingSnapshotV2 {
+    validateRankingSnapshotV2(snapshot)
     const repositories = publicOriginalRepositories(snapshot)
     const activity = collectActiveDates(snapshot, repositories)
     const commits = creditCommits(snapshot, repositories)
-    const activeOwnedRepositories = [...commits.byRepository.entries()]
-        .map(([repositoryId, creditedCommits]) => ({
-            repository: repositories.get(repositoryId)!,
-            creditedCommits,
-        }))
-        .filter(
-            ({ repository }) =>
-                repository.ownerLogin.toLowerCase() ===
-                snapshot.login.toLowerCase()
-        )
-        .sort(
-            (a, b) =>
-                b.creditedCommits - a.creditedCommits ||
-                a.repository.nameWithOwner.localeCompare(
-                    b.repository.nameWithOwner
-                )
-        )
-        .slice(0, 5)
+    const activeOwnedRepositoryIds = [...commits.byRepository.keys()].filter(
+        (repositoryId) =>
+            repositories.get(repositoryId)?.ownerLogin.toLowerCase() ===
+            snapshot.login.toLowerCase()
+    )
+    const activeOwnedRepositories = selectStewardshipRepositories(
+        activeOwnedRepositoryIds,
+        repositories,
+        commits.byRepository
+    )
 
     return {
         scoreVersion: RANKING_SCORE_VERSION,

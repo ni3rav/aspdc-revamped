@@ -3,6 +3,7 @@ import {
     type RankingRepositoryV2,
     type RankingSnapshotV2,
 } from './types'
+import { validateRankingSnapshotV2 } from './validate'
 
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql'
 const RANKING_WINDOW_DAYS = 90
@@ -31,9 +32,13 @@ type GitHubRepositoryNode = {
     licenseInfo: { key: string } | null
     releases: { totalCount: number }
     refs: { totalCount: number } | null
-    readmeMarkdown: { id: string } | null
-    readmePlain: { id: string } | null
-    readmeLowercase: { id: string } | null
+    defaultBranchRef: {
+        target: {
+            tree: {
+                entries: Array<{ name: string; type: string }>
+            }
+        }
+    } | null
 }
 
 type ContributionConnection<T> = {
@@ -206,14 +211,17 @@ fragment RankingRepository on Repository {
     refs(refPrefix: "refs/tags/", first: 1) {
         totalCount
     }
-    readmeMarkdown: object(expression: "HEAD:README.md") {
-        id
-    }
-    readmePlain: object(expression: "HEAD:README") {
-        id
-    }
-    readmeLowercase: object(expression: "HEAD:readme.md") {
-        id
+    defaultBranchRef {
+        target {
+            ... on Commit {
+                tree {
+                    entries {
+                        name
+                        type
+                    }
+                }
+            }
+        }
     }
 }
 `
@@ -272,11 +280,14 @@ function normalizeRepository(
         ownerLogin: repository.owner.login,
         isPrivate: repository.isPrivate,
         isFork: repository.isFork,
-        hasReadme: Boolean(
-            repository.readmeMarkdown ||
-            repository.readmePlain ||
-            repository.readmeLowercase
-        ),
+        hasReadme:
+            repository.defaultBranchRef?.target.tree.entries.some(
+                (entry) =>
+                    entry.type === 'blob' &&
+                    /^readme(?:\.(?:md|markdown|textile|rdoc|org|creole|mediawiki|rst|asciidoc|adoc|asc))?$/i.test(
+                        entry.name
+                    )
+            ) ?? false,
         hasDescription: Boolean(repository.description?.trim()),
         hasTopics: repository.repositoryTopics.totalCount > 0,
         hasLicense: repository.licenseInfo !== null,
@@ -481,7 +492,7 @@ export async function fetchGitHubRankingSnapshot(
             reviewsComplete &&
             issuesComplete
         ) {
-            return {
+            const snapshot: RankingSnapshotV2 = {
                 scoreVersion: RANKING_SCORE_VERSION,
                 login: login!,
                 userType: 'User',
@@ -494,6 +505,8 @@ export async function fetchGitHubRankingSnapshot(
                 reviews,
                 issues,
             }
+            validateRankingSnapshotV2(snapshot)
+            return snapshot
         }
     }
 

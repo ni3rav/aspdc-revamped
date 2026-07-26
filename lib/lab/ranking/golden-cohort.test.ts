@@ -39,7 +39,7 @@ function snapshot(
         scoreVersion: RANKING_SCORE_VERSION,
         login: 'student',
         userType: 'User',
-        windowStart: '2026-04-28T00:00:00.000Z',
+        windowStart: '2026-04-27T12:00:00.000Z',
         windowEnd: '2026-07-26T12:00:00.000Z',
         capturedAt: '2026-07-26T12:00:00.000Z',
         repositories: [],
