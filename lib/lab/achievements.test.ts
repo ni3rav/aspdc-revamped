@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { ACHIEVEMENTS, unlockAchievements } from './achievements'
+import {
+    ACHIEVEMENTS,
+    unlockAchievements,
+    unlockDurableRankingAchievements,
+    unlockDynamicRankingAchievements,
+} from './achievements'
+import type { RankingScoreV2 } from './ranking/types'
 import { emptyTraitVector } from './traits'
 import type { GitHubSnapshot, TraitVector } from './types'
 
@@ -81,9 +87,47 @@ describe('unlockAchievements', () => {
     })
 
     it('unlocks Say My Name when rank is in the top 10', () => {
-        const withRank = unlockAchievements(vector(), snapshot(), { rank: 3 })
-        const withoutRank = unlockAchievements(vector(), snapshot())
-        expect(withRank.map((a) => a.id)).toContain('say-my-name')
-        expect(withoutRank.map((a) => a.id)).not.toContain('say-my-name')
+        expect(unlockDynamicRankingAchievements(10).map((a) => a.id)).toContain(
+            'say-my-name'
+        )
+        expect(
+            unlockDynamicRankingAchievements(11).map((a) => a.id)
+        ).not.toContain('say-my-name')
+    })
+
+    it('uses only V2 credited public evidence for durable ranking achievements', () => {
+        const ranking: RankingScoreV2 = {
+            scoreVersion: 2,
+            developerScore: 70,
+            pillars: {
+                sustainedActivity: 80,
+                building: 75,
+                collaboration: 72,
+                stewardship: 50,
+            },
+            credited: {
+                activeDays: 24,
+                activeWeeks: 12,
+                creditedCommits: 80,
+                activeOriginalRepositories: 5,
+                creditedPullRequestPoints: 4,
+                creditedReviews: 5,
+                creditedIssues: 1,
+                stewardshipRepositories: 5,
+            },
+        }
+
+        expect(
+            unlockDurableRankingAchievements(ranking).map(
+                (achievement) => achievement.id
+            )
+        ).toEqual(
+            expect.arrayContaining([
+                'no-half-measures',
+                'the-one-who-builds',
+                'associate-network',
+                'open-the-lab',
+            ])
+        )
     })
 })

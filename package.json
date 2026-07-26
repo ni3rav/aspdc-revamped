@@ -12,7 +12,8 @@
         "prepare": "husky",
         "db:push": "drizzle-kit push",
         "db:generate": "drizzle-kit generate",
-        "db:migrate": "drizzle-kit migrate"
+        "db:migrate": "drizzle-kit migrate",
+        "lab:migrate-v2": "pnpm dlx tsx scripts/migrate-lab-ranking-v2.ts"
     },
     "lint-staged": {
         "*.{js,ts,tsx,css,md}": "pnpm dlx prettier --write ."
@@ -58,6 +59,7 @@
         "zod": "^4.4.3"
     },
     "devDependencies": {
+        "@electric-sql/pglite": "^0.5.4",
         "@eslint/eslintrc": "^3.3.6",
         "@tailwindcss/postcss": "^4.3.3",
         "@types/node": "^25.9.5",

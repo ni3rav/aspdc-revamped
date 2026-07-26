@@ -1,9 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TRAIT_IDS, type TraitId } from '@/lib/lab/types'
 import { getTraitLabel, getTraitDescription } from '@/lib/lab/traits'
+import {
+    formatPolicyPercent,
+    RANKING_V2_POLICY,
+} from '@/lib/lab/ranking/policy'
 
 // ─── Shared accordion item ────────────────────────────────────────────────────
 
@@ -15,12 +19,15 @@ function AccordionItem({
     children: React.ReactNode
 }) {
     const [open, setOpen] = useState(false)
+    const contentId = useId()
 
     return (
         <div className="border-border overflow-hidden rounded-lg border">
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-controls={contentId}
                 className="hover:bg-muted/40 flex w-full items-center justify-between px-4 py-3.5 text-left transition-colors"
             >
                 <span className="text-foreground text-base font-semibold">
@@ -33,6 +40,7 @@ function AccordionItem({
             <AnimatePresence initial={false}>
                 {open && (
                     <motion.div
+                        id={contentId}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -58,6 +66,7 @@ function TraitAccordionItem({
     rank: number
 }) {
     const [open, setOpen] = useState(false)
+    const contentId = useId()
     const label = getTraitLabel(traitId)
     const description = getTraitDescription(traitId)
 
@@ -66,6 +75,8 @@ function TraitAccordionItem({
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-controls={contentId}
                 className="hover:bg-muted/40 flex w-full items-center justify-between px-4 py-3 text-left transition-colors"
             >
                 <div className="flex items-center gap-3">
@@ -83,6 +94,7 @@ function TraitAccordionItem({
             <AnimatePresence initial={false}>
                 {open && (
                     <motion.div
+                        id={contentId}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -101,6 +113,8 @@ function TraitAccordionItem({
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function MetricsExplanation() {
+    const policy = RANKING_V2_POLICY
+
     return (
         <section className="bg-background text-foreground relative w-full px-4 py-12">
             <motion.div
@@ -118,39 +132,148 @@ export function MetricsExplanation() {
                         How Your Profile is Built
                     </h2>
                     <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-base leading-relaxed">
-                        Everything here is computed from public GitHub data — no
-                        opinions, no manual scoring. Expand any section below to
-                        read exactly what we measure and how.
+                        The competitive score uses recent public evidence. The
+                        score is calibrated for undergraduate and early-career
+                        developers. The character match uses a separate persona
+                        model and is not used to rank developers.
                     </p>
                 </div>
 
                 {/* Block 1: Developer Score */}
                 <div>
                     <h3 className="text-foreground mb-3 text-lg font-bold">
-                        Developer Score (0 – 100)
+                        Developer Score ({policy.score.minimum} –{' '}
+                        {policy.score.maximum})
                     </h3>
-                    <div className="space-y-2">
-                        <AccordionItem title="Engineering Fundamentals — Volume & Quality">
+                    <div className="flex flex-col gap-2">
+                        <AccordionItem
+                            title={`Sustained activity — ${formatPolicyPercent(policy.sustainedActivity.finalWeight)}`}
+                        >
                             <p className="text-muted-foreground">
-                                Measures commit volume across original
-                                repositories, repository presentation
-                                (descriptions, topic tags, languages), and
-                                active contribution frequency.
+                                Credits active days and weeks across a rolling
+                                {` ${policy.windowDays}-day public window. Active weeks reach full credit at ${policy.sustainedActivity.activeWeeks.cap} and active days at ${policy.sustainedActivity.activeDays.cap}; the pillar combines them ${formatPolicyPercent(policy.sustainedActivity.activeWeeks.weight)}/${formatPolicyPercent(policy.sustainedActivity.activeDays.weight)}. `}
+                                Fifty contributions on one day still count as
+                                one active day.
                             </p>
                         </AccordionItem>
-                        <AccordionItem title="Technical Range & Exploration">
+                        <AccordionItem
+                            title={`Building — ${formatPolicyPercent(policy.building.finalWeight)}`}
+                        >
                             <p className="text-muted-foreground">
-                                Evaluates multi-language mastery and breadth of
-                                project domains. Working across diverse stacks
-                                raises your Scientist and Curiosity scores.
+                                Credits capped commit activity and work across
+                                active original repositories. At most{' '}
+                                {policy.building.commits.perDayCap} commits per
+                                UTC day count, with diminishing returns reaching
+                                full commit credit at{' '}
+                                {policy.building.commits.cap}. Active original
+                                repositories reach full credit at{' '}
+                                {policy.building.activeOriginalRepositories.cap}
+                                . The pillar combines commits and repositories{' '}
+                                {formatPolicyPercent(
+                                    policy.building.commits.weight
+                                )}
+                                /
+                                {formatPolicyPercent(
+                                    policy.building.activeOriginalRepositories
+                                        .weight
+                                )}
+                                .
                             </p>
                         </AccordionItem>
-                        <AccordionItem title="Consistency & Discipline">
+                        <AccordionItem
+                            title={`External collaboration — ${formatPolicyPercent(policy.collaboration.finalWeight)}`}
+                        >
                             <p className="text-muted-foreground">
-                                Analyzes regularity of commit patterns over
-                                time. Steady, sustained coding activity across
-                                the 90-day window scores higher than erratic
-                                single-day bursts.
+                                Credits public pull requests, reviews, and
+                                issues in repositories you do not own. Pull
+                                requests reach full credit at{' '}
+                                {policy.collaboration.pullRequests.cap} points,
+                                reviews at {policy.collaboration.reviews.cap},
+                                and issues at {policy.collaboration.issues.cap},
+                                all with diminishing returns. Their subweights
+                                are{' '}
+                                {formatPolicyPercent(
+                                    policy.collaboration.pullRequests.weight
+                                )}{' '}
+                                pull requests,{' '}
+                                {formatPolicyPercent(
+                                    policy.collaboration.reviews.weight
+                                )}{' '}
+                                reviews, and{' '}
+                                {formatPolicyPercent(
+                                    policy.collaboration.issues.weight
+                                )}{' '}
+                                issues. Merged pull requests earn{' '}
+                                {policy.collaboration.pullRequests.mergedPoints}{' '}
+                                point, open pull requests earn{' '}
+                                {policy.collaboration.pullRequests.openPoints},
+                                and closed unmerged pull requests earn none.
+                                Pull-request credit is capped at{' '}
+                                {policy.collaboration.pullRequests.perDayCap}{' '}
+                                points per day and{' '}
+                                {
+                                    policy.collaboration.pullRequests
+                                        .perRepositoryCap
+                                }{' '}
+                                per repository; reviews at{' '}
+                                {policy.collaboration.reviews.perDayCap} per day
+                                and{' '}
+                                {policy.collaboration.reviews.perRepositoryCap}{' '}
+                                per repository; issues at{' '}
+                                {policy.collaboration.issues.perDayCap} per day
+                                and{' '}
+                                {policy.collaboration.issues.perRepositoryCap}{' '}
+                                per repository.
+                            </p>
+                        </AccordionItem>
+                        <AccordionItem
+                            title={`Repository stewardship — ${formatPolicyPercent(policy.stewardship.finalWeight)}`}
+                        >
+                            <p className="text-muted-foreground">
+                                The {policy.stewardship.repositoryLimit}{' '}
+                                strongest hygiene scores among active original
+                                repositories contribute to a fixed{' '}
+                                {policy.stewardship.repositoryLimit}-repository
+                                maximum, so adding qualifying work cannot lower
+                                the pillar. Each is scored for a GitHub-resolved
+                                README ({policy.stewardship.hygiene.readme}%),
+                                description (
+                                {policy.stewardship.hygiene.description}%),
+                                topics ({policy.stewardship.hygiene.topics}%),
+                                license ({policy.stewardship.hygiene.license}%),
+                                and at least one release or tag (
+                                {policy.stewardship.hygiene.releaseOrTag}%).
+                                GitHub&apos;s README resolution covers supported
+                                formats in the .github, root, and docs
+                                locations.
+                            </p>
+                        </AccordionItem>
+                        <AccordionItem title="Functions and rounding">
+                            <p className="text-muted-foreground">
+                                Every diminishing-return input x with cap c is
+                                scored as 100 × √(clamp(x, 0, c) ÷ c). Linear
+                                inputs use 100 × clamp(x, 0, c) ÷ c. Pillars
+                                keep full precision; only the final weighted
+                                score is rounded to an integer and clamped from
+                                {` ${policy.score.minimum} to ${policy.score.maximum}.`}
+                            </p>
+                        </AccordionItem>
+                        <AccordionItem title="What carries zero ranking weight">
+                            <p className="text-muted-foreground">
+                                Stars, forks received, follower counts, private
+                                or restricted activity, language popularity, and
+                                merely creating a fork do not change the score.
+                                Work from a fork counts only when it becomes a
+                                qualifying public upstream pull request or
+                                review.
+                            </p>
+                        </AccordionItem>
+                        <AccordionItem title="What the score cannot prove">
+                            <p className="text-muted-foreground">
+                                The score summarizes visible GitHub evidence; it
+                                does not measure code quality, difficulty,
+                                learning progress, teamwork outside GitHub, or a
+                                developer&apos;s overall ability.
                             </p>
                         </AccordionItem>
                     </div>
@@ -161,7 +284,7 @@ export function MetricsExplanation() {
                     <h3 className="text-foreground mb-3 text-lg font-bold">
                         Archetype Match %
                     </h3>
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-2">
                         <AccordionItem title="How matching works">
                             <p className="text-muted-foreground">
                                 Your 15 trait scores form a 15-dimensional
@@ -174,7 +297,7 @@ export function MetricsExplanation() {
                             </p>
                         </AccordionItem>
                         <AccordionItem title="What the percentages mean">
-                            <ul className="text-muted-foreground space-y-2">
+                            <ul className="text-muted-foreground flex flex-col gap-2">
                                 <li>
                                     <strong className="text-foreground">
                                         90–100%
@@ -217,7 +340,7 @@ export function MetricsExplanation() {
                         Each of the 15 traits is scored 0–100. Click any trait
                         to read what it measures and what a high score means.
                     </p>
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-2">
                         {TRAIT_IDS.map((traitId, idx) => (
                             <TraitAccordionItem
                                 key={traitId}

@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import {
     pgTable,
     uuid,
@@ -12,7 +12,12 @@ import {
     uniqueIndex,
     jsonb,
     real,
+    check,
 } from 'drizzle-orm/pg-core'
+import type {
+    PersistedRankingSnapshotV2,
+    RankingPillarScores,
+} from '@/lib/lab/ranking/types'
 
 // Events table
 export const events = pgTable('events', {
@@ -213,6 +218,44 @@ export const labAchievements = pgTable(
     ]
 )
 
+export const labProfileScores = pgTable(
+    'lab_profile_scores',
+    {
+        id: uuid().defaultRandom().primaryKey(),
+        profileId: uuid('profile_id')
+            .notNull()
+            .references(() => labProfiles.id, { onDelete: 'cascade' }),
+        scoreVersion: integer('score_version').notNull(),
+        developerScore: integer('developer_score').notNull(),
+        pillarScores: jsonb('pillar_scores')
+            .$type<RankingPillarScores>()
+            .notNull(),
+        rankingSnapshot: jsonb('ranking_snapshot')
+            .$type<PersistedRankingSnapshotV2>()
+            .notNull(),
+        capturedAt: timestamp('captured_at').notNull(),
+        createdAt: timestamp('created_at').defaultNow().notNull(),
+        updatedAt: timestamp('updated_at')
+            .defaultNow()
+            .$onUpdate(() => /* @__PURE__ */ new Date())
+            .notNull(),
+    },
+    (table) => [
+        uniqueIndex('lab_profile_scores_profile_version_idx').on(
+            table.profileId,
+            table.scoreVersion
+        ),
+        index('lab_profile_scores_version_score_idx').on(
+            table.scoreVersion,
+            table.developerScore
+        ),
+        check(
+            'lab_profile_scores_developer_score_check',
+            sql`${table.developerScore} between 0 and 100`
+        ),
+    ]
+)
+
 export const userRelations = relations(user, ({ many }) => ({
     sessions: many(session),
     accounts: many(account),
@@ -225,6 +268,7 @@ export const labProfileRelations = relations(labProfiles, ({ one, many }) => ({
         references: [user.id],
     }),
     achievements: many(labAchievements),
+    scores: many(labProfileScores),
 }))
 
 export const labAchievementRelations = relations(
@@ -232,6 +276,16 @@ export const labAchievementRelations = relations(
     ({ one }) => ({
         profile: one(labProfiles, {
             fields: [labAchievements.profileId],
+            references: [labProfiles.id],
+        }),
+    })
+)
+
+export const labProfileScoreRelations = relations(
+    labProfileScores,
+    ({ one }) => ({
+        profile: one(labProfiles, {
+            fields: [labProfileScores.profileId],
             references: [labProfiles.id],
         }),
     })

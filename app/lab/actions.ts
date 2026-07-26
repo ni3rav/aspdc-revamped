@@ -2,18 +2,24 @@
 
 import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
-import { replaceLabAchievements, upsertLabProfile } from '@/db/mutations'
+import { persistLabAnalysisV2 } from '@/db/lab-analysis'
 import { findLabProfileByUserId } from '@/db/queries'
 import {
     persistGitHubSnapshot,
     readPersistedGitHubSnapshot,
     resolveGitHubSnapshot,
-    runAnalysisPipeline,
     type AnalysisPipelineResult,
 } from '@/lib/lab/analyze'
 import { auth } from '@/lib/auth'
 import { fetchGitHubSnapshot } from '@/lib/lab/github'
 import { getGitHubAccessToken } from '@/lib/lab/github-token'
+import {
+    DURABLE_RANKING_ACHIEVEMENT_IDS,
+    unlockDurableRankingAchievements,
+} from '@/lib/lab/achievements'
+import { runLabAnalysisV2 } from '@/lib/lab/ranking/analyze'
+import { fetchGitHubRankingSnapshot } from '@/lib/lab/ranking/github'
+import type { RankingPillarScores } from '@/lib/lab/ranking/types'
 
 export type AnalyzeLabProfileSuccess = {
     ok: true
@@ -23,6 +29,8 @@ export type AnalyzeLabProfileSuccess = {
         characterId: string
         characterSimilarity: number
         developerScore: number
+        scoreVersion: number
+        pillarScores: RankingPillarScores
         traitScores: AnalysisPipelineResult['traitScores']
         characterMatches: AnalysisPipelineResult['characterMatches']
         achievements: AnalysisPipelineResult['achievements']
@@ -73,49 +81,77 @@ export async function analyzeLabProfile(): Promise<AnalyzeLabProfileResult> {
             : null
 
         let resolved: Awaited<ReturnType<typeof resolveGitHubSnapshot>>
+        let rankingSnapshot: Awaited<
+            ReturnType<typeof fetchGitHubRankingSnapshot>
+        >
+        const capturedAt = new Date()
         try {
-            resolved = await resolveGitHubSnapshot({
-                cached,
-                fetchFresh: () => fetchGitHubSnapshot(accessToken),
-            })
+            ;[resolved, rankingSnapshot] = await Promise.all([
+                resolveGitHubSnapshot({
+                    cached,
+                    fetchFresh: () => fetchGitHubSnapshot(accessToken),
+                    now: capturedAt,
+                }),
+                fetchGitHubRankingSnapshot(accessToken, capturedAt),
+            ])
         } catch (error) {
+            console.error('Lab GitHub collection failed', {
+                userId,
+                error:
+                    error instanceof Error
+                        ? { name: error.name, message: error.message }
+                        : 'Unknown GitHub collection error',
+            })
             return {
                 ok: false,
                 error: 'github_api',
                 message:
-                    error instanceof Error
-                        ? error.message
-                        : 'GitHub API request failed.',
+                    'GitHub activity could not be collected completely. Your previous score was kept.',
             }
         }
 
-        const analysis = runAnalysisPipeline(resolved.snapshot)
-        const analyzedAt = new Date()
-
-        const profile = await upsertLabProfile({
-            userId,
-            githubUsername: analysis.githubUsername,
-            characterId: analysis.characterId,
-            characterSimilarity: analysis.characterSimilarity,
-            developerScore: analysis.developerScore,
-            traitScores: analysis.traitScores,
-            githubSnapshot: persistGitHubSnapshot(
-                analysis.githubSnapshot,
-                resolved.capturedAt
-            ),
-            analyzedAt,
-        })
-
-        await replaceLabAchievements(
-            profile.id,
-            analysis.achievements.map((achievement) => ({
-                achievementId: achievement.id,
-                unlockedAt: analyzedAt,
-            }))
+        const analysis = runLabAnalysisV2(resolved.snapshot, rankingSnapshot)
+        const analyzedAt = capturedAt
+        const durableRankingAchievements = unlockDurableRankingAchievements(
+            analysis.ranking
         )
 
+        const profile = await persistLabAnalysisV2({
+            profile: {
+                userId,
+                githubUsername: analysis.persona.githubUsername,
+                characterId: analysis.persona.characterId,
+                characterSimilarity: analysis.persona.characterSimilarity,
+                // Kept temporarily as the version-1 rollback value.
+                developerScore: analysis.persona.developerScore,
+                traitScores: analysis.persona.traitScores,
+                githubSnapshot: persistGitHubSnapshot(
+                    analysis.persona.githubSnapshot,
+                    resolved.capturedAt
+                ),
+                analyzedAt,
+            },
+            score: {
+                scoreVersion: analysis.ranking.scoreVersion,
+                developerScore: analysis.ranking.developerScore,
+                pillarScores: analysis.ranking.pillars,
+                rankingSnapshot: analysis.persistedRankingSnapshot,
+                capturedAt: new Date(
+                    analysis.persistedRankingSnapshot.capturedAt
+                ),
+            },
+            achievements: [
+                ...analysis.persona.achievements,
+                ...durableRankingAchievements,
+            ].map((achievement) => ({
+                achievementId: achievement.id,
+                unlockedAt: analyzedAt,
+            })),
+            replaceAchievementIds: [...DURABLE_RANKING_ACHIEVEMENT_IDS],
+        })
+
         try {
-            revalidatePath(`/lab/${analysis.githubUsername}`)
+            revalidatePath(`/lab/${analysis.persona.githubUsername}`)
             revalidatePath('/lab')
         } catch {
             // Ignore cache revalidation errors if outside request context
@@ -128,10 +164,15 @@ export async function analyzeLabProfile(): Promise<AnalyzeLabProfileResult> {
                 githubUsername: profile.githubUsername,
                 characterId: profile.characterId,
                 characterSimilarity: profile.characterSimilarity,
-                developerScore: profile.developerScore,
-                traitScores: analysis.traitScores,
-                characterMatches: analysis.characterMatches,
-                achievements: analysis.achievements,
+                developerScore: analysis.ranking.developerScore,
+                scoreVersion: analysis.ranking.scoreVersion,
+                pillarScores: analysis.ranking.pillars,
+                traitScores: analysis.persona.traitScores,
+                characterMatches: analysis.persona.characterMatches,
+                achievements: [
+                    ...analysis.persona.achievements,
+                    ...durableRankingAchievements,
+                ],
                 analyzedAt: analyzedAt.toISOString(),
             },
         }

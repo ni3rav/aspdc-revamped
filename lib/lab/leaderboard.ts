@@ -1,5 +1,6 @@
 import type { LabProfile } from '@/db/types'
 import { CHARACTER_PROFILES } from './characters'
+import { assignCompetitionRanks } from './ranking/rank'
 
 export type LabLeaderboardEntry = {
     id: string
@@ -36,14 +37,19 @@ export function formatLeaderboardEntries(
         return a.githubUsername.localeCompare(b.githubUsername)
     })
 
-    return sorted.map((profile, index) => ({
-        id: profile.id,
-        rank: index + 1,
-        githubUsername: profile.githubUsername,
-        avatarUrl: getGitHubAvatarUrl(profile.githubUsername),
-        characterId: profile.characterId,
-        characterName: getCharacterName(profile.characterId),
-        developerScore: profile.developerScore,
-        analyzedAt: profile.analyzedAt,
-    }))
+    const scores = sorted.map((profile) => profile.developerScore)
+    const ranks = assignCompetitionRanks(scores)
+
+    return sorted.map((profile, index) => {
+        return {
+            id: profile.id,
+            rank: ranks[index]!,
+            githubUsername: profile.githubUsername,
+            avatarUrl: getGitHubAvatarUrl(profile.githubUsername),
+            characterId: profile.characterId,
+            characterName: getCharacterName(profile.characterId),
+            developerScore: profile.developerScore,
+            analyzedAt: profile.analyzedAt,
+        }
+    })
 }

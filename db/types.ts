@@ -160,7 +160,28 @@ export type LabAchievement = {
     unlockedAt: Date
 }
 
+export type LabProfileScore = {
+    id: string
+    profileId: string
+    scoreVersion: number
+    developerScore: number
+    pillarScores: import('@/lib/lab/ranking/types').RankingPillarScores
+    rankingSnapshot: import('@/lib/lab/ranking/types').PersistedRankingSnapshotV2
+    capturedAt: Date
+    createdAt: Date
+    updatedAt: Date
+}
+
+export type LabRankedProfile = Omit<LabProfile, 'developerScore'> & {
+    developerScore: number
+    rankingScore: LabProfileScore
+}
+
 export type NewLabProfile = Omit<LabProfile, 'id'>
+export type NewLabProfileScore = Omit<
+    LabProfileScore,
+    'id' | 'createdAt' | 'updatedAt'
+>
 export type NewLabAchievement = {
     achievementId: string
     unlockedAt?: Date

@@ -15,7 +15,7 @@ type CharacterHeroProps = {
     username: string
     character: CharacterProfile
     similarity: number
-    developerScore: number
+    developerScore?: number
     explanation: string
     profileUserId?: string
 }
@@ -60,7 +60,7 @@ export function CharacterHero({
                     <div className="grid grid-cols-1 items-center gap-8 text-left md:grid-cols-12">
                         {/* Portrait */}
                         <div className="flex flex-col items-center md:col-span-5">
-                            <div className="border-border bg-muted relative h-52 w-52 overflow-hidden rounded-xl border p-1 shadow-md sm:h-60 sm:w-60">
+                            <div className="border-border bg-muted relative size-52 overflow-hidden rounded-xl border p-1 shadow-md sm:size-60">
                                 <Image
                                     src={imgSrc}
                                     alt={character.name}
@@ -79,7 +79,7 @@ export function CharacterHero({
                         </div>
 
                         {/* Details & Layman Explanations */}
-                        <div className="space-y-5 md:col-span-7">
+                        <div className="flex flex-col gap-5 md:col-span-7">
                             <div>
                                 <span className="text-muted-foreground font-mono text-xs uppercase">
                                     PRIMARY DEVELOPER ARCHETYPE MATCH
@@ -111,21 +111,30 @@ export function CharacterHero({
                                         Developer Score
                                     </div>
                                     <div className="text-foreground mt-1 font-mono text-3xl font-extrabold">
-                                        {developerScore}
-                                        <span className="text-muted-foreground text-sm font-normal">
-                                            {' '}
-                                            / 100
-                                        </span>
+                                        {developerScore === undefined ? (
+                                            <span className="text-xl">
+                                                Not yet ranked
+                                            </span>
+                                        ) : (
+                                            <>
+                                                {developerScore}
+                                                <span className="text-muted-foreground text-sm font-normal">
+                                                    {' '}
+                                                    / 100
+                                                </span>
+                                            </>
+                                        )}
                                     </div>
                                     <p className="text-muted-foreground mt-1 text-base leading-normal">
-                                        Composite score across commit volume,
-                                        repo quality, and commit discipline.
+                                        Based on recent public activity,
+                                        collaboration, and repository
+                                        stewardship.
                                     </p>
                                 </div>
                             </div>
 
                             {/* Plain English Explanation */}
-                            <div className="border-border bg-muted/40 space-y-1 rounded-lg border p-4 text-base leading-relaxed">
+                            <div className="border-border bg-muted/40 flex flex-col gap-1 rounded-lg border p-4 text-base leading-relaxed">
                                 <div className="text-foreground font-semibold">
                                     Why you matched this persona:
                                 </div>
