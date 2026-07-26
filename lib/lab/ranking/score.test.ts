@@ -151,6 +151,32 @@ describe('scoreRankingSnapshotV2', () => {
         })
     })
 
+    it('credits an eligible open external pull request as half a point', () => {
+        const external = repository('external', {
+            nameWithOwner: 'aspdc/external',
+            ownerLogin: 'aspdc',
+        })
+        const result = scoreRankingSnapshotV2(
+            snapshot({
+                repositories: [external],
+                pullRequests: [
+                    {
+                        occurredAt: '2026-07-01T12:00:00.000Z',
+                        repositoryId: external.id,
+                        isRestricted: false,
+                        pullRequestId: 'open-pr',
+                        state: 'OPEN',
+                    },
+                ],
+            })
+        )
+
+        expect(result.credited.creditedPullRequestPoints).toBe(0.5)
+        expect(result.pillars.collaboration).toBeCloseTo(
+            0.45 * 100 * Math.sqrt(0.5 / 12)
+        )
+    })
+
     it('ignores popularity, fork creation, private, and restricted evidence', () => {
         const original = repository('coursework')
         const noisyFork = repository('popular-fork', {

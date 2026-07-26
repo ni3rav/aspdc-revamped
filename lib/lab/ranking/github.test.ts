@@ -329,6 +329,21 @@ describe('fetchGitHubRankingSnapshot', () => {
             'fetch',
             vi.fn().mockResolvedValueOnce(
                 jsonResponse({
+                    data: responseData({ typename: 'Bot' }),
+                })
+            )
+        )
+        await expect(
+            fetchGitHubRankingSnapshot(
+                'token',
+                new Date('2026-07-26T12:00:00.000Z')
+            )
+        ).rejects.toThrow(/authenticated GitHub user/)
+
+        vi.stubGlobal(
+            'fetch',
+            vi.fn().mockResolvedValueOnce(
+                jsonResponse({
                     errors: [{ message: 'Something failed' }],
                 })
             )
@@ -339,5 +354,16 @@ describe('fetchGitHubRankingSnapshot', () => {
                 new Date('2026-07-26T12:00:00.000Z')
             )
         ).rejects.toThrow(/Something failed/)
+    })
+
+    it('rejects rate-limited GitHub responses without producing a snapshot', async () => {
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue(restResponse(429)))
+
+        await expect(
+            fetchGitHubRankingSnapshot(
+                'token',
+                new Date('2026-07-26T12:00:00.000Z')
+            )
+        ).rejects.toThrow(/GitHub GraphQL request failed \(429\)/)
     })
 })

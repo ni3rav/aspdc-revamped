@@ -84,7 +84,7 @@ inserted_achievements AS (
                 (achievement) =>
                     sql`(${achievement.achievementId}, ${
                         achievement.unlockedAt ?? input.profile.analyzedAt
-                    })`
+                    }::timestamp)`
             ),
             sql`, `
         )}
