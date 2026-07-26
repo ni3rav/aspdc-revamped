@@ -9,7 +9,8 @@ async function main() {
         { account, labProfiles },
         { and, asc, desc, eq },
         { fetchGitHubRankingSnapshot },
-        { assertRankingSnapshotOwner },
+        { assertRankingSnapshotOwner, createMigrationCapReport },
+        { getCompetitionRank },
         {
             createPersistedRankingSnapshotV2,
             getDeveloperScoreBand,
@@ -24,6 +25,7 @@ async function main() {
         import('drizzle-orm'),
         import('@/lib/lab/ranking/github'),
         import('@/lib/lab/ranking/migration'),
+        import('@/lib/lab/ranking/rank'),
         import('@/lib/lab/ranking/score'),
         import('@/lib/lab/ranking/types'),
         import('@/lib/lab/achievements'),
@@ -116,8 +118,6 @@ async function main() {
 
     const oldScores = candidates.map(({ profile }) => profile.developerScore)
     const newScores = candidates.map(({ ranking }) => ranking.developerScore)
-    const competitionRank = (score: number, cohort: number[]) =>
-        1 + cohort.filter((candidateScore) => candidateScore > score).length
 
     for (const candidate of candidates) {
         const {
@@ -128,8 +128,8 @@ async function main() {
             capturedAt,
             achievements,
         } = candidate
-        const oldRank = competitionRank(profile.developerScore, oldScores)
-        const newRank = competitionRank(ranking.developerScore, newScores)
+        const oldRank = getCompetitionRank(profile.developerScore, oldScores)
+        const newRank = getCompetitionRank(ranking.developerScore, newScores)
         const movement = oldRank - newRank
         console.log(
             [
@@ -138,7 +138,7 @@ async function main() {
                 `V2 ${ranking.developerScore} (#${newRank}, ${movement >= 0 ? '+' : ''}${movement})`,
                 getDeveloperScoreBand(ranking.developerScore),
                 `pillars ${JSON.stringify(ranking.pillars)}`,
-                `caps commits ${rankingSnapshot.commits.reduce((sum, contribution) => sum + contribution.commitCount, 0)}→${ranking.credited.creditedCommits}; PR records ${rankingSnapshot.pullRequests.length}→${ranking.credited.creditedPullRequestPoints} points; reviews ${rankingSnapshot.reviews.length}→${ranking.credited.creditedReviews}; issues ${rankingSnapshot.issues.length}→${ranking.credited.creditedIssues}`,
+                createMigrationCapReport(rankingSnapshot, ranking),
                 `character ${profile.characterId} unchanged`,
             ].join(' | ')
         )
