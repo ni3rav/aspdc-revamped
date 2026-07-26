@@ -6,8 +6,10 @@ import {
 import { validateRankingSnapshotV2 } from './validate'
 
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql'
+const GITHUB_REST_URL = 'https://api.github.com'
 const RANKING_WINDOW_DAYS = 90
 const MAX_PAGINATION_REQUESTS = 100
+const README_REQUEST_CONCURRENCY = 6
 
 export class GitHubRankingDataIncompleteError extends Error {
     constructor(message: string) {
@@ -32,13 +34,6 @@ type GitHubRepositoryNode = {
     licenseInfo: { key: string } | null
     releases: { totalCount: number }
     refs: { totalCount: number } | null
-    defaultBranchRef: {
-        target: {
-            tree: {
-                entries: Array<{ name: string; type: string }>
-            }
-        }
-    } | null
 }
 
 type ContributionConnection<T> = {
@@ -211,18 +206,6 @@ fragment RankingRepository on Repository {
     refs(refPrefix: "refs/tags/", first: 1) {
         totalCount
     }
-    defaultBranchRef {
-        target {
-            ... on Commit {
-                tree {
-                    entries {
-                        name
-                        type
-                    }
-                }
-            }
-        }
-    }
 }
 `
 
@@ -280,20 +263,90 @@ function normalizeRepository(
         ownerLogin: repository.owner.login,
         isPrivate: repository.isPrivate,
         isFork: repository.isFork,
-        hasReadme:
-            repository.defaultBranchRef?.target.tree.entries.some(
-                (entry) =>
-                    entry.type === 'blob' &&
-                    /^readme(?:\.(?:md|markdown|textile|rdoc|org|creole|mediawiki|rst|asciidoc|adoc|asc))?$/i.test(
-                        entry.name
-                    )
-            ) ?? false,
+        // Resolved later through GitHub's canonical README endpoint.
+        hasReadme: false,
         hasDescription: Boolean(repository.description?.trim()),
         hasTopics: repository.repositoryTopics.totalCount > 0,
         hasLicense: repository.licenseInfo !== null,
         hasReleaseOrTag:
             repository.releases.totalCount > 0 ||
             (repository.refs?.totalCount ?? 0) > 0,
+    }
+}
+
+async function hasCanonicalReadme(
+    accessToken: string,
+    nameWithOwner: string
+): Promise<boolean> {
+    const [owner, name, ...extra] = nameWithOwner.split('/')
+    if (!owner || !name || extra.length > 0) {
+        throw new GitHubRankingDataIncompleteError(
+            `GitHub returned an invalid repository name: ${nameWithOwner}.`
+        )
+    }
+
+    const response = await fetch(
+        `${GITHUB_REST_URL}/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/readme`,
+        {
+            headers: {
+                Accept: 'application/vnd.github+json',
+                Authorization: `Bearer ${accessToken}`,
+                'X-GitHub-Api-Version': '2022-11-28',
+            },
+            cache: 'no-store',
+        }
+    )
+    if (response.status === 404) return false
+    if (!response.ok) {
+        throw new GitHubRankingDataIncompleteError(
+            `GitHub README lookup failed (${response.status}) for ${nameWithOwner}.`
+        )
+    }
+    return true
+}
+
+async function resolveCanonicalReadmes(
+    accessToken: string,
+    repositories: Map<string, RankingRepositoryV2>,
+    commits: RankingSnapshotV2['commits'],
+    login: string
+) {
+    const activeOwnedRepositoryIds = [
+        ...new Set(commits.map((contribution) => contribution.repositoryId)),
+    ].filter((repositoryId) => {
+        const repository = repositories.get(repositoryId)
+        return (
+            repository &&
+            !repository.isPrivate &&
+            !repository.isFork &&
+            repository.ownerLogin.toLowerCase() === login.toLowerCase()
+        )
+    })
+
+    for (
+        let offset = 0;
+        offset < activeOwnedRepositoryIds.length;
+        offset += README_REQUEST_CONCURRENCY
+    ) {
+        const batch = activeOwnedRepositoryIds.slice(
+            offset,
+            offset + README_REQUEST_CONCURRENCY
+        )
+        const results = await Promise.all(
+            batch.map(async (repositoryId) => {
+                const repository = repositories.get(repositoryId)!
+                return {
+                    repository,
+                    hasReadme: await hasCanonicalReadme(
+                        accessToken,
+                        repository.nameWithOwner
+                    ),
+                }
+            })
+        )
+        for (const result of results) {
+            result.repository.hasReadme = result.hasReadme
+        }
     }
 }
 
@@ -492,6 +545,12 @@ export async function fetchGitHubRankingSnapshot(
             reviewsComplete &&
             issuesComplete
         ) {
+            await resolveCanonicalReadmes(
+                accessToken,
+                repositories,
+                commits,
+                login!
+            )
             const snapshot: RankingSnapshotV2 = {
                 scoreVersion: RANKING_SCORE_VERSION,
                 login: login!,

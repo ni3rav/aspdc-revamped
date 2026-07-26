@@ -322,6 +322,49 @@ describe('scoreRankingSnapshotV2', () => {
         )
     })
 
+    it('keeps stewardship monotonic when same-day commits hit the shared cap', () => {
+        const documented = repository('z-documented', {
+            hasReadme: true,
+            hasDescription: true,
+            hasTopics: true,
+            hasLicense: true,
+            hasReleaseOrTag: true,
+        })
+        const undocumented = repository('a-undocumented')
+        const documentedCommit = {
+            occurredAt: '2026-07-01T12:00:00.000Z',
+            repositoryId: documented.id,
+            isRestricted: false,
+            commitCount: 5,
+        }
+        const before = scoreRankingSnapshotV2(
+            snapshot({
+                repositories: [documented],
+                commits: [documentedCommit],
+            })
+        )
+        const after = scoreRankingSnapshotV2(
+            snapshot({
+                repositories: [documented, undocumented],
+                commits: [
+                    documentedCommit,
+                    {
+                        ...documentedCommit,
+                        repositoryId: undocumented.id,
+                    },
+                ],
+            })
+        )
+
+        expect(after.credited.activeOriginalRepositories).toBe(2)
+        expect(after.pillars.stewardship).toBeGreaterThanOrEqual(
+            before.pillars.stewardship
+        )
+        expect(after.developerScore).toBeGreaterThanOrEqual(
+            before.developerScore
+        )
+    })
+
     it('rejects malformed snapshots instead of silently scoring them', () => {
         expect(() =>
             scoreRankingSnapshotV2(

@@ -17,6 +17,13 @@ function jsonResponse(body: GraphQLResponse) {
     }
 }
 
+function restResponse(status: number) {
+    return {
+        ok: status >= 200 && status < 300,
+        status,
+    }
+}
+
 function repository(
     id: string,
     ownerLogin = 'student',
@@ -81,15 +88,7 @@ afterEach(() => {
 
 describe('fetchGitHubRankingSnapshot', () => {
     it('collects a complete public 90-day snapshot across contribution pages', async () => {
-        const ownRepo = repository('coursework', 'student', {
-            defaultBranchRef: {
-                target: {
-                    tree: {
-                        entries: [{ name: 'README.rst', type: 'blob' }],
-                    },
-                },
-            },
-        })
+        const ownRepo = repository('coursework')
         const externalRepo = repository('club-site', 'aspdc')
         const privateRepo = repository('private-lab', 'student', {
             isPrivate: true,
@@ -186,6 +185,9 @@ describe('fetchGitHubRankingSnapshot', () => {
                     }),
                 })
             )
+            // GitHub's canonical endpoint recognizes supported README formats
+            // in .github, root, and docs without duplicating that policy here.
+            .mockResolvedValueOnce(restResponse(200))
         vi.stubGlobal('fetch', fetchMock)
 
         const snapshot = await fetchGitHubRankingSnapshot(
@@ -193,7 +195,7 @@ describe('fetchGitHubRankingSnapshot', () => {
             new Date('2026-07-26T12:00:00.000Z')
         )
 
-        expect(fetchMock).toHaveBeenCalledTimes(2)
+        expect(fetchMock).toHaveBeenCalledTimes(3)
         const [url, init] = fetchMock.mock.calls[0]!
         expect(url).toBe('https://api.github.com/graphql')
         expect(init.headers).toMatchObject({
@@ -211,6 +213,9 @@ describe('fetchGitHubRankingSnapshot', () => {
             String(fetchMock.mock.calls[1]![1].body)
         )
         expect(secondRequest.variables.pullRequestCursor).toBe('pr-cursor')
+        expect(fetchMock.mock.calls[2]![0]).toBe(
+            'https://api.github.com/repos/student/coursework/readme'
+        )
 
         expect(snapshot).toMatchObject({
             scoreVersion: 2,
@@ -242,6 +247,41 @@ describe('fetchGitHubRankingSnapshot', () => {
         ])
         expect(snapshot.reviews).toHaveLength(1)
         expect(snapshot.issues).toHaveLength(1)
+    })
+
+    it('uses GitHub canonical README resolution and accepts a missing README', async () => {
+        const fetchMock = vi
+            .fn()
+            .mockResolvedValueOnce(
+                jsonResponse({
+                    data: responseData({
+                        commits: [
+                            {
+                                repository: repository('coursework'),
+                                contributions: connection([
+                                    {
+                                        occurredAt: '2026-07-01T12:00:00.000Z',
+                                        commitCount: 1,
+                                        isRestricted: false,
+                                    },
+                                ]),
+                            },
+                        ],
+                    }),
+                })
+            )
+            .mockResolvedValueOnce(restResponse(404))
+        vi.stubGlobal('fetch', fetchMock)
+
+        const snapshot = await fetchGitHubRankingSnapshot(
+            'token',
+            new Date('2026-07-26T12:00:00.000Z')
+        )
+
+        expect(snapshot.repositories[0]?.hasReadme).toBe(false)
+        expect(fetchMock.mock.calls[1]![0]).toMatch(
+            /\/repos\/student\/coursework\/readme$/
+        )
     })
 
     it('rejects an incomplete nested commit connection', async () => {

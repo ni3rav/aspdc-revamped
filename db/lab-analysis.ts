@@ -13,7 +13,10 @@ export type PersistLabAnalysisV2Input = {
     profile: NewLabProfile
     score: Omit<NewLabProfileScore, 'profileId'>
     achievements: NewLabAchievement[]
-    /** One-time migration cleanup for achievement IDs whose V1 meaning changed. */
+    /**
+     * Achievement IDs whose legacy meanings changed. They are removed only
+     * when this profile receives the score version for the first time.
+     */
     replaceAchievementIds?: string[]
 }
 
@@ -31,8 +34,10 @@ type PersistedProfileRow = {
 
 /**
  * Persists the persona, versioned competitive score, and durable achievements
- * in one PostgreSQL statement. A single data-changing CTE is used because the
- * repository's Neon HTTP driver does not support callback transactions.
+ * in one PostgreSQL statement. The pre-write score lookup makes legacy badge
+ * cleanup a first-cutover operation, so retries cannot erase earned V2 badges.
+ * A single data-changing CTE is used because the repository's Neon HTTP driver
+ * does not support callback transactions.
  */
 export async function persistLabAnalysisV2(
     input: PersistLabAnalysisV2Input
@@ -46,6 +51,7 @@ deleted_achievements AS (
     DELETE FROM lab_achievements
     WHERE
         profile_id = (SELECT id FROM upserted_profile)
+        AND NOT EXISTS (SELECT 1 FROM existing_score)
         AND achievement_id IN (${sql.join(
             replaceAchievementIds.map((id) => sql`${id}`),
             sql`, `
@@ -89,7 +95,19 @@ inserted_achievements AS (
 )`
 
     const result = await db.execute(sql`
-WITH upserted_profile AS (
+WITH existing_profile AS MATERIALIZED (
+    SELECT id
+    FROM lab_profiles
+    WHERE user_id = ${input.profile.userId}
+),
+existing_score AS MATERIALIZED (
+    SELECT 1
+    FROM lab_profile_scores
+    WHERE
+        profile_id = (SELECT id FROM existing_profile)
+        AND score_version = ${input.score.scoreVersion}
+),
+upserted_profile AS (
     INSERT INTO lab_profiles (
         user_id,
         github_username,

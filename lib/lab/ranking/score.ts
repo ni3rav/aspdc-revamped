@@ -120,7 +120,14 @@ function creditCommits(
             a.localeCompare(b)
         )
         for (const [repositoryId, commitCount] of repositoryCommits) {
-            if (remainingForDay === 0) break
+            // Presence in this map means the repository had eligible activity,
+            // even when another repository consumed the shared daily cap.
+            // Active-repository and stewardship credit must not depend on the
+            // arbitrary allocation order of that cap.
+            if (!creditedByRepository.has(repositoryId)) {
+                creditedByRepository.set(repositoryId, 0)
+            }
+            if (remainingForDay === 0) continue
             const credited = Math.min(commitCount, remainingForDay)
             creditedByRepository.set(
                 repositoryId,

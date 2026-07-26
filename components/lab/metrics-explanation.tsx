@@ -164,13 +164,14 @@ export function MetricsExplanation() {
                                 issues in repositories you do not own. Pull
                                 requests reach full credit at 12 points, reviews
                                 at 24, and issues at 10, all with diminishing
-                                returns. Merged pull requests earn one point,
-                                open pull requests earn half, and closed
-                                unmerged pull requests earn none. Pull-request
-                                credit is capped at 2 points per day and 4 per
-                                repository; reviews at 4 per day and 10 per
-                                repository; issues at 2 per day and 4 per
-                                repository.
+                                returns. Their subweights are 45% pull requests,
+                                35% reviews, and 20% issues. Merged pull
+                                requests earn one point, open pull requests earn
+                                half, and closed unmerged pull requests earn
+                                none. Pull-request credit is capped at 2 points
+                                per day and 4 per repository; reviews at 4 per
+                                day and 10 per repository; issues at 2 per day
+                                and 4 per repository.
                             </p>
                         </AccordionItem>
                         <AccordionItem title="Repository stewardship — 15%">
@@ -179,9 +180,21 @@ export function MetricsExplanation() {
                                 original repositories contribute to a fixed
                                 five-repository maximum, so adding qualifying
                                 work cannot lower the pillar. Each is scored for
-                                README (40%), description (25%), topics (15%),
-                                license (10%), and at least one release or tag
-                                (10%).
+                                a GitHub-resolved README (40%), description
+                                (25%), topics (15%), license (10%), and at least
+                                one release or tag (10%). GitHub&apos;s README
+                                resolution covers supported formats in the
+                                .github, root, and docs locations.
+                            </p>
+                        </AccordionItem>
+                        <AccordionItem title="Functions and rounding">
+                            <p className="text-muted-foreground">
+                                Every diminishing-return input x with cap c is
+                                scored as 100 × √(clamp(x, 0, c) ÷ c). Linear
+                                inputs use 100 × clamp(x, 0, c) ÷ c. Pillars
+                                keep full precision; only the final weighted
+                                score is rounded to an integer and clamped from
+                                0 to 100.
                             </p>
                         </AccordionItem>
                         <AccordionItem title="What carries zero ranking weight">

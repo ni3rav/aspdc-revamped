@@ -274,7 +274,9 @@ An active original repository must:
 - be public;
 - be owned by the user;
 - not be a fork;
-- contain at least one credited commit contribution from the user during the window.
+- contain at least one eligible commit contribution from the user during the
+  window. A repository remains active even when another repository consumes
+  that day's shared five-commit cap.
 
 Do not count stars, forks received, lines changed, repository names, or inactive repository totals.
 
@@ -343,13 +345,13 @@ displace a stronger hygiene score and lower the pillar.
 
 Each repository receives:
 
-| Signal                                     | Points |
-| ------------------------------------------ | -----: |
-| README exists on the default branch        |     40 |
-| Non-empty description exists               |     25 |
-| At least one topic exists                  |     15 |
-| License is declared                        |     10 |
-| At least one release or version tag exists |     10 |
+| Signal                                         | Points |
+| ---------------------------------------------- | -----: |
+| GitHub resolves a README on the default branch |     40 |
+| Non-empty description exists                   |     25 |
+| At least one topic exists                      |     15 |
+| License is declared                            |     10 |
+| At least one release or version tag exists     |     10 |
 
 ```text
 stewardship = sum(topFiveRepositoryHygieneScores) / 5
@@ -359,6 +361,9 @@ Missing slots contribute zero. If there is no qualifying active original
 repository, stewardship is 0. The fixed five-repository denominator rewards
 maintaining several healthy projects without letting an additional weaker
 project reduce an existing score.
+
+README presence uses GitHub's canonical repository README endpoint, including
+GitHub-supported formats and the `.github`, root, and `docs` locations.
 
 ### Final score
 
@@ -764,4 +769,6 @@ pnpm lab:migrate-v2 -- --apply
 Profiles without a usable GitHub token are skipped. A failed or incomplete
 GitHub response is reported per profile and never overwrites its last successful
 version-2 score. Version-1 fields remain available for rollback while public
-ranking queries select version 2 exclusively.
+ranking queries select version 2 exclusively. Legacy badge IDs whose meanings
+changed are reconciled only when a profile first receives a version-2 score;
+rerunning the migration cannot delete achievements earned after cutover.

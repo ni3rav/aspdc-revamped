@@ -13,7 +13,10 @@ import {
 import { auth } from '@/lib/auth'
 import { fetchGitHubSnapshot } from '@/lib/lab/github'
 import { getGitHubAccessToken } from '@/lib/lab/github-token'
-import { unlockDurableRankingAchievements } from '@/lib/lab/achievements'
+import {
+    DURABLE_RANKING_ACHIEVEMENT_IDS,
+    unlockDurableRankingAchievements,
+} from '@/lib/lab/achievements'
 import { runLabAnalysisV2 } from '@/lib/lab/ranking/analyze'
 import { fetchGitHubRankingSnapshot } from '@/lib/lab/ranking/github'
 import type { RankingPillarScores } from '@/lib/lab/ranking/types'
@@ -144,6 +147,7 @@ export async function analyzeLabProfile(): Promise<AnalyzeLabProfileResult> {
                 achievementId: achievement.id,
                 unlockedAt: analyzedAt,
             })),
+            replaceAchievementIds: [...DURABLE_RANKING_ACHIEVEMENT_IDS],
         })
 
         try {
