@@ -5,6 +5,7 @@ import {
     type RankingScoreV2,
     type RankingSnapshotV2,
 } from './types'
+import { githubLoginsEqual } from './github-login'
 import { validateRankingSnapshotV2 } from './validate'
 
 const DAY_MS = 24 * 60 * 60 * 1000
@@ -171,8 +172,7 @@ function creditPullRequests(
                 contribution.points > 0 &&
                 withinWindow(contribution.occurredAt, snapshot) &&
                 repository !== undefined &&
-                repository.ownerLogin.toLowerCase() !==
-                    snapshot.login.toLowerCase()
+                !githubLoginsEqual(repository.ownerLogin, snapshot.login)
             )
         })
         .sort(
@@ -227,10 +227,11 @@ function creditReviews(
             !day ||
             !withinWindow(contribution.occurredAt, snapshot) ||
             !repository ||
-            repository.ownerLogin.toLowerCase() ===
-                snapshot.login.toLowerCase() ||
-            contribution.pullRequestAuthorLogin.toLowerCase() ===
-                snapshot.login.toLowerCase()
+            githubLoginsEqual(repository.ownerLogin, snapshot.login) ||
+            githubLoginsEqual(
+                contribution.pullRequestAuthorLogin,
+                snapshot.login
+            )
         ) {
             continue
         }
@@ -277,8 +278,7 @@ function creditIssues(
             !day ||
             !withinWindow(contribution.occurredAt, snapshot) ||
             !repository ||
-            repository.ownerLogin.toLowerCase() ===
-                snapshot.login.toLowerCase() ||
+            githubLoginsEqual(repository.ownerLogin, snapshot.login) ||
             (perDay.get(day) ?? 0) >= 2 ||
             (perRepository.get(contribution.repositoryId) ?? 0) >= 4
         ) {
@@ -321,9 +321,13 @@ function collectActiveDates(
         !contribution.isRestricted &&
         withinWindow(contribution.occurredAt, snapshot) &&
         repositories.has(contribution.repositoryId)
-    const isExternal = (repositoryId: string) =>
-        repositories.get(repositoryId)?.ownerLogin.toLowerCase() !==
-        snapshot.login.toLowerCase()
+    const isExternal = (repositoryId: string) => {
+        const repository = repositories.get(repositoryId)
+        return (
+            repository !== undefined &&
+            !githubLoginsEqual(repository.ownerLogin, snapshot.login)
+        )
+    }
 
     for (const contribution of snapshot.commits) {
         if (baseEligible(contribution) && contribution.commitCount > 0) {
@@ -343,8 +347,10 @@ function collectActiveDates(
         if (
             baseEligible(contribution) &&
             isExternal(contribution.repositoryId) &&
-            contribution.pullRequestAuthorLogin.toLowerCase() !==
-                snapshot.login.toLowerCase()
+            !githubLoginsEqual(
+                contribution.pullRequestAuthorLogin,
+                snapshot.login
+            )
         ) {
             addActivityDate(contribution.occurredAt, activeDays, activeWeeks)
         }
@@ -394,12 +400,13 @@ export function scoreRankingSnapshotV2(
     const commits = creditCommits(snapshot, repositories)
 
     const activeOriginalRepositories = [...commits.byRepository.keys()].filter(
-        (repositoryId) =>
-            repositories
-                .get(repositoryId)
-                ?.ownerLogin.localeCompare(snapshot.login, undefined, {
-                    sensitivity: 'accent',
-                }) === 0
+        (repositoryId) => {
+            const repository = repositories.get(repositoryId)
+            return (
+                repository !== undefined &&
+                githubLoginsEqual(repository.ownerLogin, snapshot.login)
+            )
+        }
     )
 
     const activeWeekScore = linear(activity.activeWeeks.length, 13)
@@ -467,9 +474,13 @@ export function createPersistedRankingSnapshotV2(
     const activity = collectActiveDates(snapshot, repositories)
     const commits = creditCommits(snapshot, repositories)
     const activeOwnedRepositoryIds = [...commits.byRepository.keys()].filter(
-        (repositoryId) =>
-            repositories.get(repositoryId)?.ownerLogin.toLowerCase() ===
-            snapshot.login.toLowerCase()
+        (repositoryId) => {
+            const repository = repositories.get(repositoryId)
+            return (
+                repository !== undefined &&
+                githubLoginsEqual(repository.ownerLogin, snapshot.login)
+            )
+        }
     )
     const activeOwnedRepositories = selectStewardshipRepositories(
         activeOwnedRepositoryIds,

@@ -3,6 +3,7 @@ import {
     type RankingRepositoryV2,
     type RankingSnapshotV2,
 } from './types'
+import { githubLoginsEqual } from './github-login'
 import { validateRankingSnapshotV2 } from './validate'
 
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql'
@@ -351,7 +352,7 @@ async function resolveCanonicalReadmes(
             repository &&
             !repository.isPrivate &&
             !repository.isFork &&
-            repository.ownerLogin.toLowerCase() === login.toLowerCase()
+            githubLoginsEqual(repository.ownerLogin, login)
         )
     })
 
@@ -441,7 +442,7 @@ export async function fetchGitHubRankingSnapshot(
                 'Ranking analysis requires an authenticated GitHub user account.'
             )
         }
-        if (login && login !== data.viewer.login) {
+        if (login && !githubLoginsEqual(login, data.viewer.login)) {
             throw new GitHubRankingDataIncompleteError(
                 'The authenticated GitHub account changed during pagination.'
             )

@@ -1,5 +1,6 @@
 import { runAnalysisPipeline, type AnalysisPipelineResult } from '../analyze'
 import type { GitHubSnapshot } from '../types'
+import { githubLoginsEqual } from './github-login'
 import {
     createPersistedRankingSnapshotV2,
     scoreRankingSnapshotV2,
@@ -20,10 +21,7 @@ export function runLabAnalysisV2(
     personaSnapshot: GitHubSnapshot,
     rankingSnapshot: RankingSnapshotV2
 ): LabAnalysisV2Result {
-    if (
-        personaSnapshot.login.toLowerCase() !==
-        rankingSnapshot.login.toLowerCase()
-    ) {
+    if (!githubLoginsEqual(personaSnapshot.login, rankingSnapshot.login)) {
         throw new Error(
             'Persona and ranking snapshots must belong to the same GitHub user.'
         )

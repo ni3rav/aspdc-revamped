@@ -1,4 +1,5 @@
 import type { RankingScoreV2, RankingSnapshotV2 } from './types'
+import { githubLoginsEqual } from './github-login'
 import { getCompetitionRank } from './rank'
 
 export function getMigrationRankMovement({
@@ -26,7 +27,7 @@ export function assertRankingSnapshotOwner(
     profileLogin: string,
     snapshotLogin: string
 ): void {
-    if (profileLogin.toLowerCase() === snapshotLogin.toLowerCase()) return
+    if (githubLoginsEqual(profileLogin, snapshotLogin)) return
 
     throw new Error(
         `Linked GitHub token resolved to @${snapshotLogin}, not profile @${profileLogin}.`
