@@ -127,8 +127,9 @@ export function MetricsExplanation() {
                     </h2>
                     <p className="text-muted-foreground mx-auto mt-2 max-w-xl text-base leading-relaxed">
                         The competitive score uses recent public evidence. The
-                        character match uses a separate persona model and is not
-                        used to rank developers.
+                        score is calibrated for undergraduate and early-career
+                        developers. The character match uses a separate persona
+                        model and is not used to rank developers.
                     </p>
                 </div>
 

@@ -67,7 +67,9 @@ export function RankingOverview({ score, stats }: RankingOverviewProps) {
                             </CardTitle>
                             <CardDescription className="mt-2 max-w-[70ch] text-base leading-relaxed">
                                 Recent public engineering activity and
-                                stewardship over a rolling 90-day window.
+                                stewardship over a rolling 90-day window,
+                                calibrated for undergraduate and early-career
+                                developers.
                             </CardDescription>
                         </div>
                         <div className="flex flex-wrap items-center justify-end gap-2">
