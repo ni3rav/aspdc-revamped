@@ -8,6 +8,13 @@
             "when": 1784484617019,
             "tag": "0000_lab_profiles",
             "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "7",
+            "when": 1785051648418,
+            "tag": "0001_lab-ranking-v2",
+            "breakpoints": true
         }
     ]
 }

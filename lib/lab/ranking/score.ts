@@ -1,5 +1,6 @@
 import {
     RANKING_SCORE_VERSION,
+    type PersistedRankingSnapshotV2,
     type RankingRepositoryV2,
     type RankingScoreV2,
     type RankingSnapshotV2,
@@ -83,6 +84,7 @@ function creditCommits(
 ): {
     total: number
     byRepository: Map<string, number>
+    byDay: Map<string, number>
 } {
     const commitsByDayAndRepository = new Map<string, Map<string, number>>()
 
@@ -108,9 +110,10 @@ function creditCommits(
     }
 
     const creditedByRepository = new Map<string, number>()
+    const creditedByDay = new Map<string, number>()
     let total = 0
 
-    for (const byRepository of commitsByDayAndRepository.values()) {
+    for (const [day, byRepository] of commitsByDayAndRepository) {
         let remainingForDay = 5
         const repositoryCommits = [...byRepository.entries()].sort(([a], [b]) =>
             a.localeCompare(b)
@@ -125,9 +128,14 @@ function creditCommits(
             total += credited
             remainingForDay -= credited
         }
+        creditedByDay.set(day, 5 - remainingForDay)
     }
 
-    return { total, byRepository: creditedByRepository }
+    return {
+        total,
+        byRepository: creditedByRepository,
+        byDay: creditedByDay,
+    }
 }
 
 function creditPullRequests(
@@ -293,7 +301,7 @@ function hygieneScore(repository: RankingRepositoryV2): number {
 function collectActiveDates(
     snapshot: RankingSnapshotV2,
     repositories: Map<string, RankingRepositoryV2>
-): { activeDays: number; activeWeeks: number } {
+): { activeDays: string[]; activeWeeks: string[] } {
     const activeDays = new Set<string>()
     const activeWeeks = new Set<string>()
 
@@ -318,8 +326,8 @@ function collectActiveDates(
     }
 
     return {
-        activeDays: activeDays.size,
-        activeWeeks: activeWeeks.size,
+        activeDays: [...activeDays].sort(),
+        activeWeeks: [...activeWeeks].sort(),
     }
 }
 
@@ -339,8 +347,8 @@ export function scoreRankingSnapshotV2(
                 }) === 0
     )
 
-    const activeWeekScore = linear(activity.activeWeeks, 13)
-    const activeDayScore = linear(activity.activeDays, 36)
+    const activeWeekScore = linear(activity.activeWeeks.length, 13)
+    const activeDayScore = linear(activity.activeDays.length, 36)
     const sustainedActivity = 0.65 * activeWeekScore + 0.35 * activeDayScore
 
     const commitScore = diminishing(commits.total, 90)
@@ -393,8 +401,8 @@ export function scoreRankingSnapshotV2(
             stewardship,
         },
         credited: {
-            activeDays: activity.activeDays,
-            activeWeeks: activity.activeWeeks,
+            activeDays: activity.activeDays.length,
+            activeWeeks: activity.activeWeeks.length,
             creditedCommits: commits.total,
             activeOriginalRepositories: activeOriginalRepositories.length,
             creditedPullRequestPoints,
@@ -402,6 +410,58 @@ export function scoreRankingSnapshotV2(
             creditedIssues,
             stewardshipRepositories: stewardshipRepositories.length,
         },
+    }
+}
+
+export function createPersistedRankingSnapshotV2(
+    snapshot: RankingSnapshotV2,
+    score: RankingScoreV2 = scoreRankingSnapshotV2(snapshot)
+): PersistedRankingSnapshotV2 {
+    const repositories = publicOriginalRepositories(snapshot)
+    const activity = collectActiveDates(snapshot, repositories)
+    const commits = creditCommits(snapshot, repositories)
+    const activeOwnedRepositories = [...commits.byRepository.entries()]
+        .map(([repositoryId, creditedCommits]) => ({
+            repository: repositories.get(repositoryId)!,
+            creditedCommits,
+        }))
+        .filter(
+            ({ repository }) =>
+                repository.ownerLogin.toLowerCase() ===
+                snapshot.login.toLowerCase()
+        )
+        .sort(
+            (a, b) =>
+                b.creditedCommits - a.creditedCommits ||
+                a.repository.nameWithOwner.localeCompare(
+                    b.repository.nameWithOwner
+                )
+        )
+        .slice(0, 5)
+
+    return {
+        scoreVersion: RANKING_SCORE_VERSION,
+        login: snapshot.login,
+        windowStart: snapshot.windowStart,
+        windowEnd: snapshot.windowEnd,
+        capturedAt: snapshot.capturedAt,
+        dailyCreditedCommits: Object.fromEntries(
+            [...commits.byDay.entries()].sort(([a], [b]) => a.localeCompare(b))
+        ),
+        activeDays: activity.activeDays,
+        activeWeeks: activity.activeWeeks,
+        credited: score.credited,
+        repositories: activeOwnedRepositories.map(
+            ({ repository, creditedCommits }) => ({
+                nameWithOwner: repository.nameWithOwner,
+                creditedCommits,
+                hasReadme: repository.hasReadme,
+                hasDescription: repository.hasDescription,
+                hasTopics: repository.hasTopics,
+                hasLicense: repository.hasLicense,
+                hasReleaseOrTag: repository.hasReleaseOrTag,
+            })
+        ),
     }
 }
 

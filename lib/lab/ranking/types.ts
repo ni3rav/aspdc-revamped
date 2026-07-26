@@ -79,3 +79,24 @@ export type RankingScoreV2 = {
     pillars: RankingPillarScores
     credited: RankingCreditedAggregates
 }
+
+export type PersistedRankingSnapshotV2 = {
+    scoreVersion: typeof RANKING_SCORE_VERSION
+    login: string
+    windowStart: string
+    windowEnd: string
+    capturedAt: string
+    dailyCreditedCommits: Record<string, number>
+    activeDays: string[]
+    activeWeeks: string[]
+    credited: RankingCreditedAggregates
+    repositories: Array<{
+        nameWithOwner: string
+        creditedCommits: number
+        hasReadme: boolean
+        hasDescription: boolean
+        hasTopics: boolean
+        hasLicense: boolean
+        hasReleaseOrTag: boolean
+    }>
+}
