@@ -7,8 +7,9 @@ async function main() {
     const [
         { db },
         { account, labProfiles },
-        { and, eq },
+        { and, asc, desc, eq },
         { fetchGitHubRankingSnapshot },
+        { assertRankingSnapshotOwner },
         {
             createPersistedRankingSnapshotV2,
             getDeveloperScoreBand,
@@ -22,6 +23,7 @@ async function main() {
         import('@/db/schema'),
         import('drizzle-orm'),
         import('@/lib/lab/ranking/github'),
+        import('@/lib/lab/ranking/migration'),
         import('@/lib/lab/ranking/score'),
         import('@/lib/lab/ranking/types'),
         import('@/lib/lab/achievements'),
@@ -41,11 +43,14 @@ async function main() {
                 eq(account.providerId, 'github')
             )
         )
-    const profiles = [
-        ...new Map(
-            profileRows.map((row) => [row.profile.id, row] as const)
-        ).values(),
-    ]
+        .orderBy(asc(labProfiles.id), desc(account.updatedAt), asc(account.id))
+    const profileById = new Map<string, (typeof profileRows)[number]>()
+    for (const row of profileRows) {
+        if (!profileById.has(row.profile.id)) {
+            profileById.set(row.profile.id, row)
+        }
+    }
+    const profiles = [...profileById.values()]
 
     console.log(
         `${apply ? 'APPLY' : 'DRY RUN'}: evaluating ${profiles.length} lab profiles`
@@ -76,6 +81,10 @@ async function main() {
         try {
             const rankingSnapshot =
                 await fetchGitHubRankingSnapshot(accessToken)
+            assertRankingSnapshotOwner(
+                profile.githubUsername,
+                rankingSnapshot.login
+            )
             const ranking = scoreRankingSnapshotV2(rankingSnapshot)
             const persistedSnapshot = createPersistedRankingSnapshotV2(
                 rankingSnapshot,
