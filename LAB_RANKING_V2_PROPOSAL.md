@@ -736,3 +736,26 @@ Before implementation begins, record:
 6. Approval of the no-scheduled-refresh trade-off.
 
 Once these are approved, implementation can proceed test-first in the phased order above.
+
+## Migration operator runbook
+
+After applying the database migration, run the version-2 profile migration in
+dry-run mode first:
+
+```bash
+pnpm lab:migrate-v2
+```
+
+The report shows each existing profile's version-1 score, proposed version-2
+score and pillars, and confirms that its character remains unchanged. It does
+not write data or print access tokens. Review the golden cohort and target bands
+before opting into writes:
+
+```bash
+pnpm lab:migrate-v2 -- --apply
+```
+
+Profiles without a usable GitHub token are skipped. A failed or incomplete
+GitHub response is reported per profile and never overwrites its last successful
+version-2 score. Version-1 fields remain available for rollback while public
+ranking queries select version 2 exclusively.
