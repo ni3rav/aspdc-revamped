@@ -1,5 +1,6 @@
 import type { LabProfile } from '@/db/types'
 import { CHARACTER_PROFILES } from './characters'
+import { getCompetitionRank } from './ranking/rank'
 
 export type LabLeaderboardEntry = {
     id: string
@@ -36,18 +37,12 @@ export function formatLeaderboardEntries(
         return a.githubUsername.localeCompare(b.githubUsername)
     })
 
-    let currentRank = 0
-    let previousScore: number | null = null
+    const scores = sorted.map((profile) => profile.developerScore)
 
-    return sorted.map((profile, index) => {
-        if (profile.developerScore !== previousScore) {
-            currentRank = index + 1
-            previousScore = profile.developerScore
-        }
-
+    return sorted.map((profile) => {
         return {
             id: profile.id,
-            rank: currentRank,
+            rank: getCompetitionRank(profile.developerScore, scores),
             githubUsername: profile.githubUsername,
             avatarUrl: getGitHubAvatarUrl(profile.githubUsername),
             characterId: profile.characterId,

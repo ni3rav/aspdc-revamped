@@ -1,5 +1,19 @@
 import { describe, expect, it } from 'vitest'
-import { calculateRankingStats, createScoreHistogram } from './rank'
+import {
+    calculateRankingStats,
+    createScoreHistogram,
+    getCompetitionRank,
+} from './rank'
+
+describe('getCompetitionRank', () => {
+    it('assigns competition rank from the shared displayed-score rule', () => {
+        const scores = [91.4, 91.2, 84, 70]
+
+        expect(getCompetitionRank(91, scores)).toBe(1)
+        expect(getCompetitionRank(84, scores)).toBe(3)
+        expect(getCompetitionRank(70, scores)).toBe(4)
+    })
+})
 
 describe('calculateRankingStats', () => {
     it('uses competition rank and strict score comparisons for ties', () => {

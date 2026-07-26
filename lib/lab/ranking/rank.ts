@@ -18,6 +18,18 @@ function displayedScore(score: number): number {
     return Math.min(100, Math.max(0, Math.round(score)))
 }
 
+export function getCompetitionRank(
+    userScore: number,
+    participantScores: number[]
+): number {
+    const score = displayedScore(userScore)
+    return (
+        participantScores
+            .map(displayedScore)
+            .filter((participantScore) => participantScore > score).length + 1
+    )
+}
+
 export function calculateRankingStats(
     userScore: number,
     participantScores: number[]
@@ -34,7 +46,7 @@ export function calculateRankingStats(
     const usersBelow = scores.filter(
         (participantScore) => participantScore < score
     ).length
-    const rank = usersAbove + 1
+    const rank = getCompetitionRank(score, scores)
 
     return {
         participantCount,
