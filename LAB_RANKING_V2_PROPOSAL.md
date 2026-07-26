@@ -1,7 +1,7 @@
 # Lab Ranking V2 Proposal
 
 **Status:** Updated after maintainer feedback; implementation ready for review
-**Scope:** `/lab` GitHub analysis, competitive developer score, leaderboard, ranking statistics, and rank-dependent achievements  
+**Scope:** `/lab` GitHub analysis, competitive developer score, leaderboard, ranking statistics, and rank-dependent achievements
 **Out of scope:** Changes to Breaking Bad character assignment, scheduled background refreshes, private GitHub activity, and subjective code-quality assessment
 
 ## Executive summary
