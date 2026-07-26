@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
     assertRankingSnapshotOwner,
     createMigrationCapReport,
+    getMigrationRankMovement,
 } from './migration'
 import { RANKING_SCORE_VERSION } from './types'
 
@@ -69,5 +70,22 @@ describe('createMigrationCapReport', () => {
         expect(report).toBe(
             'caps commits 8→5; PR records 3→2.5 points; reviews 2→2; issues 1→1; active original repos 7→5; stewardship candidates 7→5 selected'
         )
+    })
+})
+
+describe('getMigrationRankMovement', () => {
+    it('compares V1 against every legacy profile when V2 candidates were skipped', () => {
+        expect(
+            getMigrationRankMovement({
+                oldScore: 80,
+                newScore: 85,
+                allOldScores: [100, 90, 80],
+                candidateNewScores: [85],
+            })
+        ).toEqual({
+            oldRank: 3,
+            newRank: 1,
+            movement: 2,
+        })
     })
 })

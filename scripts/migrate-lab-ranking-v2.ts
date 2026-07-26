@@ -9,8 +9,11 @@ async function main() {
         { account, labProfiles },
         { and, asc, desc, eq },
         { fetchGitHubRankingSnapshot },
-        { assertRankingSnapshotOwner, createMigrationCapReport },
-        { getCompetitionRank },
+        {
+            assertRankingSnapshotOwner,
+            createMigrationCapReport,
+            getMigrationRankMovement,
+        },
         {
             createPersistedRankingSnapshotV2,
             getDeveloperScoreBand,
@@ -25,7 +28,6 @@ async function main() {
         import('drizzle-orm'),
         import('@/lib/lab/ranking/github'),
         import('@/lib/lab/ranking/migration'),
-        import('@/lib/lab/ranking/rank'),
         import('@/lib/lab/ranking/score'),
         import('@/lib/lab/ranking/types'),
         import('@/lib/lab/achievements'),
@@ -116,7 +118,7 @@ async function main() {
         }
     }
 
-    const oldScores = candidates.map(({ profile }) => profile.developerScore)
+    const oldScores = profiles.map(({ profile }) => profile.developerScore)
     const newScores = candidates.map(({ ranking }) => ranking.developerScore)
 
     for (const candidate of candidates) {
@@ -128,9 +130,12 @@ async function main() {
             capturedAt,
             achievements,
         } = candidate
-        const oldRank = getCompetitionRank(profile.developerScore, oldScores)
-        const newRank = getCompetitionRank(ranking.developerScore, newScores)
-        const movement = oldRank - newRank
+        const { oldRank, newRank, movement } = getMigrationRankMovement({
+            oldScore: profile.developerScore,
+            newScore: ranking.developerScore,
+            allOldScores: oldScores,
+            candidateNewScores: newScores,
+        })
         console.log(
             [
                 `${apply ? 'WRITE' : 'READY'} @${profile.githubUsername}`,

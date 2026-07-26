@@ -1,4 +1,26 @@
 import type { RankingScoreV2, RankingSnapshotV2 } from './types'
+import { getCompetitionRank } from './rank'
+
+export function getMigrationRankMovement({
+    oldScore,
+    newScore,
+    allOldScores,
+    candidateNewScores,
+}: {
+    oldScore: number
+    newScore: number
+    allOldScores: number[]
+    candidateNewScores: number[]
+}) {
+    const oldRank = getCompetitionRank(oldScore, allOldScores)
+    const newRank = getCompetitionRank(newScore, candidateNewScores)
+
+    return {
+        oldRank,
+        newRank,
+        movement: oldRank - newRank,
+    }
+}
 
 export function assertRankingSnapshotOwner(
     profileLogin: string,
