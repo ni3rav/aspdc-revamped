@@ -4,11 +4,11 @@ import {
     type RankingSnapshotV2,
 } from './types'
 import { githubLoginsEqual } from './github-login'
+import { RANKING_V2_POLICY } from './policy'
 import { validateRankingSnapshotV2 } from './validate'
 
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql'
 const GITHUB_REST_URL = 'https://api.github.com'
-const RANKING_WINDOW_DAYS = 90
 const MAX_PAGINATION_REQUESTS = 100
 const README_REQUEST_CONCURRENCY = 6
 
@@ -407,7 +407,8 @@ export async function fetchGitHubRankingSnapshot(
 
     const windowEnd = capturedAt.toISOString()
     const windowStart = new Date(
-        capturedAt.getTime() - RANKING_WINDOW_DAYS * 24 * 60 * 60 * 1000
+        capturedAt.getTime() -
+            RANKING_V2_POLICY.windowDays * 24 * 60 * 60 * 1000
     ).toISOString()
     const repositories = new Map<string, RankingRepositoryV2>()
     const commits: RankingSnapshotV2['commits'] = []
@@ -464,7 +465,7 @@ export async function fetchGitHubRankingSnapshot(
                 ) {
                     if (group.contributions.pageInfo.hasNextPage) {
                         throw new GitHubRankingDataIncompleteError(
-                            `Commit contributions for ${group.repository.nameWithOwner} exceeded the complete 90-day page.`
+                            `Commit contributions for ${group.repository.nameWithOwner} exceeded the complete ${RANKING_V2_POLICY.windowDays}-day page.`
                         )
                     }
                     continue

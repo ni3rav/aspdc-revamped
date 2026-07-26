@@ -1,5 +1,6 @@
 import type { RankingScoreV2, RankingSnapshotV2 } from './types'
 import { githubLoginsEqual } from './github-login'
+import { RANKING_V2_POLICY } from './policy'
 import { getCompetitionRank } from './rank'
 
 export function getMigrationRankMovement({
@@ -50,7 +51,7 @@ export function createMigrationCapReport(
         `issues ${snapshot.issues.length}→${score.credited.creditedIssues}`,
         `active original repos ${activeOriginalRepositories}→${Math.min(
             activeOriginalRepositories,
-            5
+            RANKING_V2_POLICY.building.activeOriginalRepositories.cap
         )}`,
         `stewardship candidates ${activeOriginalRepositories}→${score.credited.stewardshipRepositories} selected`,
     ].join('; ')

@@ -4,6 +4,10 @@ import { useId, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TRAIT_IDS, type TraitId } from '@/lib/lab/types'
 import { getTraitLabel, getTraitDescription } from '@/lib/lab/traits'
+import {
+    formatPolicyPercent,
+    RANKING_V2_POLICY,
+} from '@/lib/lab/ranking/policy'
 
 // ─── Shared accordion item ────────────────────────────────────────────────────
 
@@ -109,6 +113,8 @@ function TraitAccordionItem({
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function MetricsExplanation() {
+    const policy = RANKING_V2_POLICY
+
     return (
         <section className="bg-background text-foreground relative w-full px-4 py-12">
             <motion.div
@@ -136,56 +142,110 @@ export function MetricsExplanation() {
                 {/* Block 1: Developer Score */}
                 <div>
                     <h3 className="text-foreground mb-3 text-lg font-bold">
-                        Developer Score (0 – 100)
+                        Developer Score ({policy.score.minimum} –{' '}
+                        {policy.score.maximum})
                     </h3>
                     <div className="flex flex-col gap-2">
-                        <AccordionItem title="Sustained activity — 30%">
+                        <AccordionItem
+                            title={`Sustained activity — ${formatPolicyPercent(policy.sustainedActivity.finalWeight)}`}
+                        >
                             <p className="text-muted-foreground">
                                 Credits active days and weeks across a rolling
-                                90-day public window. Active weeks reach full
-                                credit at 13 and active days at 36; the pillar
-                                combines them 65/35. Fifty contributions on one
-                                day still count as one active day.
+                                {` ${policy.windowDays}-day public window. Active weeks reach full credit at ${policy.sustainedActivity.activeWeeks.cap} and active days at ${policy.sustainedActivity.activeDays.cap}; the pillar combines them ${formatPolicyPercent(policy.sustainedActivity.activeWeeks.weight)}/${formatPolicyPercent(policy.sustainedActivity.activeDays.weight)}. `}
+                                Fifty contributions on one day still count as
+                                one active day.
                             </p>
                         </AccordionItem>
-                        <AccordionItem title="Building — 30%">
+                        <AccordionItem
+                            title={`Building — ${formatPolicyPercent(policy.building.finalWeight)}`}
+                        >
                             <p className="text-muted-foreground">
                                 Credits capped commit activity and work across
-                                active original repositories. At most five
-                                commits per UTC day count, with diminishing
-                                returns reaching full commit credit at 90.
-                                Active original repositories reach full credit
-                                at five. The pillar combines commits and
-                                repositories 70/30.
+                                active original repositories. At most{' '}
+                                {policy.building.commits.perDayCap} commits per
+                                UTC day count, with diminishing returns reaching
+                                full commit credit at{' '}
+                                {policy.building.commits.cap}. Active original
+                                repositories reach full credit at{' '}
+                                {policy.building.activeOriginalRepositories.cap}
+                                . The pillar combines commits and repositories{' '}
+                                {formatPolicyPercent(
+                                    policy.building.commits.weight
+                                )}
+                                /
+                                {formatPolicyPercent(
+                                    policy.building.activeOriginalRepositories
+                                        .weight
+                                )}
+                                .
                             </p>
                         </AccordionItem>
-                        <AccordionItem title="External collaboration — 25%">
+                        <AccordionItem
+                            title={`External collaboration — ${formatPolicyPercent(policy.collaboration.finalWeight)}`}
+                        >
                             <p className="text-muted-foreground">
                                 Credits public pull requests, reviews, and
                                 issues in repositories you do not own. Pull
-                                requests reach full credit at 12 points, reviews
-                                at 24, and issues at 10, all with diminishing
-                                returns. Their subweights are 45% pull requests,
-                                35% reviews, and 20% issues. Merged pull
-                                requests earn one point, open pull requests earn
-                                half, and closed unmerged pull requests earn
-                                none. Pull-request credit is capped at 2 points
-                                per day and 4 per repository; reviews at 4 per
-                                day and 10 per repository; issues at 2 per day
-                                and 4 per repository.
+                                requests reach full credit at{' '}
+                                {policy.collaboration.pullRequests.cap} points,
+                                reviews at {policy.collaboration.reviews.cap},
+                                and issues at {policy.collaboration.issues.cap},
+                                all with diminishing returns. Their subweights
+                                are{' '}
+                                {formatPolicyPercent(
+                                    policy.collaboration.pullRequests.weight
+                                )}{' '}
+                                pull requests,{' '}
+                                {formatPolicyPercent(
+                                    policy.collaboration.reviews.weight
+                                )}{' '}
+                                reviews, and{' '}
+                                {formatPolicyPercent(
+                                    policy.collaboration.issues.weight
+                                )}{' '}
+                                issues. Merged pull requests earn{' '}
+                                {policy.collaboration.pullRequests.mergedPoints}{' '}
+                                point, open pull requests earn{' '}
+                                {policy.collaboration.pullRequests.openPoints},
+                                and closed unmerged pull requests earn none.
+                                Pull-request credit is capped at{' '}
+                                {policy.collaboration.pullRequests.perDayCap}{' '}
+                                points per day and{' '}
+                                {
+                                    policy.collaboration.pullRequests
+                                        .perRepositoryCap
+                                }{' '}
+                                per repository; reviews at{' '}
+                                {policy.collaboration.reviews.perDayCap} per day
+                                and{' '}
+                                {policy.collaboration.reviews.perRepositoryCap}{' '}
+                                per repository; issues at{' '}
+                                {policy.collaboration.issues.perDayCap} per day
+                                and{' '}
+                                {policy.collaboration.issues.perRepositoryCap}{' '}
+                                per repository.
                             </p>
                         </AccordionItem>
-                        <AccordionItem title="Repository stewardship — 15%">
+                        <AccordionItem
+                            title={`Repository stewardship — ${formatPolicyPercent(policy.stewardship.finalWeight)}`}
+                        >
                             <p className="text-muted-foreground">
-                                The five strongest hygiene scores among active
-                                original repositories contribute to a fixed
-                                five-repository maximum, so adding qualifying
-                                work cannot lower the pillar. Each is scored for
-                                a GitHub-resolved README (40%), description
-                                (25%), topics (15%), license (10%), and at least
-                                one release or tag (10%). GitHub&apos;s README
-                                resolution covers supported formats in the
-                                .github, root, and docs locations.
+                                The {policy.stewardship.repositoryLimit}{' '}
+                                strongest hygiene scores among active original
+                                repositories contribute to a fixed{' '}
+                                {policy.stewardship.repositoryLimit}-repository
+                                maximum, so adding qualifying work cannot lower
+                                the pillar. Each is scored for a GitHub-resolved
+                                README ({policy.stewardship.hygiene.readme}%),
+                                description (
+                                {policy.stewardship.hygiene.description}%),
+                                topics ({policy.stewardship.hygiene.topics}%),
+                                license ({policy.stewardship.hygiene.license}%),
+                                and at least one release or tag (
+                                {policy.stewardship.hygiene.releaseOrTag}%).
+                                GitHub&apos;s README resolution covers supported
+                                formats in the .github, root, and docs
+                                locations.
                             </p>
                         </AccordionItem>
                         <AccordionItem title="Functions and rounding">
@@ -195,7 +255,7 @@ export function MetricsExplanation() {
                                 inputs use 100 × clamp(x, 0, c) ÷ c. Pillars
                                 keep full precision; only the final weighted
                                 score is rounded to an integer and clamped from
-                                0 to 100.
+                                {` ${policy.score.minimum} to ${policy.score.maximum}.`}
                             </p>
                         </AccordionItem>
                         <AccordionItem title="What carries zero ranking weight">

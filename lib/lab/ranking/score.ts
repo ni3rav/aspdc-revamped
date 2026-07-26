@@ -6,6 +6,7 @@ import {
     type RankingSnapshotV2,
 } from './types'
 import { githubLoginsEqual } from './github-login'
+import { RANKING_V2_POLICY } from './policy'
 import { validateRankingSnapshotV2 } from './validate'
 
 const DAY_MS = 24 * 60 * 60 * 1000
@@ -116,7 +117,8 @@ function creditCommits(
     let total = 0
 
     for (const [day, byRepository] of commitsByDayAndRepository) {
-        let remainingForDay = 5
+        let remainingForDay: number =
+            RANKING_V2_POLICY.building.commits.perDayCap
         const repositoryCommits = [...byRepository.entries()].sort(([a], [b]) =>
             a.localeCompare(b)
         )
@@ -137,7 +139,10 @@ function creditCommits(
             total += credited
             remainingForDay -= credited
         }
-        creditedByDay.set(day, 5 - remainingForDay)
+        creditedByDay.set(
+            day,
+            RANKING_V2_POLICY.building.commits.perDayCap - remainingForDay
+        )
     }
 
     return {
@@ -160,9 +165,9 @@ function creditPullRequests(
             ...contribution,
             points:
                 contribution.state === 'MERGED'
-                    ? 1
+                    ? RANKING_V2_POLICY.collaboration.pullRequests.mergedPoints
                     : contribution.state === 'OPEN'
-                      ? 0.5
+                      ? RANKING_V2_POLICY.collaboration.pullRequests.openPoints
                       : 0,
         }))
         .filter((contribution) => {
@@ -185,9 +190,12 @@ function creditPullRequests(
     for (const contribution of contributions) {
         const day = utcDay(contribution.occurredAt)
         if (!day) continue
-        const dayRemaining = 2 - (perDay.get(day) ?? 0)
+        const dayRemaining =
+            RANKING_V2_POLICY.collaboration.pullRequests.perDayCap -
+            (perDay.get(day) ?? 0)
         const repositoryRemaining =
-            4 - (perRepository.get(contribution.repositoryId) ?? 0)
+            RANKING_V2_POLICY.collaboration.pullRequests.perRepositoryCap -
+            (perRepository.get(contribution.repositoryId) ?? 0)
         const credited = Math.max(
             0,
             Math.min(contribution.points, dayRemaining, repositoryRemaining)
@@ -239,8 +247,10 @@ function creditReviews(
         const pullRequestDay = `${contribution.pullRequestId}:${day}`
         if (
             seenPullRequestDays.has(pullRequestDay) ||
-            (perDay.get(day) ?? 0) >= 4 ||
-            (perRepository.get(contribution.repositoryId) ?? 0) >= 10
+            (perDay.get(day) ?? 0) >=
+                RANKING_V2_POLICY.collaboration.reviews.perDayCap ||
+            (perRepository.get(contribution.repositoryId) ?? 0) >=
+                RANKING_V2_POLICY.collaboration.reviews.perRepositoryCap
         ) {
             continue
         }
@@ -279,8 +289,10 @@ function creditIssues(
             !withinWindow(contribution.occurredAt, snapshot) ||
             !repository ||
             githubLoginsEqual(repository.ownerLogin, snapshot.login) ||
-            (perDay.get(day) ?? 0) >= 2 ||
-            (perRepository.get(contribution.repositoryId) ?? 0) >= 4
+            (perDay.get(day) ?? 0) >=
+                RANKING_V2_POLICY.collaboration.issues.perDayCap ||
+            (perRepository.get(contribution.repositoryId) ?? 0) >=
+                RANKING_V2_POLICY.collaboration.issues.perRepositoryCap
         ) {
             continue
         }
@@ -298,11 +310,21 @@ function creditIssues(
 
 function hygieneScore(repository: RankingRepositoryV2): number {
     return (
-        (repository.hasReadme ? 40 : 0) +
-        (repository.hasDescription ? 25 : 0) +
-        (repository.hasTopics ? 15 : 0) +
-        (repository.hasLicense ? 10 : 0) +
-        (repository.hasReleaseOrTag ? 10 : 0)
+        (repository.hasReadme
+            ? RANKING_V2_POLICY.stewardship.hygiene.readme
+            : 0) +
+        (repository.hasDescription
+            ? RANKING_V2_POLICY.stewardship.hygiene.description
+            : 0) +
+        (repository.hasTopics
+            ? RANKING_V2_POLICY.stewardship.hygiene.topics
+            : 0) +
+        (repository.hasLicense
+            ? RANKING_V2_POLICY.stewardship.hygiene.license
+            : 0) +
+        (repository.hasReleaseOrTag
+            ? RANKING_V2_POLICY.stewardship.hygiene.releaseOrTag
+            : 0)
     )
 }
 
@@ -388,7 +410,7 @@ function selectStewardshipRepositories(
                     b.repository.nameWithOwner
                 )
         )
-        .slice(0, 5)
+        .slice(0, RANKING_V2_POLICY.stewardship.repositoryLimit)
 }
 
 export function scoreRankingSnapshotV2(
@@ -409,21 +431,51 @@ export function scoreRankingSnapshotV2(
         }
     )
 
-    const activeWeekScore = linear(activity.activeWeeks.length, 13)
-    const activeDayScore = linear(activity.activeDays.length, 36)
-    const sustainedActivity = 0.65 * activeWeekScore + 0.35 * activeDayScore
+    const activeWeekScore = linear(
+        activity.activeWeeks.length,
+        RANKING_V2_POLICY.sustainedActivity.activeWeeks.cap
+    )
+    const activeDayScore = linear(
+        activity.activeDays.length,
+        RANKING_V2_POLICY.sustainedActivity.activeDays.cap
+    )
+    const sustainedActivity =
+        RANKING_V2_POLICY.sustainedActivity.activeWeeks.weight *
+            activeWeekScore +
+        RANKING_V2_POLICY.sustainedActivity.activeDays.weight * activeDayScore
 
-    const commitScore = diminishing(commits.total, 90)
-    const activeRepoScore = linear(activeOriginalRepositories.length, 5)
-    const building = 0.7 * commitScore + 0.3 * activeRepoScore
+    const commitScore = diminishing(
+        commits.total,
+        RANKING_V2_POLICY.building.commits.cap
+    )
+    const activeRepoScore = linear(
+        activeOriginalRepositories.length,
+        RANKING_V2_POLICY.building.activeOriginalRepositories.cap
+    )
+    const building =
+        RANKING_V2_POLICY.building.commits.weight * commitScore +
+        RANKING_V2_POLICY.building.activeOriginalRepositories.weight *
+            activeRepoScore
 
     const creditedPullRequestPoints = creditPullRequests(snapshot, repositories)
     const creditedReviews = creditReviews(snapshot, repositories)
     const creditedIssues = creditIssues(snapshot, repositories)
     const collaboration =
-        0.45 * diminishing(creditedPullRequestPoints, 12) +
-        0.35 * diminishing(creditedReviews, 24) +
-        0.2 * diminishing(creditedIssues, 10)
+        RANKING_V2_POLICY.collaboration.pullRequests.weight *
+            diminishing(
+                creditedPullRequestPoints,
+                RANKING_V2_POLICY.collaboration.pullRequests.cap
+            ) +
+        RANKING_V2_POLICY.collaboration.reviews.weight *
+            diminishing(
+                creditedReviews,
+                RANKING_V2_POLICY.collaboration.reviews.cap
+            ) +
+        RANKING_V2_POLICY.collaboration.issues.weight *
+            diminishing(
+                creditedIssues,
+                RANKING_V2_POLICY.collaboration.issues.cap
+            )
 
     const stewardshipRepositories = selectStewardshipRepositories(
         activeOriginalRepositories,
@@ -434,18 +486,22 @@ export function scoreRankingSnapshotV2(
         stewardshipRepositories.reduce(
             (sum, entry) => sum + hygieneScore(entry.repository),
             0
-        ) / 5
+        ) / RANKING_V2_POLICY.stewardship.repositoryLimit
 
     const developerScore = Math.round(
-        0.3 * sustainedActivity +
-            0.3 * building +
-            0.25 * collaboration +
-            0.15 * stewardship
+        RANKING_V2_POLICY.sustainedActivity.finalWeight * sustainedActivity +
+            RANKING_V2_POLICY.building.finalWeight * building +
+            RANKING_V2_POLICY.collaboration.finalWeight * collaboration +
+            RANKING_V2_POLICY.stewardship.finalWeight * stewardship
     )
 
     return {
         scoreVersion: RANKING_SCORE_VERSION,
-        developerScore: clamp(developerScore, 0, 100),
+        developerScore: clamp(
+            developerScore,
+            RANKING_V2_POLICY.score.minimum,
+            RANKING_V2_POLICY.score.maximum
+        ),
         pillars: {
             sustainedActivity,
             building,

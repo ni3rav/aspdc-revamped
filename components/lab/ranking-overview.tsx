@@ -8,6 +8,10 @@ import {
     CardTitle,
 } from '@/components/ui/card'
 import type { LabProfileScore } from '@/db/types'
+import {
+    formatPolicyPercent,
+    RANKING_V2_POLICY,
+} from '@/lib/lab/ranking/policy'
 import { getDeveloperScoreBand } from '@/lib/lab/ranking/score'
 import type { RankingStats } from '@/lib/lab/ranking/rank'
 
@@ -20,15 +24,23 @@ const PILLARS = [
     {
         key: 'sustainedActivity',
         label: 'Sustained activity',
-        weight: '30%',
+        weight: RANKING_V2_POLICY.sustainedActivity.finalWeight,
     },
-    { key: 'building', label: 'Building', weight: '30%' },
+    {
+        key: 'building',
+        label: 'Building',
+        weight: RANKING_V2_POLICY.building.finalWeight,
+    },
     {
         key: 'collaboration',
         label: 'External collaboration',
-        weight: '25%',
+        weight: RANKING_V2_POLICY.collaboration.finalWeight,
     },
-    { key: 'stewardship', label: 'Stewardship', weight: '15%' },
+    {
+        key: 'stewardship',
+        label: 'Stewardship',
+        weight: RANKING_V2_POLICY.stewardship.finalWeight,
+    },
 ] as const
 
 export function RankingOverview({ score, stats }: RankingOverviewProps) {
@@ -67,14 +79,16 @@ export function RankingOverview({ score, stats }: RankingOverviewProps) {
                             </CardTitle>
                             <CardDescription className="mt-2 max-w-[70ch] text-base leading-relaxed">
                                 Recent public engineering activity and
-                                stewardship over a rolling 90-day window,
+                                stewardship over a rolling{' '}
+                                {RANKING_V2_POLICY.windowDays}-day window,
                                 calibrated for undergraduate and early-career
                                 developers.
                             </CardDescription>
                         </div>
                         <div className="flex flex-wrap items-center justify-end gap-2">
                             <Badge variant="secondary">
-                                Score {score.developerScore}/100
+                                Score {score.developerScore}/
+                                {RANKING_V2_POLICY.score.maximum}
                             </Badge>
                             <Badge variant="outline">
                                 {getDeveloperScoreBand(score.developerScore)}
@@ -99,12 +113,13 @@ export function RankingOverview({ score, stats }: RankingOverviewProps) {
                                             {pillar.label}
                                         </dt>
                                         <dd className="text-muted-foreground text-sm">
-                                            {pillar.weight} of final score
+                                            {formatPolicyPercent(pillar.weight)}{' '}
+                                            of final score
                                         </dd>
                                     </div>
                                     <span
                                         className="font-mono text-xl font-bold tabular-nums"
-                                        aria-label={`${Math.round(score.pillarScores[pillar.key])} out of 100`}
+                                        aria-label={`${Math.round(score.pillarScores[pillar.key])} out of ${RANKING_V2_POLICY.score.maximum}`}
                                     >
                                         {Math.round(
                                             score.pillarScores[pillar.key]
