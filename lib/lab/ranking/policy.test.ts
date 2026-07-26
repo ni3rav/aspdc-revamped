@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { RANKING_V2_POLICY } from './policy'
+import { RANKING_V2_POLICY, RANKING_WINDOW_MS } from './policy'
 
 describe('RANKING_V2_POLICY', () => {
     it('publishes the approved scoring weights and caps as one contract', () => {
@@ -51,5 +51,9 @@ describe('RANKING_V2_POLICY', () => {
                 },
             },
         })
+    })
+
+    it('derives the ranking window duration from the approved day count', () => {
+        expect(RANKING_WINDOW_MS).toBe(7_776_000_000)
     })
 })

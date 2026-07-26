@@ -1,6 +1,5 @@
+import { RANKING_V2_POLICY, RANKING_WINDOW_MS } from './policy'
 import { RANKING_SCORE_VERSION, type RankingSnapshotV2 } from './types'
-
-const DAY_MS = 24 * 60 * 60 * 1000
 
 function requireCondition(
     condition: unknown,
@@ -41,8 +40,8 @@ export function validateRankingSnapshotV2(snapshot: RankingSnapshotV2): void {
         'windowStart must precede windowEnd'
     )
     requireCondition(
-        windowEnd - windowStart === 90 * DAY_MS,
-        'window must be exactly 90 days'
+        windowEnd - windowStart === RANKING_WINDOW_MS,
+        `window must be exactly ${RANKING_V2_POLICY.windowDays} days`
     )
     requireCondition(
         capturedAt === windowEnd,

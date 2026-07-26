@@ -47,6 +47,10 @@ export const RANKING_V2_POLICY = {
     },
 } as const
 
+const DAY_MS = 24 * 60 * 60 * 1000
+
+export const RANKING_WINDOW_MS = RANKING_V2_POLICY.windowDays * DAY_MS
+
 export function formatPolicyPercent(weight: number): string {
     return `${weight * 100}%`
 }

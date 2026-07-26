@@ -4,7 +4,7 @@ import {
     type RankingSnapshotV2,
 } from './types'
 import { githubLoginsEqual } from './github-login'
-import { RANKING_V2_POLICY } from './policy'
+import { RANKING_V2_POLICY, RANKING_WINDOW_MS } from './policy'
 import { validateRankingSnapshotV2 } from './validate'
 
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql'
@@ -407,8 +407,7 @@ export async function fetchGitHubRankingSnapshot(
 
     const windowEnd = capturedAt.toISOString()
     const windowStart = new Date(
-        capturedAt.getTime() -
-            RANKING_V2_POLICY.windowDays * 24 * 60 * 60 * 1000
+        capturedAt.getTime() - RANKING_WINDOW_MS
     ).toISOString()
     const repositories = new Map<string, RankingRepositoryV2>()
     const commits: RankingSnapshotV2['commits'] = []
