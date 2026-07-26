@@ -87,4 +87,52 @@ describe('lib/lab/leaderboard', () => {
     it('returns empty array when given empty profiles array', () => {
         expect(formatLeaderboardEntries([])).toEqual([])
     })
+
+    it('gives equal displayed scores equal competition ranks', () => {
+        const tiedProfiles: LabProfile[] = [
+            {
+                id: '1',
+                userId: 'u1',
+                githubUsername: 'zeta',
+                characterId: 'jesse-pinkman',
+                characterSimilarity: 80,
+                developerScore: 91,
+                traitScores: {},
+                githubSnapshot: {},
+                analyzedAt: new Date('2026-07-20T10:00:00Z'),
+            },
+            {
+                id: '2',
+                userId: 'u2',
+                githubUsername: 'alpha',
+                characterId: 'walter-white',
+                characterSimilarity: 80,
+                developerScore: 91,
+                traitScores: {},
+                githubSnapshot: {},
+                analyzedAt: new Date('2026-07-20T10:00:00Z'),
+            },
+            {
+                id: '3',
+                userId: 'u3',
+                githubUsername: 'beta',
+                characterId: 'gus-fring',
+                characterSimilarity: 80,
+                developerScore: 84,
+                traitScores: {},
+                githubSnapshot: {},
+                analyzedAt: new Date('2026-07-20T10:00:00Z'),
+            },
+        ]
+
+        expect(
+            formatLeaderboardEntries(tiedProfiles).map(
+                ({ githubUsername, rank }) => ({ githubUsername, rank })
+            )
+        ).toEqual([
+            { githubUsername: 'alpha', rank: 1 },
+            { githubUsername: 'zeta', rank: 1 },
+            { githubUsername: 'beta', rank: 3 },
+        ])
+    })
 })

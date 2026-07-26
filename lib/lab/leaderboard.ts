@@ -36,14 +36,24 @@ export function formatLeaderboardEntries(
         return a.githubUsername.localeCompare(b.githubUsername)
     })
 
-    return sorted.map((profile, index) => ({
-        id: profile.id,
-        rank: index + 1,
-        githubUsername: profile.githubUsername,
-        avatarUrl: getGitHubAvatarUrl(profile.githubUsername),
-        characterId: profile.characterId,
-        characterName: getCharacterName(profile.characterId),
-        developerScore: profile.developerScore,
-        analyzedAt: profile.analyzedAt,
-    }))
+    let currentRank = 0
+    let previousScore: number | null = null
+
+    return sorted.map((profile, index) => {
+        if (profile.developerScore !== previousScore) {
+            currentRank = index + 1
+            previousScore = profile.developerScore
+        }
+
+        return {
+            id: profile.id,
+            rank: currentRank,
+            githubUsername: profile.githubUsername,
+            avatarUrl: getGitHubAvatarUrl(profile.githubUsername),
+            characterId: profile.characterId,
+            characterName: getCharacterName(profile.characterId),
+            developerScore: profile.developerScore,
+            analyzedAt: profile.analyzedAt,
+        }
+    })
 }

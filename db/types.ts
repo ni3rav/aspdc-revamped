@@ -172,6 +172,11 @@ export type LabProfileScore = {
     updatedAt: Date
 }
 
+export type LabRankedProfile = Omit<LabProfile, 'developerScore'> & {
+    developerScore: number
+    rankingScore: LabProfileScore
+}
+
 export type NewLabProfile = Omit<LabProfile, 'id'>
 export type NewLabProfileScore = Omit<
     LabProfileScore,

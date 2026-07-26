@@ -5,6 +5,7 @@ import {
     blogs,
     events,
     labAchievements,
+    labProfileScores,
     labProfiles,
     leaderboard,
     leaderboardUsers,
@@ -20,6 +21,8 @@ import {
     Blog,
     Event,
     LabProfile,
+    LabProfileScore,
+    LabRankedProfile,
     LeaderboardEntry,
     LeaderboardUser,
     Project,
@@ -29,7 +32,8 @@ import {
     TournamentScore,
     UpcomingEvent,
 } from '@/db/types'
-import { asc, desc, eq, ilike, sql } from 'drizzle-orm'
+import { and, asc, desc, eq, ilike, sql } from 'drizzle-orm'
+import { RANKING_SCORE_VERSION } from '@/lib/lab/ranking/types'
 
 // ----------------- Achievements -----------------
 export async function fetchAchievements(): Promise<Achievement[]> {
@@ -213,6 +217,17 @@ function mapLabProfile(row: typeof labProfiles.$inferSelect): LabProfile {
     }
 }
 
+function mapLabProfileScore(
+    row: typeof labProfileScores.$inferSelect
+): LabProfileScore {
+    return {
+        ...row,
+        capturedAt: new Date(row.capturedAt),
+        createdAt: new Date(row.createdAt),
+        updatedAt: new Date(row.updatedAt),
+    }
+}
+
 export async function fetchLabProfileByUserId(
     userId: string
 ): Promise<LabProfile | null> {
@@ -273,18 +288,77 @@ export async function fetchLabProfileByGithubUsername(
     }
 }
 
-export async function fetchLabProfilesByScore(): Promise<LabProfile[]> {
+export async function fetchLabProfilesByScore(): Promise<LabRankedProfile[]> {
+    'use cache'
+    cacheLife('minutes')
+
+    try {
+        const rows = await db
+            .select({
+                profile: labProfiles,
+                rankingScore: labProfileScores,
+            })
+            .from(labProfiles)
+            .innerJoin(
+                labProfileScores,
+                and(
+                    eq(labProfileScores.profileId, labProfiles.id),
+                    eq(labProfileScores.scoreVersion, RANKING_SCORE_VERSION)
+                )
+            )
+            .orderBy(
+                desc(labProfileScores.developerScore),
+                asc(labProfiles.githubUsername)
+            )
+        return rows.map(({ profile, rankingScore }) => ({
+            ...mapLabProfile(profile),
+            developerScore: rankingScore.developerScore,
+            rankingScore: mapLabProfileScore(rankingScore),
+        }))
+    } catch (error) {
+        console.error('Error fetching lab profiles by score:', error)
+        return []
+    }
+}
+
+export async function fetchLabProfileScoreByProfileId(
+    profileId: string
+): Promise<LabProfileScore | null> {
     'use cache'
     cacheLife('minutes')
 
     try {
         const rows = await db
             .select()
-            .from(labProfiles)
-            .orderBy(desc(labProfiles.developerScore))
-        return rows.map(mapLabProfile)
+            .from(labProfileScores)
+            .where(
+                and(
+                    eq(labProfileScores.profileId, profileId),
+                    eq(labProfileScores.scoreVersion, RANKING_SCORE_VERSION)
+                )
+            )
+            .limit(1)
+        return rows[0] ? mapLabProfileScore(rows[0]) : null
     } catch (error) {
-        console.error('Error fetching lab profiles by score:', error)
+        console.error('Error fetching lab profile score by profileId:', error)
+        return null
+    }
+}
+
+export async function fetchLabScoreDistribution(): Promise<
+    Array<{ developerScore: number }>
+> {
+    'use cache'
+    cacheLife('minutes')
+
+    try {
+        return await db
+            .select({ developerScore: labProfileScores.developerScore })
+            .from(labProfileScores)
+            .where(eq(labProfileScores.scoreVersion, RANKING_SCORE_VERSION))
+            .orderBy(desc(labProfileScores.developerScore))
+    } catch (error) {
+        console.error('Error fetching lab score distribution:', error)
         return []
     }
 }

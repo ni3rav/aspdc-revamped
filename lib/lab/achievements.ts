@@ -1,4 +1,5 @@
 import type { GitHubSnapshot, TraitVector } from './types'
+import type { RankingScoreV2 } from './ranking/types'
 
 export type AchievementDefinition = {
     id: string
@@ -81,9 +82,10 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     {
         id: 'no-half-measures',
         name: 'No Half Measures',
-        description: 'Steady, uninterrupted daily commit streaks.',
+        description:
+            'Qualifying public contributions on at least 24 days in the 90-day window.',
         icon: 'measure',
-        unlock: ({ vector }) => vector.Consistency > 75,
+        unlock: () => false,
     },
     {
         id: 'this-is-not-meth',
@@ -106,25 +108,22 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
         name: 'The One Who Builds',
         description: 'Maintains 5 or more active original repositories.',
         icon: 'hammer',
-        unlock: ({ vector, snapshot }) =>
-            vector.Builder > 75 && snapshot.repos.length >= 5,
+        unlock: () => false,
     },
     {
         id: 'associate-network',
         name: 'Associate Network',
         description:
-            'Strong collaboration score with 5 or more GitHub followers.',
+            'At least 10 credited external pull requests, reviews, or issues.',
         icon: 'network',
-        unlock: ({ vector, snapshot }) =>
-            vector.TeamPlayer > 70 && snapshot.followers >= 5,
+        unlock: () => false,
     },
     {
         id: 'open-the-lab',
         name: 'Open The Lab',
-        description:
-            'High open-source contribution and public repository sharing.',
+        description: 'A collaboration pillar score of 70 or higher.',
         icon: 'unlock',
-        unlock: ({ vector }) => vector.OpenSource > 70,
+        unlock: () => false,
     },
     {
         id: 'empire-business',
@@ -154,4 +153,41 @@ export function unlockAchievements(
         description,
         icon,
     }))
+}
+
+function achievementById(id: string): Achievement {
+    const definition = ACHIEVEMENTS.find((achievement) => achievement.id === id)
+    if (!definition) {
+        throw new Error(`Unknown achievement definition: ${id}`)
+    }
+    const { name, description, icon } = definition
+    return { id, name, description, icon }
+}
+
+export function unlockDynamicRankingAchievements(rank: number): Achievement[] {
+    return rank <= 10 ? [achievementById('say-my-name')] : []
+}
+
+export function unlockDurableRankingAchievements(
+    ranking: RankingScoreV2
+): Achievement[] {
+    const collaborationActions =
+        ranking.credited.creditedPullRequestPoints +
+        ranking.credited.creditedReviews +
+        ranking.credited.creditedIssues
+
+    return [
+        ranking.credited.activeDays >= 24
+            ? achievementById('no-half-measures')
+            : null,
+        ranking.credited.activeOriginalRepositories >= 5
+            ? achievementById('the-one-who-builds')
+            : null,
+        collaborationActions >= 10
+            ? achievementById('associate-network')
+            : null,
+        ranking.pillars.collaboration >= 70
+            ? achievementById('open-the-lab')
+            : null,
+    ].filter((achievement): achievement is Achievement => Boolean(achievement))
 }

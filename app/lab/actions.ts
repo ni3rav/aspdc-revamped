@@ -13,6 +13,7 @@ import {
 import { auth } from '@/lib/auth'
 import { fetchGitHubSnapshot } from '@/lib/lab/github'
 import { getGitHubAccessToken } from '@/lib/lab/github-token'
+import { unlockDurableRankingAchievements } from '@/lib/lab/achievements'
 import { runLabAnalysisV2 } from '@/lib/lab/ranking/analyze'
 import { fetchGitHubRankingSnapshot } from '@/lib/lab/ranking/github'
 import type { RankingPillarScores } from '@/lib/lab/ranking/types'
@@ -108,6 +109,9 @@ export async function analyzeLabProfile(): Promise<AnalyzeLabProfileResult> {
 
         const analysis = runLabAnalysisV2(resolved.snapshot, rankingSnapshot)
         const analyzedAt = capturedAt
+        const durableRankingAchievements = unlockDurableRankingAchievements(
+            analysis.ranking
+        )
 
         const profile = await persistLabAnalysisV2({
             profile: {
@@ -133,7 +137,10 @@ export async function analyzeLabProfile(): Promise<AnalyzeLabProfileResult> {
                     analysis.persistedRankingSnapshot.capturedAt
                 ),
             },
-            achievements: analysis.persona.achievements.map((achievement) => ({
+            achievements: [
+                ...analysis.persona.achievements,
+                ...durableRankingAchievements,
+            ].map((achievement) => ({
                 achievementId: achievement.id,
                 unlockedAt: analyzedAt,
             })),
@@ -158,7 +165,10 @@ export async function analyzeLabProfile(): Promise<AnalyzeLabProfileResult> {
                 pillarScores: analysis.ranking.pillars,
                 traitScores: analysis.persona.traitScores,
                 characterMatches: analysis.persona.characterMatches,
-                achievements: analysis.persona.achievements,
+                achievements: [
+                    ...analysis.persona.achievements,
+                    ...durableRankingAchievements,
+                ],
                 analyzedAt: analyzedAt.toISOString(),
             },
         }
